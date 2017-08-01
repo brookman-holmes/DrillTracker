@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "630526958550",
+    "firebase_url": "https://drilltracker-64bd1.firebaseio.com",
+    "project_id": "drilltracker-64bd1",
+    "storage_bucket": "drilltracker-64bd1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:630526958550:android:bb72897ce6edeb10",
+        "android_client_info": {
+          "package_name": "com.brookmanholmes.drilltracker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "630526958550-th303shjcr7s5rl9c2vr717niastvfc0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.brookmanholmes.drilltracker",
+            "certificate_hash": "f70c2772ad142b299b582eafa8a53df509037270"
+          }
+        },
+        {
+          "client_id": "630526958550-k7a5bj5ahoils13lsdus1k74c17hdrhc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCeIr9cZrK8bAKv0QB1EiXvCbvlkyY59E4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "630526958550-k7a5bj5ahoils13lsdus1k74c17hdrhc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

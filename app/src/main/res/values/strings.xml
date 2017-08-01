@@ -1,0 +1,46 @@
+<resources>
+    <string name="app_name">Drill Tracker</string>
+    <string name="btn_text_retry">Retry</string>
+    <string name="dialog_add_attempt_title">Add attempt</string>
+    <string name="number">%1$d</string>
+    <string name="number_float">%.2f</string>
+    <string name="target_score">Target score: %1$d</string>
+    <string name="max_score_attainable">Maximum score attainable: %1$d</string>
+    <string name="median_attempt">Median attempt</string>
+    <string name="average_attempt">Average attempt</string>
+    <string name="attempts">Attempts</string>
+    <string name="high_score">High score</string>
+    <string name="lifetime">Lifetime</string>
+    <string name="this_session">This session</string>
+
+    <string name="take_photo">Take photo</string>
+    <string name="select_image">Choose photo</string>
+    <string name="change_drill_diagram">Change drill diagram</string>
+    <string name="confirm_delete_drill">Delete drill?</string>
+
+    <string name="type_any">Any</string>
+    <string name="type_positional">Positional</string>
+    <string name="type_aiming">Aiming</string>
+    <string name="type_safety">Safety</string>
+    <string name="type_pattern">Pattern</string>
+    <string name="type_kicking">Kicking</string>
+    <string name="type_banking">Banking</string>
+    <string name="type_speed">Speed</string>
+
+
+    <string-array name="create_drill_array">
+        <item>@string/take_photo</item>
+        <item>@string/select_image</item>
+    </string-array>
+
+    <string-array name="drill_types">
+        <item>@string/type_any</item>
+        <item>@string/type_aiming</item>
+        <item>@string/type_banking</item>
+        <item>@string/type_kicking</item>
+        <item>@string/type_pattern</item>
+        <item>@string/type_positional</item>
+        <item>@string/type_safety</item>
+        <item>@string/type_speed</item>
+    </string-array>
+</resources>

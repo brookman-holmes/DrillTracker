@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="CustomNumberPicker">
+        <attr name="cnp_title" format="string"/>
+        <attr name="cnp_max" format="integer"/>
+        <attr name="cnp_min" format="integer"/>
+        <attr name="cnp_starting_value" format="integer"/>
+    </declare-styleable>
+</resources>

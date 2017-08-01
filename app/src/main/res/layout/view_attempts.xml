@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/card_view_style"
+    android:layout_marginStart="4dp"
+    android:layout_marginEnd="4dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.GridLayout
+            style="@style/match_info_grid"
+            android:padding="16dp">
+
+            <TextView
+                style="@style/player_stats"
+                android:text="@string/this_session"
+                app:layout_column="1" />
+
+            <TextView
+                style="@style/player_stats"
+                android:text="@string/lifetime"
+                app:layout_column="2" />
+
+            <TextView
+                style="@style/player_stats"
+                android:gravity="start"
+                android:text="@string/high_score"
+                android:textColor="@color/primary_text"
+                app:layout_columnWeight="0"
+                app:layout_gravity="start" />
+
+            <TextView
+                android:id="@+id/sessionHigh"
+                style="@style/player_stats"
+                android:text="0"
+                android:textColor="@color/primary_text" />
+
+            <TextView
+                android:id="@+id/lifetimeHigh"
+                style="@style/player_stats"
+                android:text="0"
+                android:textColor="@color/primary_text"
+                app:layout_column="2" />
+
+            <TextView
+                style="@style/player_stats"
+                android:gravity="start"
+                android:text="@string/attempts"
+                android:textColor="@color/secondary_text"
+                app:layout_columnWeight="0"
+                app:layout_gravity="start" />
+
+            <TextView
+                android:id="@+id/sessionAttempts"
+                style="@style/player_stats"
+                android:text="0"
+                android:textColor="@color/secondary_text" />
+
+            <TextView
+                android:id="@+id/lifetimeAttempts"
+                style="@style/player_stats"
+                android:text="0"
+                android:textColor="@color/secondary_text"
+                app:layout_column="2" />
+
+            <TextView
+                style="@style/player_stats"
+                android:gravity="start"
+                android:text="@string/average_attempt"
+                android:textColor="@color/primary_text"
+                app:layout_columnWeight="0"
+                app:layout_gravity="start" />
+
+            <TextView
+                android:id="@+id/sessionAvg"
+                style="@style/player_stats"
+                android:text="0"
+                android:textColor="@color/primary_text" />
+
+            <TextView
+                android:id="@+id/lifetimeAvg"
+                style="@style/player_stats"
+                android:text="0"
+                android:textColor="@color/primary_text"
+                app:layout_column="2" />
+
+            <TextView
+                style="@style/player_stats"
+                android:gravity="start"
+                android:text="@string/median_attempt"
+                android:textColor="@color/secondary_text"
+                app:layout_columnWeight="0"
+                app:layout_gravity="start" />
+
+            <TextView
+                android:id="@+id/sessionMedian"
+                style="@style/player_stats"
+                android:text="0"
+                android:textColor="@color/secondary_text" />
+
+            <TextView
+                android:id="@+id/lifetimeMedian"
+                style="@style/player_stats"
+                android:text="0"
+                android:textColor="@color/secondary_text"
+                app:layout_column="2" />
+
+        </android.support.v7.widget.GridLayout>
+
+        <LinearLayout
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <include layout="@layout/view_divider"/>
+            <TextView
+                android:id="@+id/maxScoreAttainable"
+                android:textColor="@color/primary_text"
+                android:layout_marginTop="4dp"
+                android:text="@string/max_score_attainable"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/targetScore"
+                android:textColor="@color/primary_text"
+                android:layout_marginTop="4dp"
+                android:text="@string/target_score"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </LinearLayout>
+</android.support.v7.widget.CardView>

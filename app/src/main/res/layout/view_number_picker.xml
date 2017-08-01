@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_gravity="center"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:layout_gravity="center"
+        android:id="@+id/title"
+        style="@android:style/TextAppearance.Material.Title"
+        android:text="Title here"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageButton
+            android:id="@+id/minus"
+            android:tint="@color/button_default_enabled"
+            style="@android:style/Widget.Material.Button.Borderless.Small"
+            android:src="@drawable/ic_remove"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:layout_gravity="center"
+            android:minEms="1"
+            android:layout_margin="4dp"
+            android:id="@+id/prevValue"
+            android:gravity="center"
+            android:textColor="@color/secondary_text"
+            style="@android:style/TextAppearance.Material.Subhead"
+            android:text="13"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_margin="8dp"
+            android:layout_gravity="center"
+            android:minEms="1"
+            android:id="@+id/value"
+            android:gravity="center"
+            android:textColor="@color/primary_text"
+            style="@android:style/TextAppearance.Material.Title"
+            android:text="14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:minEms="1"
+            android:layout_gravity="center"
+            android:id="@+id/nextValue"
+            android:layout_margin="4dp"
+            android:gravity="center"
+            android:textColor="@color/secondary_text"
+            style="@android:style/TextAppearance.Material.Subhead"
+            android:text="15"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <ImageButton
+            android:tint="@color/button_default_enabled"
+            android:id="@+id/plus"
+            style="@android:style/Widget.Material.Button.Borderless.Small"
+            android:src="@drawable/ic_add_black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+</LinearLayout>
