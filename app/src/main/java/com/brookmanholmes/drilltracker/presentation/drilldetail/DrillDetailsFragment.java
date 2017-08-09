@@ -5,48 +5,42 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.util.Preconditions;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.brookmanholmes.drilltracker.R;
+import com.brookmanholmes.drilltracker.domain.interactor.DeleteAttempt;
 import com.brookmanholmes.drilltracker.domain.interactor.GetDrillDetails;
+import com.brookmanholmes.drilltracker.presentation.addattempt.AddAttemptDialog;
 import com.brookmanholmes.drilltracker.presentation.base.BaseFragment;
 import com.brookmanholmes.drilltracker.presentation.createdrill.CreateDrillActivity;
 import com.brookmanholmes.drilltracker.presentation.mapper.DrillModelDataMapper;
 import com.brookmanholmes.drilltracker.presentation.model.DrillModel;
-import com.brookmanholmes.drilltracker.presentation.view.util.ChartUtil;
 import com.brookmanholmes.drilltracker.presentation.model.DrillModelMathUtil;
-import com.brookmanholmes.drilltracker.presentation.view.util.ImageHandler;
+import com.brookmanholmes.drilltracker.presentation.view.util.ChartUtil;
 import com.github.chrisbanes.photoview.PhotoView;
+import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.Unbinder;
+import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
 import lecho.lib.hellocharts.view.LineChartView;
 
 /**
  * Created by Brookman Holmes on 7/11/2017.
  */
 
-public class DrillDetailsFragment extends BaseFragment implements DrillDetailView {
+public class DrillDetailsFragment extends BaseFragment<DrillDetailsPresenter> implements DrillDetailView, Toolbar.OnMenuItemClickListener, View.OnClickListener {
     private static final String TAG = DrillDetailsFragment.class.getName();
     private static final String PARAM_DRILL_ID = "param_drill_id";
     private static final String PARAM_MAX = "param_max";
     private static final String PARAM_TARGET = "param_target";
-
-    DrillDetailsPresenter drillDetailsPresenter;
-    Unbinder unbinder;
 
     @BindView(R.id.rl_progress)
     View rl_progress;
@@ -99,65 +93,44 @@ public class DrillDetailsFragment extends BaseFragment implements DrillDetailVie
         return fragment;
     }
 
-    public DrillDetailsFragment() {
-        setRetainInstance(true);
-    }
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         GetDrillDetails getDrillDetailsUseCase = new GetDrillDetails(getDrillRepository(), getThreadExecutor(), getPostExecutionThread());
-        drillDetailsPresenter = new DrillDetailsPresenter(getDrillDetailsUseCase, new DrillModelDataMapper());
+        DeleteAttempt deleteAttemptUseCase = new DeleteAttempt(getDrillRepository(), getThreadExecutor(), getPostExecutionThread());
+        presenter = new DrillDetailsPresenter(getDrillDetailsUseCase, deleteAttemptUseCase, new DrillModelDataMapper());
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.fragment_drill_details, container, false);
+        View view = inflater.inflate(R.layout.fragment_drill_details, container, false);
         unbinder = ButterKnife.bind(this, view);
-        toolbar.inflateMenu(R.menu.fragment_drill_details_menu);
-        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                if (item.getItemId() == R.id.ic_edit) {
-                    drillDetailsPresenter.onEditClicked();
-                }
-                return true;
-            }
-        });
-        return view;
-    }
+        presenter.setView(this);
 
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        drillDetailsPresenter.setView(this);
+        toolbar.inflateMenu(R.menu.fragment_drill_details_menu);
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
+        toolbar.setNavigationOnClickListener(this);
+        toolbar.setOnMenuItemClickListener(this);
+
+        return view;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        drillDetailsPresenter.resume();
         loadDrillDetails();
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-        drillDetailsPresenter.pause();
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        drillDetailsPresenter.destroy();
+    public boolean onMenuItemClick(MenuItem item) {
+        if (item.getItemId() == R.id.ic_edit) {
+            presenter.onEditClicked();
+        } else if (item.getItemId() == R.id.ic_undo_attempt) {
+            presenter.onUndoClicked();
+        }
+        return true;
     }
 
     @Override
@@ -186,19 +159,15 @@ public class DrillDetailsFragment extends BaseFragment implements DrillDetailVie
     }
 
     @Override
-    public Context context() {
-        return getContext().getApplicationContext();
-    }
-
-    @Override
     public void renderDrill(DrillModel drill) {
         if (drill != null) {
-            ImageHandler.loadImage(image, drill.imageUrl);
+            //ImageHandler.loadImage(image, drill.imageUrl);
+            Picasso.with(context()).load(drill.imageUrl).transform(new RoundedCornersTransformation(50, 10)).into(image);
             DrillModelMathUtil lifetimeStats = new DrillModelMathUtil(drill.attemptModels);
             DrillModelMathUtil sessionStats = new DrillModelMathUtil(drill.getSessionAttempts());
             description.setText(drill.description);
-            ChartUtil.setupChart(lifetimeChart, drill, true);
-            ChartUtil.setupChart(sessionChart, DrillModel.getSessionModel(drill), false);
+            ChartUtil.setupLifetimeChart(lifetimeChart, drill, true);
+            ChartUtil.setupChart(sessionChart, DrillModel.getSessionModel(drill));
             toolbar.setTitle(drill.name);
 
             sessionHigh.setText(getString(R.string.number, sessionStats.getMax()));
@@ -212,13 +181,21 @@ public class DrillDetailsFragment extends BaseFragment implements DrillDetailVie
             lifetimeMedian.setText(getString(R.string.number_float, lifetimeStats.getMedian()));
 
             maxScoreAttainable.setText(getString(R.string.max_score_attainable, drill.maxScore));
-            targetScore.setText(getString(R.string.target_score, drill.defaultTargetScore));
+            targetScore.setText(getString(R.string.target_score_with_number, drill.defaultTargetScore));
+
+            toolbar.getMenu().findItem(R.id.ic_undo_attempt).setEnabled(drill.attemptModels.size() > 0);
+            toolbar.getMenu().findItem(R.id.ic_undo_attempt).getIcon().setAlpha(drill.attemptModels.size() > 0 ? 255 : 127);
         }
     }
 
+    @Override
+    public Context context() {
+        return getContext();
+    }
+
     private void loadDrillDetails() {
-        if (drillDetailsPresenter != null)
-            drillDetailsPresenter.initialize(currentDrillId());
+        if (presenter != null)
+            presenter.initialize(currentDrillId());
     }
 
     private String currentDrillId() {
@@ -237,22 +214,6 @@ public class DrillDetailsFragment extends BaseFragment implements DrillDetailVie
         return arguments.getInt(PARAM_TARGET);
     }
 
-    @OnClick(R.id.bt_retry)
-    void onButtonRetryClick() {
-        DrillDetailsFragment.this.loadDrillDetails();
-    }
-
-    @OnClick(R.id.fab)
-    @Override
-    public void onFabClicked() {
-        drillDetailsPresenter.showAddAttemptView();
-    }
-
-    @OnClick(R.id.image)
-    public void onImageClicked() {
-        drillDetailsPresenter.onDrillImageClicked();
-    }
-
     public void showDrillImageFullScreen(DrillModel drillModel) {
         DialogFragment dialogFragment = FullScreenImageDialog.newInstance(drillModel.imageUrl);
         dialogFragment.show(getFragmentManager(), "tag");
@@ -268,5 +229,26 @@ public class DrillDetailsFragment extends BaseFragment implements DrillDetailVie
     @Override
     public void showEditDrillView(String drillId) {
         startActivity(CreateDrillActivity.newInstance(getContext(), drillId));
+    }
+
+    @OnClick(R.id.bt_retry)
+    void onButtonRetryClick() {
+        DrillDetailsFragment.this.loadDrillDetails();
+    }
+
+    @OnClick(R.id.fab)
+    @Override
+    public void onFabClicked() {
+        presenter.showAddAttemptView();
+    }
+
+    @OnClick(R.id.image)
+    public void onImageClicked() {
+        presenter.onDrillImageClicked();
+    }
+
+    @Override
+    public void onClick(View view) {
+        getActivity().finish();
     }
 }

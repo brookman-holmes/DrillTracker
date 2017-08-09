@@ -1,4 +1,4 @@
-package com.brookmanholmes.drilltracker.presentation.drilldetail;
+package com.brookmanholmes.drilltracker.presentation.addattempt;
 
 import com.brookmanholmes.drilltracker.domain.Drill;
 import com.brookmanholmes.drilltracker.domain.interactor.AddAttempt;

@@ -1,11 +1,10 @@
-package com.brookmanholmes.drilltracker.presentation.drilldetail;
+package com.brookmanholmes.drilltracker.presentation.addattempt;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.util.Preconditions;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.LayoutInflater;
 
 import com.brookmanholmes.drilltracker.R;
@@ -27,7 +26,7 @@ public class AddAttemptDialog extends BaseDialogFragment<AddAttemptDialogPresent
     CustomNumberPicker picker;
     private int score, maxScore;
 
-    static AddAttemptDialog newInstance(String drillId, int maxScore, int targetScore) {
+    public static AddAttemptDialog newInstance(String drillId, int maxScore, int targetScore) {
         AddAttemptDialog dialog = new AddAttemptDialog();
         Bundle args = new Bundle();
         args.putInt(PARAM_MAX, maxScore);

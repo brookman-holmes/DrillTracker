@@ -1,22 +1,17 @@
 package com.brookmanholmes.drilltracker.presentation.drills;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.brookmanholmes.drilltracker.domain.Drill;
 import com.brookmanholmes.drilltracker.domain.exception.DefaultErrorBundle;
 import com.brookmanholmes.drilltracker.domain.exception.ErrorBundle;
-import com.brookmanholmes.drilltracker.domain.interactor.AddDrill;
 import com.brookmanholmes.drilltracker.domain.interactor.DefaultObserver;
-import com.brookmanholmes.drilltracker.domain.interactor.DeleteDrill;
 import com.brookmanholmes.drilltracker.domain.interactor.GetDrillList;
-import com.brookmanholmes.drilltracker.presentation.model.DrillModel;
+import com.brookmanholmes.drilltracker.presentation.base.Presenter;
 import com.brookmanholmes.drilltracker.presentation.exception.ErrorMessageFactory;
 import com.brookmanholmes.drilltracker.presentation.mapper.DrillModelDataMapper;
-import com.brookmanholmes.drilltracker.presentation.base.Presenter;
+import com.brookmanholmes.drilltracker.presentation.model.DrillModel;
 
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -25,13 +20,11 @@ import java.util.List;
 
 class DrillsListPresenter implements Presenter {
     private static final String TAG = DrillsListPresenter.class.getName();
-
-    private DrillsListView view;
-
     private final GetDrillList getDrillListUseCase;
     private final DrillModelDataMapper drillModelDataMapper;
+    private DrillsListView view;
 
-    public DrillsListPresenter(GetDrillList getDrillListUseCase, DrillModelDataMapper drillModelDataMapper) {
+    DrillsListPresenter(GetDrillList getDrillListUseCase, DrillModelDataMapper drillModelDataMapper) {
         this.getDrillListUseCase = getDrillListUseCase;
         this.drillModelDataMapper = drillModelDataMapper;
     }
@@ -55,17 +48,17 @@ class DrillsListPresenter implements Presenter {
         this.view = null;
     }
 
-    public void initialize(DrillModel.Type filter) {
+    void initialize(DrillModel.Type filter) {
         this.loadDrillsList(filter);
     }
 
-    public void loadDrillsList(DrillModel.Type filter) {
+    void loadDrillsList(DrillModel.Type filter) {
         this.hideViewRetry();
         this.showViewLoading();
         this.getDrillsList(filter);
     }
 
-    public void onDrillClicked(DrillModel drillModel) {
+    void onDrillClicked(DrillModel drillModel) {
         this.view.viewDrill(drillModel);
     }
 

@@ -2,53 +2,52 @@
 <android.support.v7.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    app:cardUseCompatPadding="true"
-    android:layout_marginStart="4dp"
-    android:layout_marginEnd="4dp"
-    android:foreground="?android:attr/selectableItemBackground"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginEnd="4dp"
+    android:layout_marginStart="4dp"
+    android:foreground="?android:attr/selectableItemBackground"
+    app:cardUseCompatPadding="true">
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <TextView
-            style="@android:style/TextAppearance.Material.Title"
             android:id="@+id/name"
-            android:text="Title goes here"
+            style="@android:style/TextAppearance.Material.Title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
-            android:layout_marginStart="16dp" />
+            android:text="Title goes here" />
 
 
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
             <include
-                android:layout_marginTop="8dp"
+                layout="@layout/view_image"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                android:layout_marginStart="16dp"
                 android:layout_marginEnd="8dp"
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                layout="@layout/view_image"/>
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_weight="1" />
 
             <include
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="16dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="16dp"
-                android:layout_weight="1"
+                layout="@layout/view_chart"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                layout="@layout/view_chart"/>
+                android:layout_marginBottom="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_weight="1" />
         </LinearLayout>
 
 

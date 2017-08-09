@@ -27,3 +27,8 @@
 -dontwarn okio.**
 -dontwarn javax.annotation.Nullable
 -dontwarn javax.annotation.ParametersAreNonnullByDefault
+
+-keepclasseswithmembernames class * { @butterknife.* <fields>; }
+-keepclasseswithmembernames class * { @butterknife.* <methods>; }
+
+-keepattributes Signature

@@ -1,8 +1,7 @@
 package com.brookmanholmes.drilltracker.data.entity;
 
-import com.brookmanholmes.drilltracker.domain.Drill;
+import android.support.annotation.Keep;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,6 +9,7 @@ import java.util.Map;
  * Created by Brookman Holmes on 7/9/2017.
  */
 
+@Keep
 public class DrillEntity {
     public String id;
     public String name;
@@ -33,12 +33,6 @@ public class DrillEntity {
         this.type = type;
     }
 
-    public static class AttemptEntity {
-        public int score;
-        public int target;
-        public long date;
-    }
-
     @Override
     public String toString() {
         return "DrillEntity{" +
@@ -51,5 +45,11 @@ public class DrillEntity {
                 "\n type='" + type + '\'' +
                 "\n attempts=" + attempts +
                 '}';
+    }
+
+    public static class AttemptEntity {
+        public int score;
+        public int target;
+        public long date;
     }
 }

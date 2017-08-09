@@ -25,7 +25,6 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 
 import com.brookmanholmes.drilltracker.R;
-import com.brookmanholmes.drilltracker.domain.Drill;
 import com.brookmanholmes.drilltracker.domain.interactor.AddDrill;
 import com.brookmanholmes.drilltracker.domain.interactor.GetDrillDetails;
 import com.brookmanholmes.drilltracker.domain.interactor.UpdateDrill;
@@ -35,7 +34,6 @@ import com.brookmanholmes.drilltracker.presentation.model.DrillModel;
 import com.brookmanholmes.drilltracker.presentation.view.CustomNumberPicker;
 import com.brookmanholmes.drilltracker.presentation.view.util.ImageHandler;
 import com.squareup.picasso.Callback;
-import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 
 import java.io.ByteArrayOutputStream;
@@ -49,25 +47,30 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnItemSelected;
 import butterknife.OnTextChanged;
-import butterknife.Unbinder;
 
 /**
  * Created by Brookman Holmes on 7/23/2017.
  */
 
-public class CreateDrillFragment extends BaseFragment implements CreateDrillView {
+public class CreateDrillFragment extends BaseFragment<CreateDrillPresenter> implements CreateDrillView {
     private static final String TAG = CreateDrillFragment.class.getName();
     private static final String PARAM_DRILL_ID = "param_drill_id";
-
-    private static final String INSTANCE_STATE_PARAM_IMAGE = "com.brookmanholmes.STATE_PARAM_IMAGE";
-    private static final String INSTANCE_STATE_PARAM_TYPE = "com.brookmanholmes.STATE_PARAM_TYPE";
-    private static final String INSTANCE_STATE_PARAM_MAX_SCORE = "com.brookmanholmes.STATE_PARAM_MAX_SCORE";
-    private static final String INSTANCE_STATE_PARAM_TARGET_SCORE = "com.brookmanholmes.STATE_PARAM_TARGET_SCORE";
 
     private static final int ACTION_TAKE_IMAGE = 101;
     private static final int ACTION_CHOOSE_IMAGE = 102;
     private static final int COMPRESSION_AMOUNT = 50;
-
+    private final CustomNumberPicker.OnValueChangeListener targetValueListener = new CustomNumberPicker.OnValueChangeListener() {
+        @Override
+        public void onValueChange(int oldVal, int newVal) {
+            onTargetScoreChanged(newVal);
+        }
+    };
+    private final CustomNumberPicker.OnValueChangeListener maxValueListener = new CustomNumberPicker.OnValueChangeListener() {
+        @Override
+        public void onValueChange(int oldVal, int newVal) {
+            onMaximumScoreChanged(newVal);
+        }
+    };
     @BindView(R.id.input_drill_name)
     EditText drillName;
     @BindView(R.id.input_drill_description)
@@ -82,22 +85,7 @@ public class CreateDrillFragment extends BaseFragment implements CreateDrillView
     ImageView image;
     @BindView(R.id.spinner)
     Spinner drillTypeSpinner;
-
-    CreateDrillPresenter presenter;
-    Unbinder unbinder;
     private String photoPath;
-    private final CustomNumberPicker.OnValueChangeListener targetValueListener = new CustomNumberPicker.OnValueChangeListener() {
-        @Override
-        public void onValueChange(int oldVal, int newVal) {
-            onTargetScoreChanged(newVal);
-        }
-    };
-    private final CustomNumberPicker.OnValueChangeListener maxValueListener = new CustomNumberPicker.OnValueChangeListener() {
-        @Override
-        public void onValueChange(int oldVal, int newVal) {
-            onMaximumScoreChanged(newVal);
-        }
-    };
 
     public static CreateDrillFragment newInstance(String drillId) {
         CreateDrillFragment fragment = new CreateDrillFragment();
@@ -111,7 +99,6 @@ public class CreateDrillFragment extends BaseFragment implements CreateDrillView
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setRetainInstance(true);
         presenter = new CreateDrillPresenter(
                 new AddDrill(getDrillRepository(), getThreadExecutor(), getPostExecutionThread()),
                 new GetDrillDetails(getDrillRepository(), getThreadExecutor(), getPostExecutionThread()),
@@ -155,18 +142,6 @@ public class CreateDrillFragment extends BaseFragment implements CreateDrillView
         presenter.setView(this);
         presenter.setTargetScore(targetScorePicker.getValue());
         presenter.setMaximumScore(maxScorePicker.getValue());
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        presenter.destroy();
     }
 
     private File createImageFile() throws IOException {
@@ -343,28 +318,14 @@ public class CreateDrillFragment extends BaseFragment implements CreateDrillView
     }
 
     @Override
-    public void setDrillName(String name) {
-        drillName.setText(name);
-    }
+    public void loadDrillData(DrillModel model) {
+        drillName.setText(model.name);
+        drillDescription.setText(model.description);
+        maxScorePicker.setValue(model.maxScore);
+        targetScorePicker.setValue(model.defaultTargetScore);
 
-    @Override
-    public void setDrillDescription(String description) {
-        drillDescription.setText(description);
-    }
-
-    @Override
-    public void setTargetScore(int score) {
-        targetScorePicker.setValue(score);
-    }
-
-    @Override
-    public void setMaxScore(int score) {
-        maxScorePicker.setValue(score);
-    }
-
-    @Override
-    public void setDrillImage(String url) {
-        ImageHandler.loadImage(image, url, new Callback() {
+        drillTypeSpinner.setSelection(model.drillType.ordinal());
+        ImageHandler.loadImage(image, model.imageUrl, new Callback() {
             @Override
             public void onSuccess() {
                 Bitmap bitmap = ((BitmapDrawable)image.getDrawable()).getBitmap();
@@ -381,12 +342,16 @@ public class CreateDrillFragment extends BaseFragment implements CreateDrillView
     }
 
     @Override
-    public void setDrillType(DrillModel.Type type) {
-        drillTypeSpinner.setSelection(type.ordinal());
+    public void finish() {
+        getActivity().finish();
     }
 
     @Override
-    public void finish() {
-        getActivity().finish();
+    public void setIsEditing(boolean isEditing) {
+        if (isEditing) {
+            toolbar.setTitle(R.string.title_edit_drill);
+        } else {
+            toolbar.setTitle(R.string.title_create_drill);
+        }
     }
 }

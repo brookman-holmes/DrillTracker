@@ -1,13 +1,11 @@
 package com.brookmanholmes.drilltracker.domain.repository;
 
 import com.brookmanholmes.drilltracker.domain.Drill;
-import com.brookmanholmes.drilltracker.domain.interactor.UseCase;
 import com.brookmanholmes.drilltracker.presentation.model.DrillModel;
 import com.google.firebase.storage.UploadTask;
 
 import java.util.List;
 
-import io.reactivex.Flowable;
 import io.reactivex.Maybe;
 import io.reactivex.Observable;
 
@@ -20,7 +18,8 @@ public interface DrillRepository {
     Observable<List<Drill>> observeDrills(DrillModel.Type filter);
     Observable<Drill> observeDrill(final String id);
     Observable<Drill> addAttempt(final String id, Drill.Attempt attempt);
-    Observable<Drill> removeAttempt(final String id);
+
+    void removeLastAttempt(final String id);
     Observable<Drill> updateDrill(Drill drill);
     Observable<Drill> updateDrill(String name, String description, String id, byte[] image, String type, int maxScore, int targetScore);
     Maybe<UploadTask.TaskSnapshot> uploadImage(String id, byte[] image);

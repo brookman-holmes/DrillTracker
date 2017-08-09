@@ -1,18 +1,17 @@
-package com.brookmanholmes.drilltracker.presentation.drills;
+package com.brookmanholmes.drilltracker.presentation.deletedrill;
 
 import com.brookmanholmes.drilltracker.domain.interactor.DefaultObserver;
 import com.brookmanholmes.drilltracker.domain.interactor.DeleteDrill;
 import com.brookmanholmes.drilltracker.presentation.base.Presenter;
-import com.brookmanholmes.drilltracker.presentation.model.DrillModel;
 
 /**
  * Created by Brookman Holmes on 7/28/2017.
  */
 
-public class DeleteDrillDialogPresenter implements Presenter {
-    DeleteDrill deleteDrill;
+class DeleteDrillDialogPresenter implements Presenter {
+    private DeleteDrill deleteDrill;
 
-    public DeleteDrillDialogPresenter(DeleteDrill deleteDrill) {
+    DeleteDrillDialogPresenter(DeleteDrill deleteDrill) {
         this.deleteDrill = deleteDrill;
     }
 

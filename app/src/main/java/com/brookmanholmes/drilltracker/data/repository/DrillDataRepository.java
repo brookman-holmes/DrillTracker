@@ -1,7 +1,5 @@
 package com.brookmanholmes.drilltracker.data.repository;
 
-import android.util.Log;
-
 import com.brookmanholmes.drilltracker.data.entity.DrillEntity;
 import com.brookmanholmes.drilltracker.data.entity.mapper.DrillEntityDataMapper;
 import com.brookmanholmes.drilltracker.data.repository.datasource.DrillDataStore;
@@ -16,7 +14,6 @@ import java.util.List;
 import io.reactivex.Maybe;
 import io.reactivex.Observable;
 import io.reactivex.annotations.NonNull;
-import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 
@@ -33,6 +30,11 @@ public class DrillDataRepository implements DrillRepository {
     public DrillDataRepository(DrillEntityDataMapper drillEntityDataMapper, DrillDataStore drillDataStore) {
         this.drillDataStore = drillDataStore;
         this.drillEntityDataMapper = drillEntityDataMapper;
+    }
+
+    public DrillDataRepository(DrillDataStore drillDataStore) {
+        this.drillDataStore = drillDataStore;
+        this.drillEntityDataMapper = new DrillEntityDataMapper();
     }
 
     @Override
@@ -71,9 +73,8 @@ public class DrillDataRepository implements DrillRepository {
     }
 
     @Override
-    public Observable<Drill> removeAttempt(String id) {
-        return drillDataStore.removeLastAttempt(id)
-                .map(transformDrillEntity());
+    public void removeLastAttempt(String id) {
+        drillDataStore.removeLastAttempt(id);
     }
 
     @Override

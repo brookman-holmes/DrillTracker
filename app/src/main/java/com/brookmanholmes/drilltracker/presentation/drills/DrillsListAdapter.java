@@ -1,11 +1,8 @@
 package com.brookmanholmes.drilltracker.presentation.drills;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.net.Uri;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,18 +13,12 @@ import com.brookmanholmes.drilltracker.R;
 import com.brookmanholmes.drilltracker.presentation.model.DrillModel;
 import com.brookmanholmes.drilltracker.presentation.view.util.ChartUtil;
 import com.brookmanholmes.drilltracker.presentation.view.util.ImageHandler;
-import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import lecho.lib.hellocharts.model.Line;
-import lecho.lib.hellocharts.model.LineChartData;
-import lecho.lib.hellocharts.model.PointValue;
 import lecho.lib.hellocharts.view.LineChartView;
 
 /**
@@ -36,16 +27,9 @@ import lecho.lib.hellocharts.view.LineChartView;
 
 class DrillsListAdapter extends RecyclerView.Adapter<DrillsListAdapter.DrillViewHolder> {
     private static final String TAG = DrillsListAdapter.class.getName();
-
-    public interface OnItemClickListener {
-        void onDrillItemClicked(DrillModel drillModel);
-        void onDrillItemLongClicked(DrillModel drillModel);
-    }
-
-    private List<DrillModel> drillsCollection;
     private final LayoutInflater inflater;
+    private List<DrillModel> drillsCollection;
     private OnItemClickListener onItemClickListener;
-
     public DrillsListAdapter(Context context) {
         this.inflater = LayoutInflater.from(context);
         this.drillsCollection = Collections.emptyList();
@@ -58,7 +42,7 @@ class DrillsListAdapter extends RecyclerView.Adapter<DrillsListAdapter.DrillView
     }
 
     @Override
-    public void onBindViewHolder(DrillViewHolder holder, int position) {
+    public void onBindViewHolder(final DrillViewHolder holder, int position) {
         final DrillModel drillModel = drillsCollection.get(position);
         holder.bind(drillModel);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -67,6 +51,13 @@ class DrillsListAdapter extends RecyclerView.Adapter<DrillsListAdapter.DrillView
                 if (DrillsListAdapter.this.onItemClickListener != null) {
                     DrillsListAdapter.this.onItemClickListener.onDrillItemClicked(drillModel);
                 }
+            }
+        });
+        // forward the click on the chart to the whole holder because for some reason it intercepts it otherwise
+        holder.chart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                holder.itemView.performClick();
             }
         });
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
@@ -108,6 +99,12 @@ class DrillsListAdapter extends RecyclerView.Adapter<DrillsListAdapter.DrillView
             throw new IllegalArgumentException("The list cannot be null");
     }
 
+    public interface OnItemClickListener {
+        void onDrillItemClicked(DrillModel drillModel);
+
+        void onDrillItemLongClicked(DrillModel drillModel);
+    }
+
     static class DrillViewHolder extends RecyclerView.ViewHolder {
         private static final String TAG = DrillViewHolder.class.getName();
 
@@ -128,7 +125,7 @@ class DrillsListAdapter extends RecyclerView.Adapter<DrillsListAdapter.DrillView
         void bind(DrillModel model) {
             name.setText(model.name);
             ImageHandler.loadImage(image, model.imageUrl);
-            ChartUtil.setupChart(chart, model, true);
+            ChartUtil.setupLifetimeChart(chart, model, false);
         }
     }
 

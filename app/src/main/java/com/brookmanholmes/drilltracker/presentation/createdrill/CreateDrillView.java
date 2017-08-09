@@ -3,7 +3,6 @@ package com.brookmanholmes.drilltracker.presentation.createdrill;
 import android.text.Editable;
 import android.widget.ImageView;
 
-import com.brookmanholmes.drilltracker.domain.Drill;
 import com.brookmanholmes.drilltracker.presentation.model.DrillModel;
 
 /**
@@ -22,12 +21,9 @@ interface CreateDrillView {
     void isDrillComplete(boolean isComplete);
     void onDrillTypeSelected(int position);
 
-    void setDrillName(String name);
-    void setDrillDescription(String description);
-    void setTargetScore(int score);
-    void setMaxScore(int score);
-    void setDrillImage(String url);
-    void setDrillType(DrillModel.Type type);
+    void loadDrillData(DrillModel model);
 
     void finish();
+
+    void setIsEditing(boolean b);
 }

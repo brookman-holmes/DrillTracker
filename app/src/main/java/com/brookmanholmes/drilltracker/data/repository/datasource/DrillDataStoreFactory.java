@@ -1,33 +1,25 @@
 package com.brookmanholmes.drilltracker.data.repository.datasource;
 
 import com.brookmanholmes.drilltracker.data.entity.DrillEntity;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.storage.UploadTask;
 
 import java.util.List;
 
-import durdinapps.rxfirebase2.RxFirebaseAuth;
-import io.reactivex.Flowable;
 import io.reactivex.Maybe;
 import io.reactivex.Observable;
-import io.reactivex.annotations.NonNull;
-import io.reactivex.functions.Consumer;
 
 /**
  * Created by Brookman Holmes on 7/14/2017.
  */
 
 public class DrillDataStoreFactory implements DrillDataStore {
-    DrillDataStore dataStore;
+    private static DrillDataStore dataStore;
 
     public static DrillDataStore getInstance() {
-        return new FirebaseDataStore(FirebaseAuth.getInstance().signInAnonymously().getResult().getUser().getUid());
-    }
+        if (dataStore == null)
+            dataStore = new FirebaseDataStore();
 
-    private DrillDataStoreFactory(DrillDataStore dataStore) {
-        this.dataStore = dataStore;
+        return dataStore;
     }
 
     @Override
@@ -51,8 +43,8 @@ public class DrillDataStoreFactory implements DrillDataStore {
     }
 
     @Override
-    public Observable<DrillEntity>  removeLastAttempt(String id) {
-        return dataStore.removeLastAttempt(id);
+    public void removeLastAttempt(String id) {
+        dataStore.removeLastAttempt(id);
     }
 
     @Override

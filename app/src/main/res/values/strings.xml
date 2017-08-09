@@ -4,7 +4,7 @@
     <string name="dialog_add_attempt_title">Add attempt</string>
     <string name="number">%1$d</string>
     <string name="number_float">%.2f</string>
-    <string name="target_score">Target score: %1$d</string>
+    <string name="target_score_with_number">Target score: %1$d</string>
     <string name="max_score_attainable">Maximum score attainable: %1$d</string>
     <string name="median_attempt">Median attempt</string>
     <string name="average_attempt">Average attempt</string>
@@ -26,6 +26,15 @@
     <string name="type_kicking">Kicking</string>
     <string name="type_banking">Banking</string>
     <string name="type_speed">Speed</string>
+    <string name="title_edit_drill">Edit drill</string>
+    <string name="title_create_drill">Create drill</string>
+    <string name="drill_name">Drill name</string>
+    <string name="description">Description</string>
+    <string name="type_of_drill">Type of drill:</string>
+    <string name="maximum_score">Maximum score</string>
+    <string name="target_score">Target score</string>
+    <string name="undo_attempt">Undo attempt</string>
+    <string name="edit">Edit</string>
 
 
     <string-array name="create_drill_array">

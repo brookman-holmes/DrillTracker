@@ -1,4 +1,4 @@
-package com.brookmanholmes.drilltracker.presentation.drills;
+package com.brookmanholmes.drilltracker.presentation.deletedrill;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -15,7 +15,7 @@ import com.brookmanholmes.drilltracker.presentation.base.BaseDialogFragment;
 public class DeleteDrillDialog extends BaseDialogFragment<DeleteDrillDialogPresenter> {
     private static final String PARAM_DRILL_ID = "param_drill_id";
 
-    static DeleteDrillDialog newInstance(String drillId) {
+    public static DeleteDrillDialog newInstance(String drillId) {
         DeleteDrillDialog dialog = new DeleteDrillDialog();
         Bundle args = new Bundle();
         args.putString(PARAM_DRILL_ID, drillId);

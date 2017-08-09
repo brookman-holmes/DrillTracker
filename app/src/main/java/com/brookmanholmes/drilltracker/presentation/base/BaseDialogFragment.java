@@ -10,13 +10,11 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 
 import com.brookmanholmes.drilltracker.R;
-import com.brookmanholmes.drilltracker.data.entity.mapper.DrillEntityDataMapper;
 import com.brookmanholmes.drilltracker.data.executor.JobExecutor;
 import com.brookmanholmes.drilltracker.data.repository.DrillDataRepository;
 import com.brookmanholmes.drilltracker.data.repository.datasource.DrillDataStoreFactory;
 import com.brookmanholmes.drilltracker.domain.executor.PostExecutionThread;
 import com.brookmanholmes.drilltracker.domain.executor.ThreadExecutor;
-import com.brookmanholmes.drilltracker.domain.interactor.UseCase;
 import com.brookmanholmes.drilltracker.domain.repository.DrillRepository;
 
 import io.reactivex.Scheduler;
@@ -29,7 +27,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 public abstract class BaseDialogFragment<T extends Presenter> extends DialogFragment implements DialogInterface.OnClickListener {
     protected AlertDialog.Builder dialogBuilder;
     protected ThreadExecutor threadExecutor = new JobExecutor();
-    protected DrillRepository drillRepository = new DrillDataRepository(new DrillEntityDataMapper(), DrillDataStoreFactory.getInstance());
+    protected DrillRepository drillRepository = new DrillDataRepository(DrillDataStoreFactory.getInstance());
     protected PostExecutionThread postExecutionThread = new PostExecutionThread() {
         @Override
         public Scheduler getScheduler() {

@@ -17,12 +17,18 @@ import com.brookmanholmes.drilltracker.R;
  * Created by Brookman Holmes on 7/20/2017.
  */
 
-public class CustomNumberPicker extends LinearLayout implements View.OnClickListener {
+public class CustomNumberPicker extends LinearLayout implements View.OnClickListener, View.OnLongClickListener {
+    private static final long LONG_PRESS_UPDATE_INTERVAL = 300;
+    private static final float ENABLED_ALPHA = 1f;
+    private static final float DISABLED_ALPHA = .5f;
+
+    private OnValueChangeListener onValueChangedListener = null;
+    private ChangeCurrentByOneFromLongPressCommand changeCurrentByOneFromLongPressCommand;
+
+
     private int min = 0, max = 15;
     private int value = 7;
     private String stringTitle;
-
-    private OnValueChangeListener onValueChangedListener = null;
 
     private TextView title;
     private TextView textValue, textPrevValue, textNextValue;
@@ -71,6 +77,8 @@ public class CustomNumberPicker extends LinearLayout implements View.OnClickList
 
         minus.setOnClickListener(this);
         plus.setOnClickListener(this);
+        minus.setOnLongClickListener(this);
+        plus.setOnLongClickListener(this);
         title.setText(stringTitle);
         setTextValues();
     }
@@ -79,8 +87,24 @@ public class CustomNumberPicker extends LinearLayout implements View.OnClickList
         LayoutInflater.from(getContext()).inflate(R.layout.view_number_picker, this);
     }
 
-    private final float enabled = 1f;
-    private final float disabled = .5f;
+    private void changeValue(int newValue) {
+        TransitionManager.beginDelayedTransition(this);
+
+        if (value > min && value < max) {
+            notifyChange(value, newValue);
+            setValue(newValue);
+
+            if (value == max) {
+                textNextValue.setVisibility(View.INVISIBLE);
+                plus.setEnabled(false);
+                plus.setAlpha(DISABLED_ALPHA);
+            } else if (value == min) {
+                textPrevValue.setVisibility(View.INVISIBLE);
+                minus.setEnabled(false);
+                minus.setAlpha(DISABLED_ALPHA);
+            }
+        }
+    }
 
     private void increment() {
         TransitionManager.beginDelayedTransition(this);
@@ -92,13 +116,13 @@ public class CustomNumberPicker extends LinearLayout implements View.OnClickList
             if (value == max) {
                 textNextValue.setVisibility(View.INVISIBLE);
                 plus.setEnabled(false);
-                plus.setAlpha(disabled);
+                plus.setAlpha(DISABLED_ALPHA);
             }
 
             if (value > min) {
                 textPrevValue.setVisibility(View.VISIBLE);
                 minus.setEnabled(true);
-                minus.setAlpha(enabled);
+                minus.setAlpha(ENABLED_ALPHA);
             }
         }
     }
@@ -115,13 +139,13 @@ public class CustomNumberPicker extends LinearLayout implements View.OnClickList
             if (value == min) {
                 textPrevValue.setVisibility(View.INVISIBLE);
                 minus.setEnabled(false);
-                minus.setAlpha(disabled);
+                minus.setAlpha(DISABLED_ALPHA);
             }
 
             if (value < max) {
                 textNextValue.setVisibility(View.VISIBLE);
                 plus.setEnabled(true);
-                plus.setAlpha(enabled);
+                plus.setAlpha(ENABLED_ALPHA);
             }
         }
     }
@@ -138,11 +162,15 @@ public class CustomNumberPicker extends LinearLayout implements View.OnClickList
         return value;
     }
 
+    public void setValue(int newValue) {
+        notifyChange(this.value, newValue);
+        this.value = newValue;
+        setTextValues();
+    }
+
     @Override
     public void onClick(View view) {
-        int id = view.getId();
-
-        switch(id) {
+        switch (view.getId()) {
             case R.id.minus:
                 decrement();
                 break;
@@ -150,6 +178,35 @@ public class CustomNumberPicker extends LinearLayout implements View.OnClickList
                 increment();
                 break;
         }
+    }
+
+    @Override
+    public boolean onLongClick(View view) {
+        switch (view.getId()) {
+            case R.id.minus:
+                //postLongClick(false);
+                break;
+            case R.id.plus:
+                //postLongClick(true);
+                break;
+        }
+        return true;
+    }
+
+    private void postLongClick(boolean increment) {
+        removeAllCallbacks();
+
+        if (changeCurrentByOneFromLongPressCommand == null) {
+            changeCurrentByOneFromLongPressCommand = new ChangeCurrentByOneFromLongPressCommand();
+        }
+
+        changeCurrentByOneFromLongPressCommand.setIncrement(increment);
+        post(changeCurrentByOneFromLongPressCommand);
+    }
+
+    private void removeAllCallbacks() {
+        if (changeCurrentByOneFromLongPressCommand != null)
+            removeCallbacks(changeCurrentByOneFromLongPressCommand);
     }
 
     public void setMax(int max) {
@@ -181,13 +238,25 @@ public class CustomNumberPicker extends LinearLayout implements View.OnClickList
         }
     }
 
-    public void setValue(int value) {
-        notifyChange(this.value, value);
-        this.value = value;
-        setTextValues();
-    }
-
     public interface OnValueChangeListener {
         void onValueChange(int oldVal, int newVal);
+    }
+
+    private class ChangeCurrentByOneFromLongPressCommand implements Runnable {
+        private boolean increment;
+
+        private void setIncrement(boolean increment) {
+            this.increment = increment;
+        }
+
+        @Override
+        public void run() {
+            if (increment)
+                increment();
+            else
+                decrement();
+
+            postDelayed(this, LONG_PRESS_UPDATE_INTERVAL);
+        }
     }
 }

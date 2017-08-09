@@ -3,7 +3,6 @@ package com.brookmanholmes.drilltracker.presentation.createdrill;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.brookmanholmes.drilltracker.domain.Drill;
 import com.brookmanholmes.drilltracker.domain.interactor.AddDrill;
@@ -42,6 +41,7 @@ class CreateDrillPresenter implements Presenter {
 
     public void setView(@NonNull CreateDrillView view) {
         this.view = view;
+        this.view.setIsEditing(drillId != null);
         if (drillId != null) {
             getDrillDetails.execute(new GetDrillObserver(), GetDrillDetails.Params.forDrill(drillId));
         }
@@ -112,12 +112,7 @@ class CreateDrillPresenter implements Presenter {
     }
 
     private void populateView(DrillModel model) {
-        view.setTargetScore(model.defaultTargetScore);
-        view.setMaxScore(model.maxScore);
-        view.setDrillDescription(model.description);
-        view.setDrillImage(model.imageUrl);
-        view.setDrillName(model.name);
-        view.setDrillType(model.drillType);
+        view.loadDrillData(model);
     }
 
     private class EditDrillObserver extends DefaultObserver<Drill> {

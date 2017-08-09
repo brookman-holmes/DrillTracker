@@ -4,10 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 
 import com.brookmanholmes.drilltracker.R;
 import com.brookmanholmes.drilltracker.presentation.base.BaseActivity;
-import com.brookmanholmes.drilltracker.presentation.drilldetail.DrillDetailsFragment;
 
 /**
  * Created by Brookman Holmes on 7/23/2017.
@@ -29,10 +29,7 @@ public class CreateDrillActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_drill_list);
-        if (savedInstanceState == null) {
-            drillId = getIntent().getStringExtra(INTENT_EXTRA_PARAM_DRILL_ID);
-            addFragment(R.id.fragmentContainer, CreateDrillFragment.newInstance(drillId));
-        } else {
+        if (savedInstanceState != null) {
             drillId = savedInstanceState.getString(INSTANCE_STATE_PARAM_DRILL_ID);
         }
     }
@@ -43,5 +40,11 @@ public class CreateDrillActivity extends BaseActivity {
             outState.putString(INSTANCE_STATE_PARAM_DRILL_ID, drillId);
         }
         super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected Fragment getFragment() {
+        drillId = getIntent().getStringExtra(INTENT_EXTRA_PARAM_DRILL_ID);
+        return CreateDrillFragment.newInstance(drillId);
     }
 }

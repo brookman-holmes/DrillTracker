@@ -7,6 +7,7 @@ import com.brookmanholmes.drilltracker.domain.Drill;
 import com.brookmanholmes.drilltracker.domain.exception.DefaultErrorBundle;
 import com.brookmanholmes.drilltracker.domain.exception.ErrorBundle;
 import com.brookmanholmes.drilltracker.domain.interactor.DefaultObserver;
+import com.brookmanholmes.drilltracker.domain.interactor.DeleteAttempt;
 import com.brookmanholmes.drilltracker.domain.interactor.GetDrillDetails;
 import com.brookmanholmes.drilltracker.presentation.base.Presenter;
 import com.brookmanholmes.drilltracker.presentation.exception.ErrorMessageFactory;
@@ -19,15 +20,16 @@ import com.brookmanholmes.drilltracker.presentation.model.DrillModel;
 // TODO: 7/27/2017 add in ability to edit the drill
 class DrillDetailsPresenter implements Presenter {
     private static final String TAG = DrillDetailsPresenter.class.getName();
-
+    private final GetDrillDetails getDrillDetailsUseCase;
+    private final DeleteAttempt deleteAttemptUseCase;
+    private final DrillModelDataMapper drillModelDataMapper;
     private DrillDetailView drillDetailView;
     private DrillModel model;
-    private final GetDrillDetails getDrillDetailsUseCase;
-    private final DrillModelDataMapper drillModelDataMapper;
 
-    DrillDetailsPresenter(GetDrillDetails getDrillDetailsUseCase, DrillModelDataMapper drillModelDataMapper) {
+    DrillDetailsPresenter(GetDrillDetails getDrillDetailsUseCase, DeleteAttempt deleteAttemptUseCase, DrillModelDataMapper drillModelDataMapper) {
         this.getDrillDetailsUseCase = getDrillDetailsUseCase;
         this.drillModelDataMapper = drillModelDataMapper;
+        this.deleteAttemptUseCase = deleteAttemptUseCase;
     }
 
     public void setView(@NonNull DrillDetailView view) {
@@ -103,6 +105,10 @@ class DrillDetailsPresenter implements Presenter {
         drillDetailView.showEditDrillView(model.id);
     }
 
+    void onUndoClicked() {
+        deleteAttemptUseCase.execute(new DeleteAttemptObserver(), model.id);
+    }
+
     private final class DrillDetailsObserver extends DefaultObserver<Drill> {
         @Override
         public void onNext(Drill drill) {
@@ -115,6 +121,13 @@ class DrillDetailsPresenter implements Presenter {
             DrillDetailsPresenter.this.hideViewLoading();
             DrillDetailsPresenter.this.showErrorMessage(new DefaultErrorBundle((Exception)e));
             DrillDetailsPresenter.this.showViewRetry();
+        }
+    }
+
+    private final class DeleteAttemptObserver extends DefaultObserver<Void> {
+        @Override
+        public void onComplete() {
+            deleteAttemptUseCase.dispose();
         }
     }
 }

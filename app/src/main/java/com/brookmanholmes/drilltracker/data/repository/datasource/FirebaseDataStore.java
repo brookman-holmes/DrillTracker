@@ -1,9 +1,6 @@
 package com.brookmanholmes.drilltracker.data.repository.datasource;
 
-import android.util.Log;
-
 import com.brookmanholmes.drilltracker.data.entity.DrillEntity;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -15,43 +12,55 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.util.Iterator;
 import java.util.List;
 
 import durdinapps.rxfirebase2.DataSnapshotMapper;
 import durdinapps.rxfirebase2.RxFirebaseDatabase;
 import durdinapps.rxfirebase2.RxFirebaseStorage;
-import io.reactivex.Completable;
-import io.reactivex.CompletableObserver;
 import io.reactivex.Maybe;
 import io.reactivex.Observable;
-import io.reactivex.annotations.NonNull;
-import io.reactivex.functions.Action;
-import io.reactivex.functions.Consumer;
-import io.reactivex.functions.Function;
 
 /**
  * Created by Brookman Holmes on 7/14/2017.
  */
 class FirebaseDataStore implements DrillDataStore {
     private static final String TAG = FirebaseDataStore.class.getName();
-    private static boolean moveComplete = false;
-    private DatabaseReference ref;
 
-    FirebaseDataStore(String userId) {
-        ref = FirebaseDatabase.getInstance().getReference().child(userId).child("drills");
+    private StorageReference imagesRef = FirebaseStorage.getInstance().getReference();
+    private DatabaseReference drillsRef = FirebaseDatabase.getInstance().getReference();
+    private DatabaseReference userRef = FirebaseDatabase.getInstance().getReference();
 
-        DatabaseReference oldData = FirebaseDatabase.getInstance().getReference().child("test");
+    FirebaseDataStore() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        init(user.getUid());
+    }
 
-        oldData.addListenerForSingleValueEvent(new ValueEventListener() {
+    private void init(String userId) {
+        imagesRef = FirebaseStorage.getInstance().getReference().child(userId);
+        userRef = FirebaseDatabase.getInstance().getReference().child(userId);
+        drillsRef = userRef.child("drills");
+
+        final DatabaseReference testData = FirebaseDatabase.getInstance().getReference().child("test");
+
+        userRef.child("firstLogin").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if (!moveComplete)
-                    ref.getParent().setValue(dataSnapshot.getValue()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                Boolean firstLogin = dataSnapshot.getValue(Boolean.class);
+                if (firstLogin == null || firstLogin) {
+                    testData.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
-                        public void onSuccess(Void aVoid) {
-                            moveComplete = true;
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            userRef.setValue(dataSnapshot.getValue());
+                            userRef.child("firstLogin").setValue(false);
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
                         }
                     });
+                }
             }
 
             @Override
@@ -63,50 +72,69 @@ class FirebaseDataStore implements DrillDataStore {
 
     @Override
     public Observable<DrillEntity> addDrill(DrillEntity entity) {
-        String key = ref.push().getKey();
+        String key = drillsRef.push().getKey();
         entity.id = key;
-        ref.child(key).setValue(entity);
-        return RxFirebaseDatabase.observeValueEvent(ref.child(key), DrillEntity.class).toObservable();
+        drillsRef.child(key).setValue(entity);
+        return RxFirebaseDatabase.observeValueEvent(drillsRef.child(key), DrillEntity.class).toObservable();
     }
 
     @Override
     public Observable<List<DrillEntity>> drillEntityList() {
-        return RxFirebaseDatabase.observeValueEvent(ref, DataSnapshotMapper.listOf(DrillEntity.class)).toObservable();
+        return RxFirebaseDatabase.observeValueEvent(drillsRef, DataSnapshotMapper.listOf(DrillEntity.class)).toObservable();
     }
 
     @Override
     public Observable<DrillEntity> drillEntity(String id) {
-        return RxFirebaseDatabase.observeValueEvent(ref.child(id), DrillEntity.class).toObservable();
+        return RxFirebaseDatabase.observeValueEvent(drillsRef.child(id), DrillEntity.class).toObservable();
     }
 
     @Override
     public Observable<DrillEntity> addAttempt(String id, DrillEntity.AttemptEntity attempt) {
-        String attemptId = ref.child(id).child("attempts").push().getKey();
-        ref.child(id).child("attempts").child(attemptId).setValue(attempt);
+        String attemptId = drillsRef.child(id).child("attempts").push().getKey();
+        drillsRef.child(id).child("attempts").child(attemptId).setValue(attempt);
         return drillEntity(id);
     }
 
     @Override
-    public Observable<DrillEntity> removeLastAttempt(String id) {
-        ref.child(id).orderByKey().limitToLast(1).getRef().removeValue();
-        return drillEntity(id);
+    public void removeLastAttempt(String id) {
+        drillsRef.child(id).child("attempts").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getChildrenCount() > 0) { // iterate through list of children
+                    Iterator<DataSnapshot> children = dataSnapshot.getChildren().iterator();
+                    while (children.hasNext()) {
+                        DataSnapshot snapshot = children.next();
+
+                        // if we're at the last item in the list remove it
+                        if (!children.hasNext()) {
+                            snapshot.getRef().setValue(null);
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     @Override
-    public Maybe<UploadTask.TaskSnapshot> uploadImage(String id, byte[] image) {
-        StorageReference storageRef = FirebaseStorage.getInstance().getReference().child("test").child(id).child("image.png");
+    public Maybe<UploadTask.TaskSnapshot> uploadImage(String drillId, byte[] image) {
+        StorageReference storageRef = imagesRef.child(drillId + ".jpg");
         return RxFirebaseStorage.putBytes(storageRef, image);
     }
 
     @Override
     public Observable<DrillEntity> updateDrill(DrillEntity entity) {
-        ref.child(entity.id).setValue(entity);
+        drillsRef.child(entity.id).setValue(entity);
         return drillEntity(entity.id);
     }
 
     @Override
     public void deleteDrill(String drillId) {
-        FirebaseStorage.getInstance().getReference().child("test").child(drillId).child("image.png").delete();
-        ref.child(drillId).setValue(null);
+        imagesRef.child(drillId + ".jpg").delete();
+        drillsRef.child(drillId).setValue(null);
     }
 }
