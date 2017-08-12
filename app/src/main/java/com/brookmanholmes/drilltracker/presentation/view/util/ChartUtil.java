@@ -44,7 +44,7 @@ public class ChartUtil {
         Line line = getLine(points, getColor(chart.getContext(), R.color.chart_blue));
 
         List<PointValue> dummyPoints = getPointValues(0, model.maxScore + 1);
-        List<PointValue> targetPoints = model.attemptModels.size() > 0 ? getPointValues(getTargetArray(new ArrayList<>(model.attemptModels))) : getPointValues(model.defaultTargetScore, model.defaultTargetScore);
+        List<PointValue> targetPoints = model.attemptModels.size() > 1 ? getPointValues(getTargetArray(new ArrayList<>(model.attemptModels))) : getPointValues(model.defaultTargetScore, model.defaultTargetScore);
 
         LineChartData data = getData(getLine(targetPoints, getColor(chart.getContext(), R.color.chart_red)).setHasPoints(false), line, getLine(dummyPoints, Color.TRANSPARENT));
 

@@ -25,31 +25,31 @@ import lecho.lib.hellocharts.view.LineChartView;
  * Created by Brookman Holmes on 7/7/2017.
  */
 
-class DrillsListAdapter extends RecyclerView.Adapter<DrillsListAdapter.DrillViewHolder> {
+class DrillsListAdapter extends RecyclerView.Adapter<DrillsListAdapter.ViewHolder> {
     private static final String TAG = DrillsListAdapter.class.getName();
     private final LayoutInflater inflater;
-    private List<DrillModel> drillsCollection;
+    private List<DrillModel> models;
     private OnItemClickListener onItemClickListener;
-    public DrillsListAdapter(Context context) {
+
+    DrillsListAdapter(Context context) {
         this.inflater = LayoutInflater.from(context);
-        this.drillsCollection = Collections.emptyList();
+        this.models = Collections.emptyList();
     }
 
     @Override
-    public DrillViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         final View view = inflater.inflate(R.layout.row_drill, parent, false);
-        return new DrillViewHolder(view);
+        return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(final DrillViewHolder holder, int position) {
-        final DrillModel drillModel = drillsCollection.get(position);
-        holder.bind(drillModel);
+    public void onBindViewHolder(final ViewHolder holder, int position) {
+        holder.bind(models.get(position));
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (DrillsListAdapter.this.onItemClickListener != null) {
-                    DrillsListAdapter.this.onItemClickListener.onDrillItemClicked(drillModel);
+                    DrillsListAdapter.this.onItemClickListener.onDrillItemClicked(models.get(holder.getAdapterPosition()));
                 }
             }
         });
@@ -64,7 +64,7 @@ class DrillsListAdapter extends RecyclerView.Adapter<DrillsListAdapter.DrillView
             @Override
             public boolean onLongClick(View view) {
                 if (DrillsListAdapter.this.onItemClickListener != null) {
-                    DrillsListAdapter.this.onItemClickListener.onDrillItemLongClicked(drillModel);
+                    DrillsListAdapter.this.onItemClickListener.onDrillItemLongClicked(models.get(holder.getAdapterPosition()));
                     return true;
                 } else {
                     return false;
@@ -75,7 +75,7 @@ class DrillsListAdapter extends RecyclerView.Adapter<DrillsListAdapter.DrillView
 
     @Override
     public int getItemCount() {
-        return (this.drillsCollection != null) ? this.drillsCollection.size() : 0;
+        return (this.models != null) ? this.models.size() : 0;
     }
 
     @Override
@@ -83,14 +83,14 @@ class DrillsListAdapter extends RecyclerView.Adapter<DrillsListAdapter.DrillView
         return position;
     }
 
-    public void setDrillsCollection(List<DrillModel> drillsCollection) {
+    void setData(List<DrillModel> drillsCollection) {
         this.validateDrillsCollection(drillsCollection);
-        DiffUtil.DiffResult result = DiffUtil.calculateDiff(new DiffUtilCallback(this.drillsCollection, drillsCollection));
-        this.drillsCollection = drillsCollection;
+        DiffUtil.DiffResult result = DiffUtil.calculateDiff(new DiffUtilCallback(this.models, drillsCollection));
+        this.models = drillsCollection;
         result.dispatchUpdatesTo(this);
     }
 
-    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+    void setOnItemClickListener(OnItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
     }
 
@@ -99,14 +99,13 @@ class DrillsListAdapter extends RecyclerView.Adapter<DrillsListAdapter.DrillView
             throw new IllegalArgumentException("The list cannot be null");
     }
 
-    public interface OnItemClickListener {
+    interface OnItemClickListener {
         void onDrillItemClicked(DrillModel drillModel);
-
         void onDrillItemLongClicked(DrillModel drillModel);
     }
 
-    static class DrillViewHolder extends RecyclerView.ViewHolder {
-        private static final String TAG = DrillViewHolder.class.getName();
+    static class ViewHolder extends RecyclerView.ViewHolder {
+        private static final String TAG = ViewHolder.class.getName();
 
         @BindView(R.id.name)
         TextView name;
@@ -115,7 +114,7 @@ class DrillsListAdapter extends RecyclerView.Adapter<DrillsListAdapter.DrillView
         @BindView(R.id.chart)
         LineChartView chart;
 
-        DrillViewHolder(View itemView) {
+        ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
             chart.setClickable(false);

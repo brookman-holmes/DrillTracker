@@ -25,28 +25,28 @@ public class DrillDataRepository implements DrillRepository {
     private static final String TAG = DrillDataRepository.class.getName();
 
     private final DrillEntityDataMapper drillEntityDataMapper;
-    private final DrillDataStore drillDataStore;
+    private final DrillDataStore dataStore;
 
     public DrillDataRepository(DrillEntityDataMapper drillEntityDataMapper, DrillDataStore drillDataStore) {
-        this.drillDataStore = drillDataStore;
+        this.dataStore = drillDataStore;
         this.drillEntityDataMapper = drillEntityDataMapper;
     }
 
     public DrillDataRepository(DrillDataStore drillDataStore) {
-        this.drillDataStore = drillDataStore;
+        this.dataStore = drillDataStore;
         this.drillEntityDataMapper = new DrillEntityDataMapper();
     }
 
     @Override
     public Observable<Drill> addDrill(final String name, final String description, final byte[] image, final String type, final int maxScore, final int targetScore) {
-        return drillDataStore.addDrill(new DrillEntity(name, description, null, null, type, maxScore, targetScore))
+        return dataStore.addDrill(new DrillEntity(name, description, null, null, type, maxScore, targetScore))
                 .map(uploadImageMap(image))
                 .map(transformDrillEntity());
     }
 
     @Override
     public Observable<List<Drill>> observeDrills(final DrillModel.Type filter) {
-        return drillDataStore.drillEntityList()
+        return dataStore.drillEntityList()
                 .map(new Function<List<DrillEntity>, List<Drill>>() {
                     @Override
                     public List<Drill> apply(@NonNull List<DrillEntity> drillEntityList) throws Exception {
@@ -62,42 +62,42 @@ public class DrillDataRepository implements DrillRepository {
 
     @Override
     public Observable<Drill> observeDrill(final String id) {
-        return drillDataStore.drillEntity(id)
+        return dataStore.drillEntity(id)
                 .map(transformDrillEntity());
     }
 
     @Override
     public Observable<Drill> addAttempt(String id, Drill.Attempt attempt) {
-        return drillDataStore.addAttempt(id, drillEntityDataMapper.transform(attempt))
+        return dataStore.addAttempt(id, drillEntityDataMapper.transform(attempt))
                 .map(transformDrillEntity());
     }
 
     @Override
     public void removeLastAttempt(String id) {
-        drillDataStore.removeLastAttempt(id);
+        dataStore.removeLastAttempt(id);
     }
 
     @Override
     public Maybe<UploadTask.TaskSnapshot> uploadImage(String id, byte[] image) {
-        return drillDataStore.uploadImage(id, image);
+        return dataStore.uploadImage(id, image);
     }
 
     @Override
     public Observable<Drill> updateDrill(Drill drill) {
-        return drillDataStore.updateDrill(new DrillEntity(drill.getName(), drill.getDescription(), drill.getId(), drill.getImageUrl(), drillEntityDataMapper.transform(drill.getType()), drill.getMaxScore(), drill.getDefaultTargetScore()))
+        return dataStore.updateDrill(new DrillEntity(drill.getName(), drill.getDescription(), drill.getId(), drill.getImageUrl(), drillEntityDataMapper.transform(drill.getType()), drill.getMaxScore(), drill.getDefaultTargetScore()))
                 .map(transformDrillEntity());
     }
 
     @Override
     public Observable<Drill> updateDrill(String name, String description, final String id, final byte[] image, String type, int maxScore, int targetScore) {
-        return drillDataStore.updateDrill(new DrillEntity(name, description, id, null, type, maxScore, targetScore))
+        return dataStore.updateDrill(new DrillEntity(name, description, id, null, type, maxScore, targetScore))
                 .map(uploadImageMap(image))
                 .map(transformDrillEntity());
     }
 
     @Override
     public void deleteDrill(String drillId) {
-        drillDataStore.deleteDrill(drillId);
+        dataStore.deleteDrill(drillId);
     }
 
     private Function<DrillEntity, DrillEntity> uploadImageMap(final byte[] image) {
@@ -109,7 +109,7 @@ public class DrillDataRepository implements DrillRepository {
                             @Override
                             public void accept(@NonNull UploadTask.TaskSnapshot taskSnapshot) throws Exception {
                                 entity.imageUrl = taskSnapshot.getDownloadUrl().toString();
-                                drillDataStore.updateDrill(entity);
+                                dataStore.updateDrill(entity);
                             }
                         });
 

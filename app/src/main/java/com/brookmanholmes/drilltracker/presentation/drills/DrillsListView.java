@@ -1,9 +1,8 @@
 package com.brookmanholmes.drilltracker.presentation.drills;
 
-import com.brookmanholmes.drilltracker.presentation.model.DrillModel;
 import com.brookmanholmes.drilltracker.presentation.base.LoadDataView;
+import com.brookmanholmes.drilltracker.presentation.model.DrillModel;
 
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -11,8 +10,7 @@ import java.util.List;
  */
 
 interface DrillsListView extends LoadDataView {
-    void renderUserList(List<DrillModel> drillModelCollection);
+    void renderDrillList(List<DrillModel> drillModelCollection);
     void viewDrill(DrillModel drillModel);
-    void showCreateDrillActivity();
     void showDeleteConfirmation(DrillModel drillModel);
 }

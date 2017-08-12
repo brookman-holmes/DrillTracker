@@ -1,22 +1,222 @@
 package com.brookmanholmes.drilltracker.presentation.drills;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.support.v7.view.ContextThemeWrapper;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.Spinner;
 
 import com.brookmanholmes.drilltracker.R;
-import com.brookmanholmes.drilltracker.presentation.base.BaseActivity;
+import com.brookmanholmes.drilltracker.presentation.base.BaseViewPagerActivity;
+import com.brookmanholmes.drilltracker.presentation.createdrill.CreateDrillActivity;
+import com.brookmanholmes.drilltracker.presentation.model.DrillModel;
+import com.brookmanholmes.drilltracker.presentation.purchasedrills.PurchaseDrillsFragment;
 
-public class DrillsListActivity extends BaseActivity {
-    private static final String TAG = DrillsListActivity.class.getName();
+import java.util.ArrayList;
+import java.util.List;
+
+import butterknife.BindView;
+import butterknife.OnClick;
+
+/**
+ * Created by Brookman Holmes on 8/9/2017.
+ */
+
+public class DrillsListActivity extends BaseViewPagerActivity implements AdapterView.OnItemSelectedListener,
+        DrillFilter, ViewPager.OnPageChangeListener, FragmentCallback {
+
+    @BindView(R.id.rl_progress)
+    View rl_progress;
+    @BindView(R.id.rl_retry)
+    View rl_retry;
+    @BindView(R.id.bt_retry)
+    Button bt_retry;
+
+    Spinner spinner;
+    List<ActivityCallback> callbacks = new ArrayList<>();
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_drill_list);
     }
 
     @Override
-    protected Fragment getFragment() {
-        return new DrillsListFragment();
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.activity_drills_list_menu, menu);
+        MenuItem item = menu.findItem(R.id.spinner);
+
+        spinner = (Spinner) item.getActionView();
+
+        spinner.setAdapter(createAdapter());
+        spinner.setOnItemSelectedListener(this);
+
+        pager.addOnPageChangeListener(this);
+        return true;
+    }
+
+    @Override
+    protected FragmentPagerAdapter getAdapter() {
+        return new PagerAdapter(getSupportFragmentManager());
+    }
+
+    private ArrayAdapter<CharSequence> createAdapter() {
+        ArrayAdapter<CharSequence> spinnerAdapter
+                = ArrayAdapter.createFromResource(
+                new ContextThemeWrapper(this, android.R.style.ThemeOverlay_Material_Dark_ActionBar),
+                R.array.drill_types,
+                android.R.layout.simple_spinner_item);
+
+        spinnerAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
+
+        return spinnerAdapter;
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        for (ActivityCallback callback : callbacks) {
+            callback.setFilterSelection(getFilterSelection());
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
+    }
+
+    private DrillModel.Type transformSelectionToModel(int selection) {
+        switch (selection) {
+            case 0:
+                return DrillModel.Type.ANY;
+            case 1:
+                return DrillModel.Type.AIMING;
+            case 2:
+                return DrillModel.Type.BANKING;
+            case 3:
+                return DrillModel.Type.KICKING;
+            case 4:
+                return DrillModel.Type.PATTERN;
+            case 5:
+                return DrillModel.Type.POSITIONAL;
+            case 6:
+                return DrillModel.Type.SAFETY;
+            case 7:
+                return DrillModel.Type.SPEED;
+            default:
+                throw new IllegalArgumentException("No such selection possible: " + selection);
+        }
+    }
+
+    @Override
+    public DrillModel.Type onSelected() {
+        return null;
+    }
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
+    }
+
+    @Override
+    public void addListener(ActivityCallback callback) {
+        callbacks.add(callback);
+    }
+
+    @Override
+    public void removeListener(ActivityCallback callback) {
+        callbacks.remove(callback);
+    }
+
+    @Override
+    public DrillModel.Type getTypeSelection() {
+        return getFilterSelection();
+    }
+
+    @Override
+    public DrillModel.Type getFilterSelection() {
+        if (spinner != null)
+            return transformSelectionToModel(spinner.getSelectedItemPosition());
+        else
+            return DrillModel.Type.ANY;
+    }
+
+    @Override
+    public void showLoading() {
+        this.rl_progress.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideLoading() {
+        this.rl_progress.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void showRetry() {
+        this.rl_retry.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideRetry() {
+        this.rl_retry.setVisibility(View.GONE);
+    }
+
+    @OnClick(R.id.fab)
+    @Override
+    public void showCreateDrillActivity() {
+        startActivity(new Intent(this, CreateDrillActivity.class));
+    }
+
+    private static class PagerAdapter extends FragmentPagerAdapter {
+        private PagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            switch (position) {
+                case 0:
+                    return new DrillsListFragment();
+                case 1:
+                    return new PurchaseDrillsFragment();
+                default:
+                    throw new IllegalArgumentException("Position must be between 0 and 1, was: " + position);
+            }
+        }
+
+        @Override
+        public int getCount() {
+            return 2;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            switch (position) {
+                case 0:
+                    return "My drills";
+                case 1:
+                    return "Get drills";
+                default:
+                    throw new IllegalArgumentException("Position must be between 0 and 1, was: " + position);
+            }
+        }
     }
 }

@@ -85,7 +85,7 @@ class DrillsListPresenter implements Presenter {
 
     private void showDrillCollectionInView(List<Drill> drillCollection) {
         final List<DrillModel> drillModelCollection = this.drillModelDataMapper.transform(drillCollection);
-        this.view.renderUserList(drillModelCollection);
+        this.view.renderDrillList(drillModelCollection);
     }
 
     private void getDrillsList(DrillModel.Type filter) {

@@ -38,7 +38,7 @@ class FirebaseDataStore implements DrillDataStore {
 
     private void init(String userId) {
         imagesRef = FirebaseStorage.getInstance().getReference().child(userId);
-        userRef = FirebaseDatabase.getInstance().getReference().child(userId);
+        userRef = FirebaseDatabase.getInstance().getReference().child("users").child(userId);
         drillsRef = userRef.child("drills");
 
         final DatabaseReference testData = FirebaseDatabase.getInstance().getReference().child("test");
