@@ -50,6 +50,6 @@ public class DeleteDrillDialog extends BaseDialogFragment<DeleteDrillDialogPrese
 
     @Override
     protected DeleteDrillDialogPresenter getPresenter() {
-        return new DeleteDrillDialogPresenter(new DeleteDrill(drillRepository, threadExecutor, postExecutionThread));
+        return new DeleteDrillDialogPresenter(new DeleteDrill(drillRepository));
     }
 }

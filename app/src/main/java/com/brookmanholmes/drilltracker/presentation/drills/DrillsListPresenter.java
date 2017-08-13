@@ -7,7 +7,6 @@ import com.brookmanholmes.drilltracker.domain.exception.DefaultErrorBundle;
 import com.brookmanholmes.drilltracker.domain.exception.ErrorBundle;
 import com.brookmanholmes.drilltracker.domain.interactor.DefaultObserver;
 import com.brookmanholmes.drilltracker.domain.interactor.GetDrillList;
-import com.brookmanholmes.drilltracker.presentation.base.Presenter;
 import com.brookmanholmes.drilltracker.presentation.exception.ErrorMessageFactory;
 import com.brookmanholmes.drilltracker.presentation.mapper.DrillModelDataMapper;
 import com.brookmanholmes.drilltracker.presentation.model.DrillModel;
@@ -18,7 +17,7 @@ import java.util.List;
  * Created by Brookman Holmes on 7/7/2017.
  */
 
-class DrillsListPresenter implements Presenter {
+class DrillsListPresenter implements DrillsListContract {
     private static final String TAG = DrillsListPresenter.class.getName();
     private final GetDrillList getDrillListUseCase;
     private final DrillModelDataMapper drillModelDataMapper;
@@ -29,6 +28,7 @@ class DrillsListPresenter implements Presenter {
         this.drillModelDataMapper = drillModelDataMapper;
     }
 
+    @Override
     public void setView(@NonNull DrillsListView view) {
         this.view = view;
     }
@@ -48,17 +48,20 @@ class DrillsListPresenter implements Presenter {
         this.view = null;
     }
 
-    void initialize(DrillModel.Type filter) {
+    @Override
+    public void initialize(DrillModel.Type filter) {
         this.loadDrillsList(filter);
     }
 
-    void loadDrillsList(DrillModel.Type filter) {
+    @Override
+    public void loadDrillsList(DrillModel.Type filter) {
         this.hideViewRetry();
         this.showViewLoading();
         this.getDrillsList(filter);
     }
 
-    void onDrillClicked(DrillModel drillModel) {
+    @Override
+    public void onDrillClicked(DrillModel drillModel) {
         this.view.viewDrill(drillModel);
     }
 
@@ -90,10 +93,6 @@ class DrillsListPresenter implements Presenter {
 
     private void getDrillsList(DrillModel.Type filter) {
         this.getDrillListUseCase.execute(new DrillListObserver(), GetDrillList.Params.newInstance(filter));
-    }
-
-    void showDeleteConfirmation(DrillModel drillModel) {
-        this.view.showDeleteConfirmation(drillModel);
     }
 
     private final class DrillListObserver extends DefaultObserver<List<Drill>> {

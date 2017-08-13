@@ -28,7 +28,7 @@ import butterknife.ButterKnife;
  * Created by Brookman Holmes on 8/9/2017.
  */
 
-public class PurchaseDrillsFragment extends BaseFragment<PurchaseDrillsPresenter> implements
+public class PurchaseDrillsFragment extends BaseFragment<PurchaseDrillsContract> implements
         PurchaseDrillsView, ActivityCallback, PurchaseDrillsAdapter.OnItemClickListener {
     @BindView(R.id.scrollView)
     RecyclerView recyclerView;
@@ -40,7 +40,7 @@ public class PurchaseDrillsFragment extends BaseFragment<PurchaseDrillsPresenter
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         adapter = new PurchaseDrillsAdapter(getContext());
-        GetDrillPackList getDrillPackList = new GetDrillPackList(getThreadExecutor(), getPostExecutionThread(), repository);
+        GetDrillPackList getDrillPackList = new GetDrillPackList(repository);
         presenter = new PurchaseDrillsPresenter(getDrillPackList);
     }
 

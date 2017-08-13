@@ -1,7 +1,6 @@
 package com.brookmanholmes.drilltracker.presentation.drilldetail;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.brookmanholmes.drilltracker.domain.Drill;
 import com.brookmanholmes.drilltracker.domain.exception.DefaultErrorBundle;
@@ -9,7 +8,6 @@ import com.brookmanholmes.drilltracker.domain.exception.ErrorBundle;
 import com.brookmanholmes.drilltracker.domain.interactor.DefaultObserver;
 import com.brookmanholmes.drilltracker.domain.interactor.DeleteAttempt;
 import com.brookmanholmes.drilltracker.domain.interactor.GetDrillDetails;
-import com.brookmanholmes.drilltracker.presentation.base.Presenter;
 import com.brookmanholmes.drilltracker.presentation.exception.ErrorMessageFactory;
 import com.brookmanholmes.drilltracker.presentation.mapper.DrillModelDataMapper;
 import com.brookmanholmes.drilltracker.presentation.model.DrillModel;
@@ -17,23 +15,23 @@ import com.brookmanholmes.drilltracker.presentation.model.DrillModel;
 /**
  * Created by Brookman Holmes on 7/11/2017.
  */
-// TODO: 7/27/2017 add in ability to edit the drill
-class DrillDetailsPresenter implements Presenter {
+class DrillDetailsPresenter implements DrillDetailsContract {
     private static final String TAG = DrillDetailsPresenter.class.getName();
     private final GetDrillDetails getDrillDetailsUseCase;
     private final DeleteAttempt deleteAttemptUseCase;
-    private final DrillModelDataMapper drillModelDataMapper;
-    private DrillDetailView drillDetailView;
+    private final DrillModelDataMapper mapper;
+    private DrillDetailsView view;
     private DrillModel model;
 
-    DrillDetailsPresenter(GetDrillDetails getDrillDetailsUseCase, DeleteAttempt deleteAttemptUseCase, DrillModelDataMapper drillModelDataMapper) {
+    DrillDetailsPresenter(GetDrillDetails getDrillDetailsUseCase, DeleteAttempt deleteAttemptUseCase, DrillModelDataMapper mapper) {
         this.getDrillDetailsUseCase = getDrillDetailsUseCase;
-        this.drillModelDataMapper = drillModelDataMapper;
+        this.mapper = mapper;
         this.deleteAttemptUseCase = deleteAttemptUseCase;
     }
 
-    public void setView(@NonNull DrillDetailView view) {
-        this.drillDetailView = view;
+    @Override
+    public void setView(@NonNull DrillDetailsView view) {
+        this.view = view;
     }
 
     @Override
@@ -49,10 +47,11 @@ class DrillDetailsPresenter implements Presenter {
     @Override
     public void destroy() {
         getDrillDetailsUseCase.dispose();
-        drillDetailView = null;
+        view = null;
     }
 
-    void initialize(String drillId) {
+    @Override
+    public void initialize(String drillId) {
         hideViewRetry();
         showViewLoading();
         getDrillDetails(drillId);
@@ -64,48 +63,36 @@ class DrillDetailsPresenter implements Presenter {
     }
 
     private void showViewLoading() {
-        this.drillDetailView.showLoading();
+        this.view.showLoading();
     }
 
     private void hideViewLoading() {
-        drillDetailView.hideLoading();
+        view.hideLoading();
     }
 
     private void showViewRetry() {
-        drillDetailView.showRetry();
+        view.showRetry();
     }
 
     private void hideViewRetry() {
-        drillDetailView.hideRetry();
+        view.hideRetry();
     }
 
     private void showErrorMessage(ErrorBundle errorBundle) {
-        String error = ErrorMessageFactory.create(drillDetailView.context(), errorBundle.getException());
-        drillDetailView.showError(error);
+        String error = ErrorMessageFactory.create(view.context(), errorBundle.getException());
+        view.showError(error);
     }
 
     private void showDrillDetailsInView(Drill drill) {
-        final DrillModel drillModel = drillModelDataMapper.transform(drill);
+        final DrillModel drillModel = mapper.transform(drill);
         if (drillModel != null) {
-            drillDetailView.renderDrill(drillModel);
+            view.renderDrill(drillModel);
             this.model = drillModel;
         }
-        else Log.w(TAG, "showDrillDetailsInView: drill model is null and drill == null ? " + (drill == null));
     }
 
-    void showAddAttemptView() {
-        drillDetailView.showAddAttemptView();
-    }
-
-    void onDrillImageClicked() {
-        drillDetailView.showDrillImageFullScreen(model);
-    }
-
-    void onEditClicked() {
-        drillDetailView.showEditDrillView(model.id);
-    }
-
-    void onUndoClicked() {
+    @Override
+    public void onUndoClicked() {
         deleteAttemptUseCase.execute(new DeleteAttemptObserver(), model.id);
     }
 

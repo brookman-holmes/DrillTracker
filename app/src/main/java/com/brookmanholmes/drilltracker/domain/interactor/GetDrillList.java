@@ -1,8 +1,6 @@
 package com.brookmanholmes.drilltracker.domain.interactor;
 
 import com.brookmanholmes.drilltracker.domain.Drill;
-import com.brookmanholmes.drilltracker.domain.executor.PostExecutionThread;
-import com.brookmanholmes.drilltracker.domain.executor.ThreadExecutor;
 import com.brookmanholmes.drilltracker.domain.repository.DrillRepository;
 import com.brookmanholmes.drilltracker.presentation.model.DrillModel;
 
@@ -12,13 +10,14 @@ import io.reactivex.Observable;
 
 /**
  * Created by Brookman Holmes on 7/7/2017.
+ * This class is an implementation of {@link UseCase} that represents a use case for retrieving a list
+ * of all {@link Drill}
  */
 
 public class GetDrillList extends UseCase<List<Drill>, GetDrillList.Params>{
     private final DrillRepository drillRepository;
 
-    public GetDrillList(DrillRepository drillRepository, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread) {
-        super(threadExecutor, postExecutionThread);
+    public GetDrillList(DrillRepository drillRepository) {
         this.drillRepository = drillRepository;
     }
 

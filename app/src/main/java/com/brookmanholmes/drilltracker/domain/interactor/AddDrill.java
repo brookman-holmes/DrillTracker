@@ -2,28 +2,21 @@ package com.brookmanholmes.drilltracker.domain.interactor;
 
 import com.brookmanholmes.drilltracker.data.entity.mapper.DrillEntityDataMapper;
 import com.brookmanholmes.drilltracker.domain.Drill;
-import com.brookmanholmes.drilltracker.domain.executor.PostExecutionThread;
-import com.brookmanholmes.drilltracker.domain.executor.ThreadExecutor;
 import com.brookmanholmes.drilltracker.domain.repository.DrillRepository;
 import com.brookmanholmes.drilltracker.presentation.model.DrillModel;
 
-import java.util.List;
-
 import io.reactivex.Observable;
-import io.reactivex.ObservableSource;
-import io.reactivex.ObservableTransformer;
-import io.reactivex.annotations.NonNull;
-import io.reactivex.functions.Function;
 
 /**
  * Created by Brookman Holmes on 7/14/2017.
+ * This class is an implementation of {@link UseCase} that represents a use case for adding a new
+ * {@link Drill} to the repository
  */
 
 public class AddDrill extends UseCase<Drill, AddDrill.Params> {
     private final DrillRepository drillRepository;
 
-    public AddDrill(DrillRepository drillRepository, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread) {
-        super(threadExecutor, postExecutionThread);
+    public AddDrill(DrillRepository drillRepository) {
         this.drillRepository = drillRepository;
     }
 

@@ -7,11 +7,18 @@ import java.util.List;
 import io.reactivex.Observable;
 
 /**
- * Created by Brookman Holmes on 8/9/2017.
+ * Interface that represents a data store from where data is retrieved.
  */
-
 public interface DrillPackDataStore {
+    /**
+     * Get an {@link Observable} which will emit a List of {@link DrillPackEntity}.
+     */
     Observable<List<DrillPackEntity>> drillPackEntityList();
 
+    /**
+     * Get an {@link Observable} which will emit a {@link DrillPackEntity} by its id.
+     *
+     * @param id The id to retrieve drill data.
+     */
     Observable<DrillPackEntity> drillPackEntity(String id);
 }

@@ -3,16 +3,11 @@ package com.brookmanholmes.drilltracker.presentation.base;
 import android.support.v4.app.Fragment;
 import android.widget.Toast;
 
-import com.brookmanholmes.drilltracker.data.executor.JobExecutor;
 import com.brookmanholmes.drilltracker.data.repository.DrillDataRepository;
 import com.brookmanholmes.drilltracker.data.repository.datasource.DataStoreFactory;
-import com.brookmanholmes.drilltracker.domain.executor.PostExecutionThread;
-import com.brookmanholmes.drilltracker.domain.executor.ThreadExecutor;
 import com.brookmanholmes.drilltracker.domain.repository.DrillRepository;
 
 import butterknife.Unbinder;
-import io.reactivex.Scheduler;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 
 /**
  * Created by Brookman Holmes on 7/7/2017.
@@ -20,13 +15,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 
 public abstract class BaseFragment<T extends Presenter> extends Fragment {
     private final DrillRepository drillRepository = new DrillDataRepository(DataStoreFactory.getDrillDataStore());
-    private final ThreadExecutor threadExecutor = new JobExecutor();
-    private final PostExecutionThread postExecutionThread = new PostExecutionThread() {
-        @Override
-        public Scheduler getScheduler() {
-            return AndroidSchedulers.mainThread();
-        }
-    };
     protected T presenter;
     protected Unbinder unbinder;
 
@@ -61,14 +49,6 @@ public abstract class BaseFragment<T extends Presenter> extends Fragment {
 
     protected void showToastMessage(String message) {
         Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
-    }
-
-    protected ThreadExecutor getThreadExecutor() {
-        return threadExecutor;
-    }
-
-    protected PostExecutionThread getPostExecutionThread() {
-        return postExecutionThread;
     }
 
     protected DrillRepository getDrillRepository() {

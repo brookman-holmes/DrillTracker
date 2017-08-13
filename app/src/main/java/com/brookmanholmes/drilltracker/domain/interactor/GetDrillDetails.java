@@ -3,21 +3,20 @@ package com.brookmanholmes.drilltracker.domain.interactor;
 import android.support.v4.util.Preconditions;
 
 import com.brookmanholmes.drilltracker.domain.Drill;
-import com.brookmanholmes.drilltracker.domain.executor.PostExecutionThread;
-import com.brookmanholmes.drilltracker.domain.executor.ThreadExecutor;
 import com.brookmanholmes.drilltracker.domain.repository.DrillRepository;
 
 import io.reactivex.Observable;
 
 /**
  * Created by Brookman Holmes on 7/11/2017.
+ * This class is an implementation of {@link UseCase} that represents a use case for retrieving a
+ * {@link Drill}
  */
 
 public class GetDrillDetails extends UseCase<Drill, GetDrillDetails.Params> {
     private final DrillRepository drillRepository;
 
-    public GetDrillDetails(DrillRepository drillRepository, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread) {
-        super(threadExecutor, postExecutionThread);
+    public GetDrillDetails(DrillRepository drillRepository) {
         this.drillRepository = drillRepository;
     }
 

@@ -5,7 +5,6 @@ import com.brookmanholmes.drilltracker.domain.exception.DefaultErrorBundle;
 import com.brookmanholmes.drilltracker.domain.exception.ErrorBundle;
 import com.brookmanholmes.drilltracker.domain.interactor.DefaultObserver;
 import com.brookmanholmes.drilltracker.domain.interactor.GetDrillPackList;
-import com.brookmanholmes.drilltracker.presentation.base.Presenter;
 import com.brookmanholmes.drilltracker.presentation.exception.ErrorMessageFactory;
 import com.brookmanholmes.drilltracker.presentation.mapper.DrillPackModelDataMapper;
 import com.brookmanholmes.drilltracker.presentation.model.DrillModel;
@@ -15,7 +14,7 @@ import java.util.List;
 /**
  * Created by Brookman Holmes on 8/9/2017.
  */
-class PurchaseDrillsPresenter implements Presenter {
+class PurchaseDrillsPresenter implements PurchaseDrillsContract {
     private final GetDrillPackList getDrillPackList;
     private final DrillPackModelDataMapper mapper = new DrillPackModelDataMapper();
     private PurchaseDrillsView view;
@@ -24,9 +23,9 @@ class PurchaseDrillsPresenter implements Presenter {
         this.getDrillPackList = getDrillPackList;
     }
 
-    public void setView(PurchaseDrillsView view) {
-        this.view = view;
-    }
+    /*
+        Contract methods
+     */
 
     @Override
     public void resume() {
@@ -42,6 +41,18 @@ class PurchaseDrillsPresenter implements Presenter {
     public void destroy() {
         this.view = null;
         getDrillPackList.dispose();
+    }
+
+    @Override
+    public void setView(PurchaseDrillsView view) {
+        this.view = view;
+    }
+
+    @Override
+    public void loadDrillsList(DrillModel.Type typeSelection) {
+        hideViewRetry();
+        showViewLoading();
+        getDrillPackList();
     }
 
     private void showViewLoading() {
@@ -63,12 +74,6 @@ class PurchaseDrillsPresenter implements Presenter {
     private void showErrorMessage(ErrorBundle errorBundle) {
         String errorMessage = ErrorMessageFactory.create(this.view.context(), errorBundle.getException());
         this.view.showError(errorMessage);
-    }
-
-    void loadDrillsList(DrillModel.Type typeSelection) {
-        hideViewRetry();
-        showViewLoading();
-        getDrillPackList();
     }
 
     private void showDrillPackCollectionInView(List<DrillPack> drillPacks) {

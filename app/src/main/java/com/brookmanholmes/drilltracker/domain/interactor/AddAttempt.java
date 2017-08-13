@@ -1,23 +1,19 @@
 package com.brookmanholmes.drilltracker.domain.interactor;
 
 import com.brookmanholmes.drilltracker.domain.Drill;
-import com.brookmanholmes.drilltracker.domain.executor.PostExecutionThread;
-import com.brookmanholmes.drilltracker.domain.executor.ThreadExecutor;
 import com.brookmanholmes.drilltracker.domain.repository.DrillRepository;
 
 import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.annotations.NonNull;
 
 /**
  * Created by Brookman Holmes on 7/13/2017.
+ * This class is an implementation of {@link UseCase} that represents a use case for adding an
+ * {@link Drill.Attempt} to an existing {@link Drill}
  */
 public final class AddAttempt extends UseCase<Drill, AddAttempt.Params> {
     private final DrillRepository drillRepository;
 
-    public AddAttempt(DrillRepository drillRepository, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread) {
-        super(threadExecutor, postExecutionThread);
+    public AddAttempt(DrillRepository drillRepository) {
         this.drillRepository = drillRepository;
     }
 

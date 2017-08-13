@@ -18,9 +18,8 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 
 /**
- * Created by Brookman Holmes on 7/9/2017.
+ * {@link DrillRepository} for retrieving drill data.
  */
-
 public class DrillDataRepository implements DrillRepository {
     private static final String TAG = DrillDataRepository.class.getName();
 

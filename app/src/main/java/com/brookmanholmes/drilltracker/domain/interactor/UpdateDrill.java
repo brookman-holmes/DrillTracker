@@ -2,8 +2,6 @@ package com.brookmanholmes.drilltracker.domain.interactor;
 
 import com.brookmanholmes.drilltracker.data.entity.mapper.DrillEntityDataMapper;
 import com.brookmanholmes.drilltracker.domain.Drill;
-import com.brookmanholmes.drilltracker.domain.executor.PostExecutionThread;
-import com.brookmanholmes.drilltracker.domain.executor.ThreadExecutor;
 import com.brookmanholmes.drilltracker.domain.repository.DrillRepository;
 import com.brookmanholmes.drilltracker.presentation.model.DrillModel;
 
@@ -11,13 +9,14 @@ import io.reactivex.Observable;
 
 /**
  * Created by Brookman Holmes on 7/30/2017.
+ * This class is an implementation of {@link UseCase} that represents a use case for updating a {@link Drill}
+ * in the repository
  */
 
 public class UpdateDrill extends UseCase<Drill, UpdateDrill.Params> {
     private final DrillRepository drillRepository;
 
-    public UpdateDrill(DrillRepository drillRepository, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread) {
-        super(threadExecutor, postExecutionThread);
+    public UpdateDrill(DrillRepository drillRepository) {
         this.drillRepository = drillRepository;
     }
 

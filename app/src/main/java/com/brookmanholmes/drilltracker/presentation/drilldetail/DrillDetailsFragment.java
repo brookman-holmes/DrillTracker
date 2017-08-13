@@ -17,8 +17,8 @@ import com.brookmanholmes.drilltracker.R;
 import com.brookmanholmes.drilltracker.domain.interactor.DeleteAttempt;
 import com.brookmanholmes.drilltracker.domain.interactor.GetDrillDetails;
 import com.brookmanholmes.drilltracker.presentation.addattempt.AddAttemptDialog;
+import com.brookmanholmes.drilltracker.presentation.addeditdrill.AddEditDrillActivity;
 import com.brookmanholmes.drilltracker.presentation.base.BaseFragment;
-import com.brookmanholmes.drilltracker.presentation.createdrill.CreateDrillActivity;
 import com.brookmanholmes.drilltracker.presentation.mapper.DrillModelDataMapper;
 import com.brookmanholmes.drilltracker.presentation.model.DrillModel;
 import com.brookmanholmes.drilltracker.presentation.model.DrillModelMathUtil;
@@ -36,7 +36,7 @@ import lecho.lib.hellocharts.view.LineChartView;
  * Created by Brookman Holmes on 7/11/2017.
  */
 
-public class DrillDetailsFragment extends BaseFragment<DrillDetailsPresenter> implements DrillDetailView, Toolbar.OnMenuItemClickListener, View.OnClickListener {
+public class DrillDetailsFragment extends BaseFragment<DrillDetailsContract> implements DrillDetailsView, Toolbar.OnMenuItemClickListener, View.OnClickListener {
     private static final String TAG = DrillDetailsFragment.class.getName();
     private static final String PARAM_DRILL_ID = "param_drill_id";
     private static final String PARAM_MAX = "param_max";
@@ -97,8 +97,8 @@ public class DrillDetailsFragment extends BaseFragment<DrillDetailsPresenter> im
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        GetDrillDetails getDrillDetailsUseCase = new GetDrillDetails(getDrillRepository(), getThreadExecutor(), getPostExecutionThread());
-        DeleteAttempt deleteAttemptUseCase = new DeleteAttempt(getDrillRepository(), getThreadExecutor(), getPostExecutionThread());
+        GetDrillDetails getDrillDetailsUseCase = new GetDrillDetails(getDrillRepository());
+        DeleteAttempt deleteAttemptUseCase = new DeleteAttempt(getDrillRepository());
         presenter = new DrillDetailsPresenter(getDrillDetailsUseCase, deleteAttemptUseCase, new DrillModelDataMapper());
     }
 
@@ -123,20 +123,30 @@ public class DrillDetailsFragment extends BaseFragment<DrillDetailsPresenter> im
         loadDrillDetails();
     }
 
-    @Override
-    public boolean onMenuItemClick(MenuItem item) {
-        if (item.getItemId() == R.id.ic_edit) {
-            presenter.onEditClicked();
-        } else if (item.getItemId() == R.id.ic_undo_attempt) {
-            presenter.onUndoClicked();
-        }
-        return true;
+    private void loadDrillDetails() {
+        if (presenter != null)
+            presenter.initialize(currentDrillId());
     }
 
-    @Override
-    public void showLoading() {
-        rl_progress.setVisibility(View.VISIBLE);
+    private String currentDrillId() {
+        final Bundle arguments = getArguments();
+        Preconditions.checkNotNull(arguments, "Fragment arguments cannot be null");
+        return arguments.getString(PARAM_DRILL_ID);
     }
+
+    private int currentMaxScore() {
+        final Bundle arguments = getArguments();
+        return arguments.getInt(PARAM_MAX);
+    }
+
+    private int currentTargetScore() {
+        final Bundle arguments = getArguments();
+        return arguments.getInt(PARAM_TARGET);
+    }
+
+    /**
+     * Implementation of {@link DrillDetailsView}
+     */
 
     @Override
     public void hideLoading() {
@@ -149,13 +159,8 @@ public class DrillDetailsFragment extends BaseFragment<DrillDetailsPresenter> im
     }
 
     @Override
-    public void hideRetry() {
-        rl_retry.setVisibility(View.GONE);
-    }
-
-    @Override
-    public void showError(String message) {
-        this.showToastMessage(message);
+    public void showLoading() {
+        rl_progress.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -189,47 +194,23 @@ public class DrillDetailsFragment extends BaseFragment<DrillDetailsPresenter> im
     }
 
     @Override
+    public void hideRetry() {
+        rl_retry.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void showError(String message) {
+        this.showToastMessage(message);
+    }
+
+    @Override
     public Context context() {
         return getContext();
     }
 
-    private void loadDrillDetails() {
-        if (presenter != null)
-            presenter.initialize(currentDrillId());
-    }
-
-    private String currentDrillId() {
-        final Bundle arguments = getArguments();
-        Preconditions.checkNotNull(arguments, "Fragment arguments cannot be null");
-        return arguments.getString(PARAM_DRILL_ID);
-    }
-
-    private int currentMaxScore() {
-        final Bundle arguments = getArguments();
-        return arguments.getInt(PARAM_MAX);
-    }
-
-    private int currentTargetScore() {
-        final Bundle arguments = getArguments();
-        return arguments.getInt(PARAM_TARGET);
-    }
-
-    public void showDrillImageFullScreen(DrillModel drillModel) {
-        DialogFragment dialogFragment = FullScreenImageDialog.newInstance(drillModel.imageUrl);
-        dialogFragment.show(getFragmentManager(), "tag");
-    }
-
-
-    @Override
-    public void showAddAttemptView() {
-        AddAttemptDialog addAttemptDialog = AddAttemptDialog.newInstance(currentDrillId(), currentMaxScore(), currentTargetScore());
-        addAttemptDialog.show(getFragmentManager(), AddAttemptDialog.class.getName());
-    }
-
-    @Override
-    public void showEditDrillView(String drillId) {
-        startActivity(CreateDrillActivity.newInstance(getContext(), drillId));
-    }
+    /**
+     * On click methods
+     */
 
     @OnClick(R.id.bt_retry)
     void onButtonRetryClick() {
@@ -237,18 +218,29 @@ public class DrillDetailsFragment extends BaseFragment<DrillDetailsPresenter> im
     }
 
     @OnClick(R.id.fab)
-    @Override
-    public void onFabClicked() {
-        presenter.showAddAttemptView();
+    public void onAddAttemptClicked() {
+        AddAttemptDialog addAttemptDialog = AddAttemptDialog.newInstance(currentDrillId(), currentMaxScore(), currentTargetScore());
+        addAttemptDialog.show(getFragmentManager(), AddAttemptDialog.class.getName());
     }
 
     @OnClick(R.id.image)
     public void onImageClicked() {
-        presenter.onDrillImageClicked();
+        DialogFragment dialogFragment = FullScreenImageDialog.newInstance(currentDrillId());
+        dialogFragment.show(getFragmentManager(), "tag");
     }
 
     @Override
     public void onClick(View view) {
         getActivity().finish();
+    }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        if (item.getItemId() == R.id.ic_edit) {
+            startActivity(AddEditDrillActivity.newInstance(getContext(), currentDrillId()));
+        } else if (item.getItemId() == R.id.ic_undo_attempt) {
+            presenter.onUndoClicked();
+        }
+        return true;
     }
 }

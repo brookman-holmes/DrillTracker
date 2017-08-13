@@ -1,4 +1,4 @@
-package com.brookmanholmes.drilltracker.presentation.createdrill;
+package com.brookmanholmes.drilltracker.presentation.addeditdrill;
 
 import android.content.Context;
 import android.content.Intent;
@@ -13,14 +13,14 @@ import com.brookmanholmes.drilltracker.presentation.base.BaseActivity;
  * Created by Brookman Holmes on 7/23/2017.
  */
 
-public class CreateDrillActivity extends BaseActivity {
+public class AddEditDrillActivity extends BaseActivity {
     private static final String INTENT_EXTRA_PARAM_DRILL_ID = "param_drill_id";
     private static final String INSTANCE_STATE_PARAM_DRILL_ID = "com.brookmanholmes.STATE_PARAM_DRILL_ID";
 
     private String drillId;
 
     public static Intent newInstance(Context context, String drillId) {
-        Intent intent = new Intent(context, CreateDrillActivity.class);
+        Intent intent = new Intent(context, AddEditDrillActivity.class);
         intent.putExtra(INTENT_EXTRA_PARAM_DRILL_ID, drillId);
         return intent;
     }
@@ -45,6 +45,6 @@ public class CreateDrillActivity extends BaseActivity {
     @Override
     protected Fragment getFragment() {
         drillId = getIntent().getStringExtra(INTENT_EXTRA_PARAM_DRILL_ID);
-        return CreateDrillFragment.newInstance(drillId);
+        return AddEditDrillFragment.newInstance(drillId);
     }
 }

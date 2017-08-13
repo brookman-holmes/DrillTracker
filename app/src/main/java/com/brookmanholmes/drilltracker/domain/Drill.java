@@ -1,16 +1,13 @@
 package com.brookmanholmes.drilltracker.domain;
 
-import com.brookmanholmes.drilltracker.presentation.model.DrillModel;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
 /**
- * Created by Brookman Holmes on 7/7/2017.
+ * A class that represents a Drill in the domain layer
  */
-
 public class Drill {
     private String id;
     private String name;
@@ -80,6 +77,17 @@ public class Drill {
         return type;
     }
 
+    @Override
+    public String toString() {
+        return "Drill{" +
+                "id='" + id + '\'' +
+                "\n name='" + name + '\'' +
+                "\n imageUrl='" + imageUrl + '\'' +
+                "\n maxScore=" + maxScore +
+                "\n defaultTargetScore=" + defaultTargetScore +
+                '}';
+    }
+
     public enum Type {
         ANY,
         AIMING,
@@ -122,17 +130,5 @@ public class Drill {
                     "\n date=" + date +
                     '}';
         }
-    }
-
-
-    @Override
-    public String toString() {
-        return "Drill{" +
-                "id='" + id + '\'' +
-                "\n name='" + name + '\'' +
-                "\n imageUrl='" + imageUrl + '\'' +
-                "\n maxScore=" + maxScore +
-                "\n defaultTargetScore=" + defaultTargetScore +
-                '}';
     }
 }

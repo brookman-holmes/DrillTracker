@@ -1,4 +1,4 @@
-package com.brookmanholmes.drilltracker.presentation.createdrill;
+package com.brookmanholmes.drilltracker.presentation.addeditdrill;
 
 import android.app.Activity;
 import android.content.DialogInterface;
@@ -52,13 +52,15 @@ import butterknife.OnTextChanged;
  * Created by Brookman Holmes on 7/23/2017.
  */
 
-public class CreateDrillFragment extends BaseFragment<CreateDrillPresenter> implements CreateDrillView {
-    private static final String TAG = CreateDrillFragment.class.getName();
+public class AddEditDrillFragment extends BaseFragment<AddEditDrillPresenter> implements AddEditDrillView {
+    private static final String TAG = AddEditDrillFragment.class.getName();
     private static final String PARAM_DRILL_ID = "param_drill_id";
 
     private static final int ACTION_TAKE_IMAGE = 101;
     private static final int ACTION_CHOOSE_IMAGE = 102;
     private static final int COMPRESSION_AMOUNT = 50;
+
+
     private final CustomNumberPicker.OnValueChangeListener targetValueListener = new CustomNumberPicker.OnValueChangeListener() {
         @Override
         public void onValueChange(int oldVal, int newVal) {
@@ -71,6 +73,7 @@ public class CreateDrillFragment extends BaseFragment<CreateDrillPresenter> impl
             onMaximumScoreChanged(newVal);
         }
     };
+
     @BindView(R.id.input_drill_name)
     EditText drillName;
     @BindView(R.id.input_drill_description)
@@ -85,10 +88,11 @@ public class CreateDrillFragment extends BaseFragment<CreateDrillPresenter> impl
     ImageView image;
     @BindView(R.id.spinner)
     Spinner drillTypeSpinner;
+
     private String photoPath;
 
-    public static CreateDrillFragment newInstance(String drillId) {
-        CreateDrillFragment fragment = new CreateDrillFragment();
+    public static AddEditDrillFragment newInstance(String drillId) {
+        AddEditDrillFragment fragment = new AddEditDrillFragment();
         Bundle args = new Bundle();
         args.putString(PARAM_DRILL_ID, drillId);
         fragment.setArguments(args);
@@ -99,10 +103,10 @@ public class CreateDrillFragment extends BaseFragment<CreateDrillPresenter> impl
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        presenter = new CreateDrillPresenter(
-                new AddDrill(getDrillRepository(), getThreadExecutor(), getPostExecutionThread()),
-                new GetDrillDetails(getDrillRepository(), getThreadExecutor(), getPostExecutionThread()),
-                new UpdateDrill(getDrillRepository(), getThreadExecutor(), getPostExecutionThread()),
+        presenter = new AddEditDrillPresenter(
+                new AddDrill(getDrillRepository()),
+                new GetDrillDetails(getDrillRepository()),
+                new UpdateDrill(getDrillRepository()),
                 getArguments().getString(PARAM_DRILL_ID)
         );
     }
@@ -126,7 +130,7 @@ public class CreateDrillFragment extends BaseFragment<CreateDrillPresenter> impl
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.action_save:
-                        presenter.uploadDrill();
+                        presenter.saveDrill();
                         return true;
                     default:
                         return true;
@@ -218,30 +222,26 @@ public class CreateDrillFragment extends BaseFragment<CreateDrillPresenter> impl
 
     }
 
-    @Override
-    public void onMaximumScoreChanged(int value) {
+    private void onMaximumScoreChanged(int value) {
         presenter.setMaximumScore(value);
     }
 
-    @Override
-    public void onTargetScoreChanged(int value) {
+    private void onTargetScoreChanged(int value) {
         presenter.setTargetScore(value);
     }
 
     @OnTextChanged(value = R.id.input_drill_description, callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
-    @Override
-    public void onDescriptionChanged(Editable editable) {
+    void onDescriptionChanged(Editable editable) {
         presenter.setDrillDescription(editable.toString());
     }
 
     @OnTextChanged(value = R.id.input_drill_name, callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
-    @Override
-    public void onDrillNameChanged(Editable editable) {
+    void onDrillNameChanged(Editable editable) {
         presenter.setDrillName(editable.toString());
     }
 
     @OnItemSelected(R.id.spinner)
-    public void onDrillTypeSelected(int position) {
+    void onDrillTypeSelected(int position) {
         presenter.setDrillType(transformSelectionToModel(position));
     }
 
@@ -268,15 +268,9 @@ public class CreateDrillFragment extends BaseFragment<CreateDrillPresenter> impl
         }
     }
 
-    @OnClick(R.id.image)
-    @Override
-    public void onDrillImageClicked() {
-        presenter.showDrillChoiceDialog();
-    }
-
     // TODO: 7/27/2017 add in ability to use a url
-    @Override
-    public void showImageChoiceDialog() {
+    @OnClick(R.id.image)
+    void onDrillImageClicked() {
         new AlertDialog.Builder(getContext())
                 .setTitle(R.string.change_drill_diagram)
                 .setItems(R.array.create_drill_array, new DialogInterface.OnClickListener() {
@@ -296,8 +290,7 @@ public class CreateDrillFragment extends BaseFragment<CreateDrillPresenter> impl
                 .show();
     }
 
-    @Override
-    public void onImageCropped(ImageView image) {
+    private void onImageCropped(ImageView image) {
         Bitmap bitmap = ((BitmapDrawable)image.getDrawable()).getBitmap();
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, COMPRESSION_AMOUNT, outputStream);
@@ -305,7 +298,7 @@ public class CreateDrillFragment extends BaseFragment<CreateDrillPresenter> impl
     }
 
     @Override
-    public void onDrillUploaded(String drillId, int maxScore, int targetScore) {
+    public void showDrillDetailsView(String drillId, int maxScore, int targetScore) {
         startActivity(DrillDetailsActivity.getIntent(getContext(), drillId, maxScore, targetScore));
         getActivity().finish();
     }
@@ -325,6 +318,7 @@ public class CreateDrillFragment extends BaseFragment<CreateDrillPresenter> impl
         targetScorePicker.setValue(model.defaultTargetScore);
 
         drillTypeSpinner.setSelection(model.drillType.ordinal());
+        toolbar.setTitle(R.string.title_edit_drill);
         ImageHandler.loadImage(image, model.imageUrl, new Callback() {
             @Override
             public void onSuccess() {
@@ -344,14 +338,5 @@ public class CreateDrillFragment extends BaseFragment<CreateDrillPresenter> impl
     @Override
     public void finish() {
         getActivity().finish();
-    }
-
-    @Override
-    public void setIsEditing(boolean isEditing) {
-        if (isEditing) {
-            toolbar.setTitle(R.string.title_edit_drill);
-        } else {
-            toolbar.setTitle(R.string.title_create_drill);
-        }
     }
 }

@@ -10,13 +10,18 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Created by Brookman Holmes on 7/9/2017.
+ * Mapper class used to transform {@link DrillEntity} (in the data layer) to {@link Drill} in the
+ * domain layer.
  */
-
 public class DrillEntityDataMapper {
     public DrillEntityDataMapper() {
     }
 
+    /**
+     * Transform a {@link DrillEntity.AttemptEntity} into an {@link Drill.Attempt}.
+     *
+     * @param attempt Object to be transformed.
+     */
     public DrillEntity.AttemptEntity transform(Drill.Attempt attempt) {
         final DrillEntity.AttemptEntity entity = new DrillEntity.AttemptEntity();
         entity.score = attempt.getScore();
@@ -26,6 +31,11 @@ public class DrillEntityDataMapper {
         return entity;
     }
 
+    /**
+     * Transform a {@link DrillEntity} into an {@link Drill}.
+     *
+     * @param entity Object to be transformed.
+     */
     public Drill transform(DrillEntity entity) {
         final Drill drill = new Drill(entity.id, entity.name, entity.description, entity.imageUrl, transform(entity.type), entity.maxScore, entity.targetScore);
         drill.setAttempts(transformAttempts(entity.attempts.values()));
@@ -48,6 +58,11 @@ public class DrillEntityDataMapper {
         return attempts;
     }
 
+    /**
+     * Transform a list of {@link DrillEntity} into an list of {@link Drill}.
+     *
+     * @param drillEntityList Object to be transformed.
+     */
     public List<Drill> transform(Collection<DrillEntity> drillEntityList) {
         final List<Drill> drillList = new ArrayList<>();
         for (DrillEntity entity : drillEntityList) {
@@ -59,6 +74,11 @@ public class DrillEntityDataMapper {
         return drillList;
     }
 
+    /**
+     * Transform a {@link Drill.Type} into a String
+     *
+     * @param type The type to transform
+     */
     public String transform(Drill.Type type) {
         switch (type) {
             case POSITIONAL:
@@ -82,6 +102,10 @@ public class DrillEntityDataMapper {
         }
     }
 
+    /**
+     * Transform a {@link DrillModel.Type} into a string
+     * @param type The type to transform
+     */
     public String transform(DrillModel.Type type) {
         switch (type) {
             case POSITIONAL:

@@ -6,9 +6,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by Brookman Holmes on 7/9/2017.
+ * Drill Entity used in the data layer
  */
-
 @Keep
 public class DrillEntity {
     public String id;

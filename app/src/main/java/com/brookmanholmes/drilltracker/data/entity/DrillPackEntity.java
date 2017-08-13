@@ -3,9 +3,8 @@ package com.brookmanholmes.drilltracker.data.entity;
 import android.support.annotation.Keep;
 
 /**
- * Created by Brookman Holmes on 8/9/2017.
+ * Drill Pack Entity used in the data layer
  */
-
 @Keep
 public class DrillPackEntity {
     public String name;

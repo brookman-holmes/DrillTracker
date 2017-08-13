@@ -13,9 +13,8 @@ import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Function;
 
 /**
- * Created by Brookman Holmes on 8/9/2017.
+ * {@link DrillPackRepository} for retrieving drill pack data.
  */
-
 public class DrillPackDataRepository implements DrillPackRepository {
     private final DrillPackDataStore dataStore;
     private final DrillPackEntityDataMapper mapper;

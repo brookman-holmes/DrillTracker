@@ -88,7 +88,7 @@ public class AddAttemptDialog extends BaseDialogFragment<AddAttemptDialogPresent
 
     @Override
     protected AddAttemptDialogPresenter getPresenter() {
-        return new AddAttemptDialogPresenter(new AddAttempt(drillRepository, threadExecutor, postExecutionThread));
+        return new AddAttemptDialogPresenter(new AddAttempt(drillRepository));
     }
 
     private int getMaxScore() {

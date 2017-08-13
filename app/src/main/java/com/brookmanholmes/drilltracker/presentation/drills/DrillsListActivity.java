@@ -17,8 +17,8 @@ import android.widget.Button;
 import android.widget.Spinner;
 
 import com.brookmanholmes.drilltracker.R;
+import com.brookmanholmes.drilltracker.presentation.addeditdrill.AddEditDrillActivity;
 import com.brookmanholmes.drilltracker.presentation.base.BaseViewPagerActivity;
-import com.brookmanholmes.drilltracker.presentation.createdrill.CreateDrillActivity;
 import com.brookmanholmes.drilltracker.presentation.model.DrillModel;
 import com.brookmanholmes.drilltracker.presentation.purchasedrills.PurchaseDrillsFragment;
 
@@ -182,7 +182,7 @@ public class DrillsListActivity extends BaseViewPagerActivity implements Adapter
     @OnClick(R.id.fab)
     @Override
     public void showCreateDrillActivity() {
-        startActivity(new Intent(this, CreateDrillActivity.class));
+        startActivity(new Intent(this, AddEditDrillActivity.class));
     }
 
     private static class PagerAdapter extends FragmentPagerAdapter {

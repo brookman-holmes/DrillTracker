@@ -8,13 +8,18 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Created by Brookman Holmes on 8/9/2017.
+ * Mapper class used to transform {@link DrillPackEntity} (in the data layer) to {@link DrillPack} in the
+ * domain layer.
  */
-
 public class DrillPackEntityDataMapper {
     public DrillPackEntityDataMapper() {
     }
 
+    /**
+     * Transform a {@link DrillPackEntity} into a {@link DrillPack}
+     *
+     * @param entity The entity to transform into a drill
+     */
     public DrillPack transform(DrillPackEntity entity) {
         final DrillPack drillPack = new DrillPack();
         drillPack.name = entity.name;
@@ -25,6 +30,10 @@ public class DrillPackEntityDataMapper {
         return drillPack;
     }
 
+    /**
+     * Transform a list of {@link DrillPackEntity} into a list of {@link DrillPack}
+     * @param drillPackEntities The entities to transform
+     */
     public List<DrillPack> transform(List<DrillPackEntity> drillPackEntities) {
         List<DrillPack> result;
         if (drillPackEntities != null && !drillPackEntities.isEmpty()) {

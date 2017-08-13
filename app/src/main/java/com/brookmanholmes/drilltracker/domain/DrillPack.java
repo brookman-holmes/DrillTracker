@@ -1,9 +1,8 @@
 package com.brookmanholmes.drilltracker.domain;
 
 /**
- * Created by Brookman Holmes on 8/9/2017.
+ * A class that represents a DrillPack in the domain layer
  */
-
 public class DrillPack {
     public String price;
     public String name;

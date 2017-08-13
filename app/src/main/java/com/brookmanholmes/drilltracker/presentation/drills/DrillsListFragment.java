@@ -26,7 +26,7 @@ import butterknife.ButterKnife;
  * Created by Brookman Holmes on 7/7/2017.
  */
 
-public class DrillsListFragment extends BaseFragment<DrillsListPresenter> implements DrillsListView,
+public class DrillsListFragment extends BaseFragment<DrillsListContract> implements DrillsListView,
         DrillsListAdapter.OnItemClickListener, ActivityCallback {
     private static final String TAG = DrillsListFragment.class.getName();
 
@@ -35,13 +35,17 @@ public class DrillsListFragment extends BaseFragment<DrillsListPresenter> implem
 
     private DrillsListAdapter adapter;
 
+    /**
+     * Fragment lifecycle methods
+     */
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         adapter = new DrillsListAdapter(getContext());
 
-        GetDrillList getDrillList = new GetDrillList(getDrillRepository(), getThreadExecutor(), getPostExecutionThread());
+        GetDrillList getDrillList = new GetDrillList(getDrillRepository());
         DrillModelDataMapper drillModelDataMapper = new DrillModelDataMapper();
         presenter = new DrillsListPresenter(getDrillList, drillModelDataMapper);
     }
@@ -84,9 +88,22 @@ public class DrillsListFragment extends BaseFragment<DrillsListPresenter> implem
         super.onDestroyView();
     }
 
+    private FragmentCallback getCallback() {
+        if (getActivity() instanceof FragmentCallback) {
+            return ((FragmentCallback) getActivity());
+        } else {
+            throw new IllegalStateException("Parent activity must implement FragmentCallback");
+        }
+    }
+
+
     private void loadUserList() {
         this.presenter.initialize(getCallback().getTypeSelection());
     }
+
+    /**
+     * Implementation of DrillsListView
+     */
 
     @Override
     public void showLoading() {
@@ -126,24 +143,6 @@ public class DrillsListFragment extends BaseFragment<DrillsListPresenter> implem
     }
 
     @Override
-    public void onDrillItemClicked(DrillModel drillModel) {
-        presenter.onDrillClicked(drillModel);
-    }
-
-    @Override
-    public void onDrillItemLongClicked(DrillModel drillModel) {
-        presenter.showDeleteConfirmation(drillModel);
-    }
-
-    private FragmentCallback getCallback() {
-        if (getActivity() instanceof FragmentCallback) {
-            return ((FragmentCallback) getActivity());
-        } else {
-            throw new IllegalStateException("Parent activity must implement FragmentCallback");
-        }
-    }
-
-    @Override
     public void setFilterSelection(DrillModel.Type type) {
         presenter.loadDrillsList(type);
     }
@@ -153,8 +152,17 @@ public class DrillsListFragment extends BaseFragment<DrillsListPresenter> implem
         startActivity(DrillDetailsActivity.getIntent(getContext(), drillModel.id, drillModel.maxScore, drillModel.defaultTargetScore));
     }
 
+    /**
+     * Implementation of item click listeners in {@link DrillsListAdapter}
+     */
+
     @Override
-    public void showDeleteConfirmation(final DrillModel drillModel) {
+    public void onDrillItemClicked(DrillModel drillModel) {
+        presenter.onDrillClicked(drillModel);
+    }
+
+    @Override
+    public void onDrillItemLongClicked(DrillModel drillModel) {
         DeleteDrillDialog dialog = DeleteDrillDialog.newInstance(drillModel.id);
         dialog.show(getFragmentManager(), DeleteDrillDialog.class.getName());
     }
