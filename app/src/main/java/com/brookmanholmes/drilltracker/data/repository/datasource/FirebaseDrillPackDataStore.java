@@ -1,5 +1,6 @@
 package com.brookmanholmes.drilltracker.data.repository.datasource;
 
+import com.brookmanholmes.drilltracker.data.entity.DrillEntity;
 import com.brookmanholmes.drilltracker.data.entity.DrillPackEntity;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -17,16 +18,17 @@ class FirebaseDrillPackDataStore implements DrillPackDataStore {
     private DatabaseReference drillsRef = FirebaseDatabase.getInstance().getReference();
 
     FirebaseDrillPackDataStore() {
-        drillsRef = FirebaseDatabase.getInstance().getReference().child("iap").child("drills");
+        drillsRef = FirebaseDatabase.getInstance().getReference().child("iap");
+        drillsRef.keepSynced(true);
     }
 
     @Override
     public Observable<List<DrillPackEntity>> drillPackEntityList() {
-        return RxFirebaseDatabase.observeValueEvent(drillsRef, DataSnapshotMapper.listOf(DrillPackEntity.class)).toObservable();
+        return RxFirebaseDatabase.observeValueEvent(drillsRef.child("drill_packs"), DataSnapshotMapper.listOf(DrillPackEntity.class)).toObservable();
     }
 
     @Override
-    public Observable<DrillPackEntity> drillPackEntity(String id) {
-        return RxFirebaseDatabase.observeValueEvent(drillsRef.child(id), DrillPackEntity.class).toObservable();
+    public Observable<List<DrillEntity>> drillPackEntity(String id) {
+        return RxFirebaseDatabase.observeValueEvent(drillsRef.child("drills").child(id), DataSnapshotMapper.listOf(DrillEntity.class)).toObservable();
     }
 }

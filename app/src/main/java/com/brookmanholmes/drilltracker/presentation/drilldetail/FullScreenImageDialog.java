@@ -23,6 +23,7 @@ import butterknife.Unbinder;
  */
 
 public class FullScreenImageDialog extends DialogFragment {
+    private static final String TAG = FullScreenImageDialog.class.getName();
     private static final String PARAM_URL = "param_url";
 
     @BindView(R.id.image)
@@ -63,5 +64,4 @@ public class FullScreenImageDialog extends DialogFragment {
     void onImageClicked() {
         dismiss();
     }
-
 }

@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
+import com.brookmanholmes.drilltracker.data.repository.datasource.DataStoreFactory;
 import com.brookmanholmes.drilltracker.domain.Drill;
 import com.brookmanholmes.drilltracker.domain.interactor.AddDrill;
 import com.brookmanholmes.drilltracker.domain.interactor.DefaultObserver;
@@ -36,6 +37,13 @@ class AddEditDrillPresenter implements AddEditDrillContract {
         this.getDrillDetails = getDrillDetails;
         this.drillId = drillId;
         this.updateDrill = updateDrill;
+    }
+
+    AddEditDrillPresenter(@Nullable String drillId) {
+        addDrill = new AddDrill(DataStoreFactory.getDrillRepo());
+        getDrillDetails = new GetDrillDetails(DataStoreFactory.getDrillRepo());
+        updateDrill = new UpdateDrill(DataStoreFactory.getDrillRepo());
+        this.drillId = drillId;
     }
 
     @Override
@@ -129,7 +137,7 @@ class AddEditDrillPresenter implements AddEditDrillContract {
     private class AddDrillObserver extends DefaultObserver<Drill> {
         @Override
         public void onNext(Drill drill) {
-            view.showDrillDetailsView(drill.getId(), drill.getMaxScore(), drill.getDefaultTargetScore());
+            view.showDrillDetailsView(new DrillModelDataMapper().transform(drill));
             onComplete();
             dispose();
         }

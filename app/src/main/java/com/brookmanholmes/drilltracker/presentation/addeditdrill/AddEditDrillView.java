@@ -24,11 +24,9 @@ interface AddEditDrillView {
     /**
      * Shows a drill to the user
      *
-     * @param drillId     The id of the drill
-     * @param maxScore    The max score of the drill
-     * @param targetScore The target score of the drill
+     * @param drill The drill to show
      */
-    void showDrillDetailsView(String drillId, int maxScore, int targetScore);
+    void showDrillDetailsView(DrillModel drill);
 
     /**
      * Removes the view from the stack (prevents the user from navigating back)

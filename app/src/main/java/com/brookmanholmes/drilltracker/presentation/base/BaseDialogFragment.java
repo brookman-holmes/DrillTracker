@@ -10,9 +10,6 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 
 import com.brookmanholmes.drilltracker.R;
-import com.brookmanholmes.drilltracker.data.repository.DrillDataRepository;
-import com.brookmanholmes.drilltracker.data.repository.datasource.DataStoreFactory;
-import com.brookmanholmes.drilltracker.domain.repository.DrillRepository;
 
 /**
  * Created by Brookman Holmes on 7/28/2017.
@@ -20,7 +17,6 @@ import com.brookmanholmes.drilltracker.domain.repository.DrillRepository;
 
 public abstract class BaseDialogFragment<T extends Presenter> extends DialogFragment implements DialogInterface.OnClickListener {
     protected AlertDialog.Builder dialogBuilder;
-    protected DrillRepository drillRepository = new DrillDataRepository(DataStoreFactory.getDrillDataStore());
 
     protected T presenter;
 
@@ -40,8 +36,9 @@ public abstract class BaseDialogFragment<T extends Presenter> extends DialogFrag
             dialogBuilder.setTitle(getTitle());
 
         setDialogBuilderView(dialogBuilder);
-        dialogBuilder.setNegativeButton(android.R.string.cancel, null)
-                .setPositiveButton(android.R.string.ok, this);
+        dialogBuilder.setPositiveButton(android.R.string.ok, this);
+        if (hasNegativeButton())
+            dialogBuilder.setNegativeButton(android.R.string.cancel, null);
         return dialogBuilder.create();
     }
 
@@ -49,8 +46,18 @@ public abstract class BaseDialogFragment<T extends Presenter> extends DialogFrag
         return R.style.AlertDialogTheme;
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        presenter.destroy();
+    }
+
     protected abstract boolean hasTitle();
     protected abstract void setDialogBuilderView(AlertDialog.Builder dialogBuilder);
     protected abstract String getTitle();
     protected abstract T getPresenter();
+
+    protected boolean hasNegativeButton() {
+        return true;
+    }
 }

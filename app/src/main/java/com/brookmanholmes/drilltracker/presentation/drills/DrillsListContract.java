@@ -10,25 +10,23 @@ import com.brookmanholmes.drilltracker.presentation.model.DrillModel;
  * Interface representing the contract between the {@link DrillsListPresenter} and the
  * {@link DrillsListView}
  */
-
 interface DrillsListContract extends Presenter {
     /**
-     * @param view
+     * Sets the view within the presenter
+     *
+     * @param view The view that this presenter will control
      */
     void setView(@NonNull DrillsListView view);
 
     /**
-     * @param filter
+     * Retrieves all the drills from the drill repository
+     * @param filter The type of drill to filter for
      */
     void initialize(DrillModel.Type filter);
 
     /**
-     * @param filter
-     */
-    void loadDrillsList(DrillModel.Type filter);
-
-    /**
-     * @param drillModel
+     * Tells the presenter that a drill has been clicked on
+     * @param drillModel The drill that was clicked
      */
     void onDrillClicked(DrillModel drillModel);
 }

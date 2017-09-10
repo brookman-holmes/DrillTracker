@@ -13,8 +13,7 @@ import java.util.TimeZone;
  * Created by Brookman Holmes on 7/7/2017.
  */
 
-public class DrillModel {
-    public String id;
+public class DrillModel extends Model {
     public String name;
     public String description;
     public String imageUrl;

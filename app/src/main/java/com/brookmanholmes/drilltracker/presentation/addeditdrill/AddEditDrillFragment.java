@@ -25,14 +25,12 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 
 import com.brookmanholmes.drilltracker.R;
-import com.brookmanholmes.drilltracker.domain.interactor.AddDrill;
-import com.brookmanholmes.drilltracker.domain.interactor.GetDrillDetails;
-import com.brookmanholmes.drilltracker.domain.interactor.UpdateDrill;
 import com.brookmanholmes.drilltracker.presentation.base.BaseFragment;
 import com.brookmanholmes.drilltracker.presentation.drilldetail.DrillDetailsActivity;
 import com.brookmanholmes.drilltracker.presentation.model.DrillModel;
 import com.brookmanholmes.drilltracker.presentation.view.CustomNumberPicker;
 import com.brookmanholmes.drilltracker.presentation.view.util.ImageHandler;
+import com.google.firebase.crash.FirebaseCrash;
 import com.squareup.picasso.Callback;
 import com.theartofdev.edmodo.cropper.CropImage;
 
@@ -67,13 +65,6 @@ public class AddEditDrillFragment extends BaseFragment<AddEditDrillPresenter> im
             onTargetScoreChanged(newVal);
         }
     };
-    private final CustomNumberPicker.OnValueChangeListener maxValueListener = new CustomNumberPicker.OnValueChangeListener() {
-        @Override
-        public void onValueChange(int oldVal, int newVal) {
-            onMaximumScoreChanged(newVal);
-        }
-    };
-
     @BindView(R.id.input_drill_name)
     EditText drillName;
     @BindView(R.id.input_drill_description)
@@ -82,6 +73,13 @@ public class AddEditDrillFragment extends BaseFragment<AddEditDrillPresenter> im
     CustomNumberPicker maxScorePicker;
     @BindView(R.id.targetScoreNumberPicker)
     CustomNumberPicker targetScorePicker;
+    private final CustomNumberPicker.OnValueChangeListener maxValueListener = new CustomNumberPicker.OnValueChangeListener() {
+        @Override
+        public void onValueChange(int oldVal, int newVal) {
+            onMaximumScoreChanged(newVal);
+            targetScorePicker.setMax(newVal);
+        }
+    };
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.image)
@@ -103,12 +101,7 @@ public class AddEditDrillFragment extends BaseFragment<AddEditDrillPresenter> im
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        presenter = new AddEditDrillPresenter(
-                new AddDrill(getDrillRepository()),
-                new GetDrillDetails(getDrillRepository()),
-                new UpdateDrill(getDrillRepository()),
-                getArguments().getString(PARAM_DRILL_ID)
-        );
+        presenter = new AddEditDrillPresenter(getArguments().getString(PARAM_DRILL_ID));
     }
 
     @Nullable
@@ -118,6 +111,7 @@ public class AddEditDrillFragment extends BaseFragment<AddEditDrillPresenter> im
         unbinder = ButterKnife.bind(this, view);
         maxScorePicker.setOnValueChangedListener(maxValueListener);
         targetScorePicker.setOnValueChangedListener(targetValueListener);
+        targetScorePicker.setMax(maxScorePicker.getValue());
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -178,6 +172,7 @@ public class AddEditDrillFragment extends BaseFragment<AddEditDrillPresenter> im
                 photoFile = createImageFile();
             } catch (IOException ex) {
                 // Error occurred while creating the File
+                FirebaseCrash.log(ex.getMessage());
                 Log.i(TAG, "startTakePictureActivity: " + ex);
             }
             // Continue only if the File was successfully created
@@ -298,8 +293,8 @@ public class AddEditDrillFragment extends BaseFragment<AddEditDrillPresenter> im
     }
 
     @Override
-    public void showDrillDetailsView(String drillId, int maxScore, int targetScore) {
-        startActivity(DrillDetailsActivity.getIntent(getContext(), drillId, maxScore, targetScore));
+    public void showDrillDetailsView(DrillModel drill) {
+        startActivity(DrillDetailsActivity.getIntent(getContext(), drill.id, drill.imageUrl, drill.maxScore, drill.defaultTargetScore));
         getActivity().finish();
     }
 

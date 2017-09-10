@@ -1,5 +1,6 @@
 package com.brookmanholmes.drilltracker.presentation.addattempt;
 
+import com.brookmanholmes.drilltracker.data.repository.datasource.DataStoreFactory;
 import com.brookmanholmes.drilltracker.domain.Drill;
 import com.brookmanholmes.drilltracker.domain.interactor.AddAttempt;
 import com.brookmanholmes.drilltracker.domain.interactor.DefaultObserver;
@@ -11,7 +12,11 @@ import java.util.Date;
  * Created by Brookman Holmes on 7/28/2017.
  */
 class AddAttemptDialogPresenter implements Presenter {
-    private AddAttempt addAttempt;
+    private final AddAttempt addAttempt;
+
+    AddAttemptDialogPresenter() {
+        addAttempt = new AddAttempt(DataStoreFactory.getDrillRepo());
+    }
 
     AddAttemptDialogPresenter(AddAttempt addAttempt) {
         this.addAttempt = addAttempt;

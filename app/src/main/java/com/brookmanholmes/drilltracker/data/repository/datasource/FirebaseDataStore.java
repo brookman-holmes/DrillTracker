@@ -40,34 +40,8 @@ class FirebaseDataStore implements DrillDataStore {
         imagesRef = FirebaseStorage.getInstance().getReference().child(userId);
         userRef = FirebaseDatabase.getInstance().getReference().child("users").child(userId);
         drillsRef = userRef.child("drills");
-
-        final DatabaseReference testData = FirebaseDatabase.getInstance().getReference().child("test");
-
-        userRef.child("firstLogin").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Boolean firstLogin = dataSnapshot.getValue(Boolean.class);
-                if (firstLogin == null || firstLogin) {
-                    testData.addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            userRef.setValue(dataSnapshot.getValue());
-                            userRef.child("firstLogin").setValue(false);
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-                        }
-                    });
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
+        drillsRef.keepSynced(true);
+        userRef.keepSynced(true);
     }
 
     @Override

@@ -1,5 +1,8 @@
 package com.brookmanholmes.drilltracker.presentation.purchasedrills;
 
+import android.support.annotation.NonNull;
+
+import com.brookmanholmes.drilltracker.data.repository.datasource.DataStoreFactory;
 import com.brookmanholmes.drilltracker.domain.DrillPack;
 import com.brookmanholmes.drilltracker.domain.exception.DefaultErrorBundle;
 import com.brookmanholmes.drilltracker.domain.exception.ErrorBundle;
@@ -8,6 +11,7 @@ import com.brookmanholmes.drilltracker.domain.interactor.GetDrillPackList;
 import com.brookmanholmes.drilltracker.presentation.exception.ErrorMessageFactory;
 import com.brookmanholmes.drilltracker.presentation.mapper.DrillPackModelDataMapper;
 import com.brookmanholmes.drilltracker.presentation.model.DrillModel;
+import com.brookmanholmes.drilltracker.presentation.model.DrillPackModel;
 
 import java.util.List;
 
@@ -18,6 +22,10 @@ class PurchaseDrillsPresenter implements PurchaseDrillsContract {
     private final GetDrillPackList getDrillPackList;
     private final DrillPackModelDataMapper mapper = new DrillPackModelDataMapper();
     private PurchaseDrillsView view;
+
+    PurchaseDrillsPresenter() {
+        getDrillPackList = new GetDrillPackList(DataStoreFactory.getDrillPackRepo());
+    }
 
     PurchaseDrillsPresenter(GetDrillPackList getDrillPackList) {
         this.getDrillPackList = getDrillPackList;
@@ -44,7 +52,7 @@ class PurchaseDrillsPresenter implements PurchaseDrillsContract {
     }
 
     @Override
-    public void setView(PurchaseDrillsView view) {
+    public void setView(@NonNull PurchaseDrillsView view) {
         this.view = view;
     }
 
@@ -76,8 +84,12 @@ class PurchaseDrillsPresenter implements PurchaseDrillsContract {
         this.view.showError(errorMessage);
     }
 
-    private void showDrillPackCollectionInView(List<DrillPack> drillPacks) {
-        view.renderDrillPacks(mapper.transform(drillPacks));
+    private void showDrillPackCollectionInView(List<DrillPackModel> drillPacks) {
+        view.renderDrillPacks(drillPacks);
+    }
+
+    private void loadSkusInView(List<String> skus) {
+        view.loadInventory(skus);
     }
 
     private void getDrillPackList() {
@@ -87,7 +99,11 @@ class PurchaseDrillsPresenter implements PurchaseDrillsContract {
     private class DrillPackObserver extends DefaultObserver<List<DrillPack>> {
         @Override
         public void onNext(List<DrillPack> drillPacks) {
-            showDrillPackCollectionInView(drillPacks);
+            List<DrillPackModel> models = mapper.transform(drillPacks);
+            List<String> skus = mapper.getSkus(models);
+
+            showDrillPackCollectionInView(models);
+            loadSkusInView(skus);
             hideViewLoading();
         }
 

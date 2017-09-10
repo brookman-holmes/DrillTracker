@@ -1,111 +1,42 @@
 package com.brookmanholmes.drilltracker.presentation.drills;
 
 import android.content.Context;
-import android.support.v7.util.DiffUtil;
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.brookmanholmes.drilltracker.R;
+import com.brookmanholmes.drilltracker.presentation.base.BaseRecyclerViewAdapter;
 import com.brookmanholmes.drilltracker.presentation.model.DrillModel;
 import com.brookmanholmes.drilltracker.presentation.view.util.ChartUtil;
 import com.brookmanholmes.drilltracker.presentation.view.util.ImageHandler;
 
-import java.util.Collections;
-import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.OnLongClick;
 import lecho.lib.hellocharts.view.LineChartView;
 
 /**
  * Created by Brookman Holmes on 7/7/2017.
  */
-
-class DrillsListAdapter extends RecyclerView.Adapter<DrillsListAdapter.ViewHolder> {
+class DrillsListAdapter extends BaseRecyclerViewAdapter<DrillModel> {
     private static final String TAG = DrillsListAdapter.class.getName();
-    private final LayoutInflater inflater;
-    private List<DrillModel> models;
-    private OnItemClickListener onItemClickListener;
 
     DrillsListAdapter(Context context) {
-        this.inflater = LayoutInflater.from(context);
-        this.models = Collections.emptyList();
+        super(context);
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    protected ViewHolder<DrillModel> getDefaultViewHolder(ViewGroup parent, int viewType) {
         final View view = inflater.inflate(R.layout.row_drill, parent, false);
-        return new ViewHolder(view);
+        return new DrillModelViewHolder(view);
     }
 
-    @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.bind(models.get(position));
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (DrillsListAdapter.this.onItemClickListener != null) {
-                    DrillsListAdapter.this.onItemClickListener.onDrillItemClicked(models.get(holder.getAdapterPosition()));
-                }
-            }
-        });
-        // forward the click on the chart to the whole holder because for some reason it intercepts it otherwise
-        holder.chart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                holder.itemView.performClick();
-            }
-        });
-        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                if (DrillsListAdapter.this.onItemClickListener != null) {
-                    DrillsListAdapter.this.onItemClickListener.onDrillItemLongClicked(models.get(holder.getAdapterPosition()));
-                    return true;
-                } else {
-                    return false;
-                }
-            };
-        });
-    }
-
-    @Override
-    public int getItemCount() {
-        return (this.models != null) ? this.models.size() : 0;
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
-
-    void setData(List<DrillModel> drillsCollection) {
-        this.validateDrillsCollection(drillsCollection);
-        DiffUtil.DiffResult result = DiffUtil.calculateDiff(new DiffUtilCallback(this.models, drillsCollection));
-        this.models = drillsCollection;
-        result.dispatchUpdatesTo(this);
-    }
-
-    void setOnItemClickListener(OnItemClickListener onItemClickListener) {
-        this.onItemClickListener = onItemClickListener;
-    }
-
-    private void validateDrillsCollection(List<DrillModel> drillModelCollection) {
-        if (drillModelCollection == null)
-            throw new IllegalArgumentException("The list cannot be null");
-    }
-
-    interface OnItemClickListener {
-        void onDrillItemClicked(DrillModel drillModel);
-        void onDrillItemLongClicked(DrillModel drillModel);
-    }
-
-    static class ViewHolder extends RecyclerView.ViewHolder {
-        private static final String TAG = ViewHolder.class.getName();
+    static class DrillModelViewHolder extends BaseRecyclerViewAdapter.ViewHolder<DrillModel>
+            implements View.OnClickListener, View.OnLongClickListener {
+        private static final String TAG = DrillModelViewHolder.class.getName();
 
         @BindView(R.id.name)
         TextView name;
@@ -114,46 +45,39 @@ class DrillsListAdapter extends RecyclerView.Adapter<DrillsListAdapter.ViewHolde
         @BindView(R.id.chart)
         LineChartView chart;
 
-        ViewHolder(View itemView) {
+        DrillModelViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-            chart.setClickable(false);
-            chart.setFocusable(false);
         }
 
-        void bind(DrillModel model) {
+        @Override
+        public void bind(DrillModel model, OnItemClickListener<DrillModel> onItemClickListener) {
+            super.bind(model, onItemClickListener);
             name.setText(model.name);
             ImageHandler.loadImage(image, model.imageUrl);
             ChartUtil.setupLifetimeChart(chart, model, false);
-        }
-    }
-
-    private static class DiffUtilCallback extends DiffUtil.Callback {
-        List<DrillModel> oldCollection, newCollection;
-
-        public DiffUtilCallback(List<DrillModel> oldCollection, List<DrillModel> newCollection) {
-            this.oldCollection = oldCollection;
-            this.newCollection = newCollection;
+            itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(this);
         }
 
-        @Override
-        public int getOldListSize() {
-            return oldCollection.size();
+        @OnClick(R.id.chart)
+        void onChartClicked() {
+            onItemClick(R.id.chart);
+        }
+
+        @OnLongClick(R.id.chart)
+        boolean onChartLongClicked() {
+            return onItemLongClick();
         }
 
         @Override
-        public int getNewListSize() {
-            return newCollection.size();
+        public void onClick(View view) {
+            onItemClick(view.getId());
         }
 
         @Override
-        public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
-            return oldCollection.get(oldItemPosition).id.equals(newCollection.get(newItemPosition).id);
-        }
-
-        @Override
-        public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
-            return oldCollection.get(oldItemPosition).equals(newCollection.get(newItemPosition));
+        public boolean onLongClick(View view) {
+            return onItemLongClick();
         }
     }
 }

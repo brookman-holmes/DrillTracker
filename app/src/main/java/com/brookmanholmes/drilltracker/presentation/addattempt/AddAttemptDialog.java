@@ -8,7 +8,6 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 
 import com.brookmanholmes.drilltracker.R;
-import com.brookmanholmes.drilltracker.domain.interactor.AddAttempt;
 import com.brookmanholmes.drilltracker.presentation.base.BaseDialogFragment;
 import com.brookmanholmes.drilltracker.presentation.view.CustomNumberPicker;
 
@@ -57,12 +56,6 @@ public class AddAttemptDialog extends BaseDialogFragment<AddAttemptDialogPresent
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        presenter.destroy();
-    }
-
-    @Override
     protected boolean hasTitle() {
         return true;
     }
@@ -88,7 +81,7 @@ public class AddAttemptDialog extends BaseDialogFragment<AddAttemptDialogPresent
 
     @Override
     protected AddAttemptDialogPresenter getPresenter() {
-        return new AddAttemptDialogPresenter(new AddAttempt(drillRepository));
+        return new AddAttemptDialogPresenter();
     }
 
     private int getMaxScore() {

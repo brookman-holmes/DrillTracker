@@ -1,8 +1,11 @@
 package com.brookmanholmes.drilltracker.data.repository;
 
+import com.brookmanholmes.drilltracker.data.entity.DrillEntity;
 import com.brookmanholmes.drilltracker.data.entity.DrillPackEntity;
+import com.brookmanholmes.drilltracker.data.entity.mapper.DrillEntityDataMapper;
 import com.brookmanholmes.drilltracker.data.entity.mapper.DrillPackEntityDataMapper;
 import com.brookmanholmes.drilltracker.data.repository.datasource.DrillPackDataStore;
+import com.brookmanholmes.drilltracker.domain.Drill;
 import com.brookmanholmes.drilltracker.domain.DrillPack;
 import com.brookmanholmes.drilltracker.domain.repository.DrillPackRepository;
 
@@ -36,9 +39,15 @@ public class DrillPackDataRepository implements DrillPackRepository {
     }
 
     @Override
-    public Observable<DrillPack> observeDrillPack(String sku) {
+    public Observable<List<Drill>> observeDrillPack(String sku) {
         return dataStore.drillPackEntity(sku)
-                .map(transformEntity());
+                .map(new Function<List<DrillEntity>, List<Drill>>() {
+                    @Override
+                    public List<Drill> apply(@NonNull List<DrillEntity> drillEntityList) throws Exception {
+                        DrillEntityDataMapper drillEntityDataMapper = new DrillEntityDataMapper();
+                        return drillEntityDataMapper.transform(drillEntityList);
+                    }
+                });
     }
 
     private Function<DrillPackEntity, DrillPack> transformEntity() {

@@ -2,6 +2,7 @@ package com.brookmanholmes.drilltracker.presentation.drills;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,11 +11,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.brookmanholmes.drilltracker.R;
-import com.brookmanholmes.drilltracker.domain.interactor.GetDrillList;
 import com.brookmanholmes.drilltracker.presentation.base.BaseFragment;
 import com.brookmanholmes.drilltracker.presentation.deletedrill.DeleteDrillDialog;
 import com.brookmanholmes.drilltracker.presentation.drilldetail.DrillDetailsActivity;
-import com.brookmanholmes.drilltracker.presentation.mapper.DrillModelDataMapper;
 import com.brookmanholmes.drilltracker.presentation.model.DrillModel;
 
 import java.util.List;
@@ -27,7 +26,7 @@ import butterknife.ButterKnife;
  */
 
 public class DrillsListFragment extends BaseFragment<DrillsListContract> implements DrillsListView,
-        DrillsListAdapter.OnItemClickListener, ActivityCallback {
+        DrillsListAdapter.OnItemClickListener<DrillModel>, ActivityCallback {
     private static final String TAG = DrillsListFragment.class.getName();
 
     @BindView(R.id.scrollView)
@@ -44,10 +43,7 @@ public class DrillsListFragment extends BaseFragment<DrillsListContract> impleme
         super.onCreate(savedInstanceState);
 
         adapter = new DrillsListAdapter(getContext());
-
-        GetDrillList getDrillList = new GetDrillList(getDrillRepository());
-        DrillModelDataMapper drillModelDataMapper = new DrillModelDataMapper();
-        presenter = new DrillsListPresenter(getDrillList, drillModelDataMapper);
+        presenter = new DrillsListPresenter();
     }
 
     @Nullable
@@ -58,9 +54,10 @@ public class DrillsListFragment extends BaseFragment<DrillsListContract> impleme
         presenter.setView(this);
         adapter.setOnItemClickListener(this);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setDrawingCacheEnabled(true);
-        recyclerView.setItemViewCacheSize(10);
+        recyclerView.setItemViewCacheSize(8);
+        recyclerView.setHasFixedSize(true);
         recyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
+        recyclerView.setDrawingCacheEnabled(true);
         recyclerView.setAdapter(adapter);
 
         getCallback().addListener(this);
@@ -78,7 +75,7 @@ public class DrillsListFragment extends BaseFragment<DrillsListContract> impleme
     @Override
     public void onResume() {
         super.onResume();
-        this.presenter.loadDrillsList(getCallback().getTypeSelection());
+        loadUserList();
     }
 
     @Override
@@ -144,12 +141,12 @@ public class DrillsListFragment extends BaseFragment<DrillsListContract> impleme
 
     @Override
     public void setFilterSelection(DrillModel.Type type) {
-        presenter.loadDrillsList(type);
+        presenter.initialize(type);
     }
 
     @Override
     public void viewDrill(DrillModel drillModel) {
-        startActivity(DrillDetailsActivity.getIntent(getContext(), drillModel.id, drillModel.maxScore, drillModel.defaultTargetScore));
+        startActivity(DrillDetailsActivity.getIntent(getContext(), drillModel.id, drillModel.imageUrl, drillModel.maxScore, drillModel.defaultTargetScore));
     }
 
     /**
@@ -157,12 +154,12 @@ public class DrillsListFragment extends BaseFragment<DrillsListContract> impleme
      */
 
     @Override
-    public void onDrillItemClicked(DrillModel drillModel) {
+    public void onItemClicked(DrillModel drillModel, @IdRes int id) {
         presenter.onDrillClicked(drillModel);
     }
 
     @Override
-    public void onDrillItemLongClicked(DrillModel drillModel) {
+    public void onItemLongClicked(DrillModel drillModel) {
         DeleteDrillDialog dialog = DeleteDrillDialog.newInstance(drillModel.id);
         dialog.show(getFragmentManager(), DeleteDrillDialog.class.getName());
     }

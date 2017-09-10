@@ -2,6 +2,7 @@ package com.brookmanholmes.drilltracker.presentation.drills;
 
 import android.support.annotation.NonNull;
 
+import com.brookmanholmes.drilltracker.data.repository.datasource.DataStoreFactory;
 import com.brookmanholmes.drilltracker.domain.Drill;
 import com.brookmanholmes.drilltracker.domain.exception.DefaultErrorBundle;
 import com.brookmanholmes.drilltracker.domain.exception.ErrorBundle;
@@ -26,6 +27,11 @@ class DrillsListPresenter implements DrillsListContract {
     DrillsListPresenter(GetDrillList getDrillListUseCase, DrillModelDataMapper drillModelDataMapper) {
         this.getDrillListUseCase = getDrillListUseCase;
         this.drillModelDataMapper = drillModelDataMapper;
+    }
+
+    DrillsListPresenter() {
+        getDrillListUseCase = new GetDrillList(DataStoreFactory.getDrillRepo());
+        drillModelDataMapper = new DrillModelDataMapper();
     }
 
     @Override
@@ -53,8 +59,7 @@ class DrillsListPresenter implements DrillsListContract {
         this.loadDrillsList(filter);
     }
 
-    @Override
-    public void loadDrillsList(DrillModel.Type filter) {
+    private void loadDrillsList(DrillModel.Type filter) {
         this.hideViewRetry();
         this.showViewLoading();
         this.getDrillsList(filter);

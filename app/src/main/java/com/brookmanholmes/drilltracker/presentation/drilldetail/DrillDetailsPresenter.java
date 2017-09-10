@@ -2,6 +2,7 @@ package com.brookmanholmes.drilltracker.presentation.drilldetail;
 
 import android.support.annotation.NonNull;
 
+import com.brookmanholmes.drilltracker.data.repository.datasource.DataStoreFactory;
 import com.brookmanholmes.drilltracker.domain.Drill;
 import com.brookmanholmes.drilltracker.domain.exception.DefaultErrorBundle;
 import com.brookmanholmes.drilltracker.domain.exception.ErrorBundle;
@@ -22,6 +23,12 @@ class DrillDetailsPresenter implements DrillDetailsContract {
     private final DrillModelDataMapper mapper;
     private DrillDetailsView view;
     private DrillModel model;
+
+    DrillDetailsPresenter() {
+        getDrillDetailsUseCase = new GetDrillDetails(DataStoreFactory.getDrillRepo());
+        deleteAttemptUseCase = new DeleteAttempt(DataStoreFactory.getDrillRepo());
+        mapper = new DrillModelDataMapper();
+    }
 
     DrillDetailsPresenter(GetDrillDetails getDrillDetailsUseCase, DeleteAttempt deleteAttemptUseCase, DrillModelDataMapper mapper) {
         this.getDrillDetailsUseCase = getDrillDetailsUseCase;

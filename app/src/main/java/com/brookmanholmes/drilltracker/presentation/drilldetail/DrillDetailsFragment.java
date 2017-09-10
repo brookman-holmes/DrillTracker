@@ -14,12 +14,9 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.brookmanholmes.drilltracker.R;
-import com.brookmanholmes.drilltracker.domain.interactor.DeleteAttempt;
-import com.brookmanholmes.drilltracker.domain.interactor.GetDrillDetails;
 import com.brookmanholmes.drilltracker.presentation.addattempt.AddAttemptDialog;
 import com.brookmanholmes.drilltracker.presentation.addeditdrill.AddEditDrillActivity;
 import com.brookmanholmes.drilltracker.presentation.base.BaseFragment;
-import com.brookmanholmes.drilltracker.presentation.mapper.DrillModelDataMapper;
 import com.brookmanholmes.drilltracker.presentation.model.DrillModel;
 import com.brookmanholmes.drilltracker.presentation.model.DrillModelMathUtil;
 import com.brookmanholmes.drilltracker.presentation.view.util.ChartUtil;
@@ -41,6 +38,7 @@ public class DrillDetailsFragment extends BaseFragment<DrillDetailsContract> imp
     private static final String PARAM_DRILL_ID = "param_drill_id";
     private static final String PARAM_MAX = "param_max";
     private static final String PARAM_TARGET = "param_target";
+    private static final String PARAM_URL = "param_url";
 
     @BindView(R.id.rl_progress)
     View rl_progress;
@@ -83,12 +81,13 @@ public class DrillDetailsFragment extends BaseFragment<DrillDetailsContract> imp
     @BindView(R.id.image)
     PhotoView image;
 
-    public static DrillDetailsFragment forDrill(String drillId, int maxValue, int targetValue) {
+    public static DrillDetailsFragment forDrill(String drillId, String url, int maxValue, int targetValue) {
         final DrillDetailsFragment fragment = new DrillDetailsFragment();
         final Bundle args = new Bundle();
         args.putString(PARAM_DRILL_ID, drillId);
         args.putInt(PARAM_MAX, maxValue);
         args.putInt(PARAM_TARGET, targetValue);
+        args.putString(PARAM_URL, url);
         fragment.setArguments(args);
         return fragment;
     }
@@ -97,9 +96,7 @@ public class DrillDetailsFragment extends BaseFragment<DrillDetailsContract> imp
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        GetDrillDetails getDrillDetailsUseCase = new GetDrillDetails(getDrillRepository());
-        DeleteAttempt deleteAttemptUseCase = new DeleteAttempt(getDrillRepository());
-        presenter = new DrillDetailsPresenter(getDrillDetailsUseCase, deleteAttemptUseCase, new DrillModelDataMapper());
+        presenter = new DrillDetailsPresenter();
     }
 
     @Nullable
@@ -125,23 +122,35 @@ public class DrillDetailsFragment extends BaseFragment<DrillDetailsContract> imp
 
     private void loadDrillDetails() {
         if (presenter != null)
-            presenter.initialize(currentDrillId());
+            presenter.initialize(getDrillId());
     }
 
-    private String currentDrillId() {
+    private String getDrillId() {
         final Bundle arguments = getArguments();
         Preconditions.checkNotNull(arguments, "Fragment arguments cannot be null");
         return arguments.getString(PARAM_DRILL_ID);
     }
 
-    private int currentMaxScore() {
+    private String getDrillUrl() {
+        final Bundle arguments = getArguments();
+        return arguments.getString(PARAM_URL, "invalid url");
+    }
+
+    private int getMaxScore() {
         final Bundle arguments = getArguments();
         return arguments.getInt(PARAM_MAX);
     }
 
-    private int currentTargetScore() {
+    private int getTargetScore() {
         final Bundle arguments = getArguments();
         return arguments.getInt(PARAM_TARGET);
+    }
+
+    private void setArguments(DrillModel model) {
+        getArguments().putString(PARAM_DRILL_ID, model.id);
+        getArguments().putInt(PARAM_MAX, model.maxScore);
+        getArguments().putInt(PARAM_TARGET, model.defaultTargetScore);
+        getArguments().putString(PARAM_URL, model.imageUrl);
     }
 
     /**
@@ -164,9 +173,15 @@ public class DrillDetailsFragment extends BaseFragment<DrillDetailsContract> imp
     }
 
     @Override
+    public void hideRetry() {
+        rl_retry.setVisibility(View.GONE);
+    }
+
+    @Override
     public void renderDrill(DrillModel drill) {
         if (drill != null) {
             //ImageHandler.loadImage(image, drill.imageUrl);
+            setArguments(drill);
             Picasso.with(context()).load(drill.imageUrl).transform(new RoundedCornersTransformation(50, 10)).into(image);
             DrillModelMathUtil lifetimeStats = new DrillModelMathUtil(drill.attemptModels);
             DrillModelMathUtil sessionStats = new DrillModelMathUtil(drill.getSessionAttempts());
@@ -194,11 +209,6 @@ public class DrillDetailsFragment extends BaseFragment<DrillDetailsContract> imp
     }
 
     @Override
-    public void hideRetry() {
-        rl_retry.setVisibility(View.GONE);
-    }
-
-    @Override
     public void showError(String message) {
         this.showToastMessage(message);
     }
@@ -219,13 +229,13 @@ public class DrillDetailsFragment extends BaseFragment<DrillDetailsContract> imp
 
     @OnClick(R.id.fab)
     public void onAddAttemptClicked() {
-        AddAttemptDialog addAttemptDialog = AddAttemptDialog.newInstance(currentDrillId(), currentMaxScore(), currentTargetScore());
+        AddAttemptDialog addAttemptDialog = AddAttemptDialog.newInstance(getDrillId(), getMaxScore(), getTargetScore());
         addAttemptDialog.show(getFragmentManager(), AddAttemptDialog.class.getName());
     }
 
     @OnClick(R.id.image)
     public void onImageClicked() {
-        DialogFragment dialogFragment = FullScreenImageDialog.newInstance(currentDrillId());
+        DialogFragment dialogFragment = FullScreenImageDialog.newInstance(getDrillUrl());
         dialogFragment.show(getFragmentManager(), "tag");
     }
 
@@ -237,7 +247,7 @@ public class DrillDetailsFragment extends BaseFragment<DrillDetailsContract> imp
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         if (item.getItemId() == R.id.ic_edit) {
-            startActivity(AddEditDrillActivity.newInstance(getContext(), currentDrillId()));
+            startActivity(AddEditDrillActivity.newInstance(getContext(), getDrillId()));
         } else if (item.getItemId() == R.id.ic_undo_attempt) {
             presenter.onUndoClicked();
         }

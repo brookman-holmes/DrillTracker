@@ -1,9 +1,6 @@
 package com.brookmanholmes.drilltracker.presentation.view.util;
 
-import android.content.Context;
-import android.graphics.Bitmap;
 import android.net.Uri;
-import android.util.Log;
 import android.widget.ImageView;
 
 import com.brookmanholmes.drilltracker.R;
@@ -21,37 +18,38 @@ import java.io.File;
 public class ImageHandler {
     private static final String TAG = ImageHandler.class.getName();
 
+    private ImageHandler() {
+    }
+
     public static void loadImage(ImageView imageView, String url) {
         Picasso.with(imageView.getContext())
                 .load(url)
-                .placeholder(R.drawable.table_horizontal)
-                .error(R.drawable.table_horizontal)
+                .placeholder(R.drawable.pool_table)
+                .error(R.drawable.pool_table)
                 .into(imageView);
     }
 
     public static void loadImage(ImageView imageView, String url, Callback callback) {
         Picasso.with(imageView.getContext())
                 .load(url)
-                .placeholder(R.drawable.table_horizontal)
-                .error(R.drawable.table_horizontal)
+                .placeholder(R.drawable.pool_table)
+                .error(R.drawable.pool_table)
                 .into(imageView, callback);
     }
 
     public static void loadImage(ImageView imageView, File file) {
         Picasso.with(imageView.getContext())
                 .load(file)
-                .placeholder(R.drawable.table_horizontal)
-                .error(R.drawable.table_horizontal)
+                .placeholder(R.drawable.pool_table)
+                .error(R.drawable.pool_table)
                 .into(imageView);
     }
 
     public static void loadImage(ImageView imageView, Uri uri) {
         Picasso.with(imageView.getContext())
                 .load(uri)
-                .placeholder(R.drawable.table_horizontal)
-                .error(R.drawable.table_horizontal)
+                .placeholder(R.drawable.pool_table)
+                .error(R.drawable.pool_table)
                 .into(imageView);
     }
-
-    private ImageHandler() {}
 }

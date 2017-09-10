@@ -22,6 +22,7 @@ public class DrillPackModelDataMapper {
         model.description = drillPack.description;
         model.sku = drillPack.sku;
         model.url = drillPack.url;
+        model.id = drillPack.sku;
 
         return model;
     }
@@ -32,6 +33,21 @@ public class DrillPackModelDataMapper {
             result = new ArrayList<>();
             for (DrillPack drillPack : drillPacks) {
                 result.add(transform(drillPack));
+            }
+        } else {
+            result = Collections.emptyList();
+        }
+
+        return result;
+    }
+
+    public List<String> getSkus(List<DrillPackModel> models) {
+        List<String> result;
+
+        if (models != null && !models.isEmpty()) {
+            result = new ArrayList<>();
+            for (DrillPackModel model : models) {
+                result.add(model.sku);
             }
         } else {
             result = Collections.emptyList();

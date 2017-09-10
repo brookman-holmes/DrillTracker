@@ -1,5 +1,6 @@
 package com.brookmanholmes.drilltracker.presentation.deletedrill;
 
+import com.brookmanholmes.drilltracker.data.repository.datasource.DataStoreFactory;
 import com.brookmanholmes.drilltracker.domain.interactor.DefaultObserver;
 import com.brookmanholmes.drilltracker.domain.interactor.DeleteDrill;
 import com.brookmanholmes.drilltracker.presentation.base.Presenter;
@@ -9,7 +10,11 @@ import com.brookmanholmes.drilltracker.presentation.base.Presenter;
  */
 
 class DeleteDrillDialogPresenter implements Presenter {
-    private DeleteDrill deleteDrill;
+    private final DeleteDrill deleteDrill;
+
+    DeleteDrillDialogPresenter() {
+        deleteDrill = new DeleteDrill(DataStoreFactory.getDrillRepo());
+    }
 
     DeleteDrillDialogPresenter(DeleteDrill deleteDrill) {
         this.deleteDrill = deleteDrill;

@@ -17,17 +17,20 @@ public class DrillDetailsActivity extends BaseActivity {
     private static final String INTENT_EXTRA_PARAM_DRILL_ID = "com.brookmanholmes.INTENT_PARAM_DRILL_ID";
     private static final String INTENT_EXTRA_PARAM_DRILL_MAX = "com.brookmanholmes.INTENT_PARAM_DRILL_MAX";
     private static final String INTENT_EXTRA_PARAM_DRILL_TARGET = "com.brookmanholmes.INTENT_PARAM_DRILL_TARGET";
+    private static final String INTENT_EXTRA_PARAM_DRILL_URL = "com.brookmanholmes.INTENT_PARAM_DRILL_URL";
     private static final String INSTANCE_STATE_PARAM_DRILL_ID = "com.brookmanholmes.STATE_PARAM_DRILL_ID";
     private static final String INSTANCE_STATE_PARAM_DRILL_MAX = "com.brookmanholmes.STATE_DRILL_MAX";
     private static final String INSTANCE_STATE_PARAM_DRILL_TARGET = "com.brookmanholmes.TATE_DRILL_TARGET";
-    private String drillId;
+    private static final String INSTANCE_STATE_PARAM_DRILL_URL = "com.brookmanholmes.TATE_DRILL_URL";
+    private String drillId, imageUrl;
     private int maxValue, targetValue;
 
-    public static Intent getIntent(Context context, String drillId, int maxValue, int targetValue) {
+    public static Intent getIntent(Context context, String drillId, String url, int maxValue, int targetValue) {
         Intent intent = new Intent(context, DrillDetailsActivity.class);
         intent.putExtra(INTENT_EXTRA_PARAM_DRILL_ID, drillId);
         intent.putExtra(INTENT_EXTRA_PARAM_DRILL_MAX, maxValue);
         intent.putExtra(INTENT_EXTRA_PARAM_DRILL_TARGET, targetValue);
+        intent.putExtra(INTENT_EXTRA_PARAM_DRILL_URL, url);
         return intent;
     }
 
@@ -37,6 +40,7 @@ public class DrillDetailsActivity extends BaseActivity {
         setContentView(R.layout.activity_drill_details);
         if (savedInstanceState != null) {
             drillId = savedInstanceState.getString(INSTANCE_STATE_PARAM_DRILL_ID);
+            imageUrl = savedInstanceState.getString(INSTANCE_STATE_PARAM_DRILL_URL);
             maxValue = savedInstanceState.getInt(INSTANCE_STATE_PARAM_DRILL_MAX);
             targetValue = savedInstanceState.getInt(INSTANCE_STATE_PARAM_DRILL_TARGET);
         }
@@ -46,6 +50,7 @@ public class DrillDetailsActivity extends BaseActivity {
     protected void onSaveInstanceState(Bundle outState) {
         if (outState != null) {
             outState.putString(INSTANCE_STATE_PARAM_DRILL_ID, drillId);
+            outState.putString(INSTANCE_STATE_PARAM_DRILL_URL, imageUrl);
             outState.putInt(INSTANCE_STATE_PARAM_DRILL_MAX, maxValue);
             outState.putInt(INSTANCE_STATE_PARAM_DRILL_TARGET, targetValue);
         }
@@ -55,9 +60,10 @@ public class DrillDetailsActivity extends BaseActivity {
     @Override
     protected Fragment getFragment() {
         drillId = getIntent().getStringExtra(INTENT_EXTRA_PARAM_DRILL_ID);
+        imageUrl = getIntent().getStringExtra(INTENT_EXTRA_PARAM_DRILL_URL);
         maxValue = getIntent().getIntExtra(INTENT_EXTRA_PARAM_DRILL_MAX, -1);
         targetValue = getIntent().getIntExtra(INTENT_EXTRA_PARAM_DRILL_TARGET, -1);
 
-        return DrillDetailsFragment.forDrill(drillId, maxValue, targetValue);
+        return DrillDetailsFragment.forDrill(drillId, imageUrl, maxValue, targetValue);
     }
 }

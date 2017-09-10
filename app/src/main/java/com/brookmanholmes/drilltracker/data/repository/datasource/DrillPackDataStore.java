@@ -1,5 +1,6 @@
 package com.brookmanholmes.drilltracker.data.repository.datasource;
 
+import com.brookmanholmes.drilltracker.data.entity.DrillEntity;
 import com.brookmanholmes.drilltracker.data.entity.DrillPackEntity;
 
 import java.util.List;
@@ -16,9 +17,10 @@ public interface DrillPackDataStore {
     Observable<List<DrillPackEntity>> drillPackEntityList();
 
     /**
-     * Get an {@link Observable} which will emit a {@link DrillPackEntity} by its id.
+     * Get an {@link Observable} which will emit a list of {@link DrillEntity} for that
+     * {@link DrillPackEntity}'s id.
      *
      * @param id The id to retrieve drill data.
      */
-    Observable<DrillPackEntity> drillPackEntity(String id);
+    Observable<List<DrillEntity>> drillPackEntity(String id);
 }

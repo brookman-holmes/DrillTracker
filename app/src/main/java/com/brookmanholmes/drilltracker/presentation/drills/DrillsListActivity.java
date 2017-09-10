@@ -61,6 +61,7 @@ public class DrillsListActivity extends BaseViewPagerActivity implements Adapter
         spinner.setOnItemSelectedListener(this);
 
         pager.addOnPageChangeListener(this);
+        pager.setOffscreenPageLimit(0);
         return true;
     }
 

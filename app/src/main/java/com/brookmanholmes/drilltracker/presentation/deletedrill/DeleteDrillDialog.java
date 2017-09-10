@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 
 import com.brookmanholmes.drilltracker.R;
-import com.brookmanholmes.drilltracker.domain.interactor.DeleteDrill;
 import com.brookmanholmes.drilltracker.presentation.base.BaseDialogFragment;
 
 /**
@@ -50,6 +49,6 @@ public class DeleteDrillDialog extends BaseDialogFragment<DeleteDrillDialogPrese
 
     @Override
     protected DeleteDrillDialogPresenter getPresenter() {
-        return new DeleteDrillDialogPresenter(new DeleteDrill(drillRepository));
+        return new DeleteDrillDialogPresenter();
     }
 }

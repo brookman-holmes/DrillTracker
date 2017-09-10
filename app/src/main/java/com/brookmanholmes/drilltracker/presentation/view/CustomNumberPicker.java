@@ -112,18 +112,6 @@ public class CustomNumberPicker extends LinearLayout implements View.OnClickList
             value++;
             notifyChange(value - 1, value);
             setTextValues();
-
-            if (value == max) {
-                textNextValue.setVisibility(View.INVISIBLE);
-                plus.setEnabled(false);
-                plus.setAlpha(DISABLED_ALPHA);
-            }
-
-            if (value > min) {
-                textPrevValue.setVisibility(View.VISIBLE);
-                minus.setEnabled(true);
-                minus.setAlpha(ENABLED_ALPHA);
-            }
         }
     }
 
@@ -134,19 +122,6 @@ public class CustomNumberPicker extends LinearLayout implements View.OnClickList
             value--;
             notifyChange(value + 1, value);
             setTextValues();
-            textPrevValue.setVisibility(View.VISIBLE);
-
-            if (value == min) {
-                textPrevValue.setVisibility(View.INVISIBLE);
-                minus.setEnabled(false);
-                minus.setAlpha(DISABLED_ALPHA);
-            }
-
-            if (value < max) {
-                textNextValue.setVisibility(View.VISIBLE);
-                plus.setEnabled(true);
-                plus.setAlpha(ENABLED_ALPHA);
-            }
         }
     }
 
@@ -155,7 +130,35 @@ public class CustomNumberPicker extends LinearLayout implements View.OnClickList
         if (value > min)
             textPrevValue.setText(Integer.toString(value - 1));
         if (value < max)
-        textNextValue.setText(Integer.toString(value + 1));
+            textNextValue.setText(Integer.toString(value + 1));
+
+        setTextVisibility();
+    }
+
+    private void setTextVisibility() {
+        if (value == max) {
+            textNextValue.setVisibility(View.INVISIBLE);
+            plus.setEnabled(false);
+            plus.setAlpha(DISABLED_ALPHA);
+        }
+
+        if (value > min) {
+            textPrevValue.setVisibility(View.VISIBLE);
+            minus.setEnabled(true);
+            minus.setAlpha(ENABLED_ALPHA);
+        }
+
+        if (value == min) {
+            textPrevValue.setVisibility(View.INVISIBLE);
+            minus.setEnabled(false);
+            minus.setAlpha(DISABLED_ALPHA);
+        }
+
+        if (value < max) {
+            textNextValue.setVisibility(View.VISIBLE);
+            plus.setEnabled(true);
+            plus.setAlpha(ENABLED_ALPHA);
+        }
     }
 
     public int getValue() {

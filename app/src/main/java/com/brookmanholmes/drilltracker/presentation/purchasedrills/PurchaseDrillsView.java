@@ -23,4 +23,11 @@ interface PurchaseDrillsView extends LoadDataView {
      * @param drillModel The drill pack to show
      */
     void viewDrillPack(DrillPackModel drillModel);
+
+    /**
+     * Load up the available purchasable drills
+     *
+     * @param skus The list of purchasable drill ids (SKUs)
+     */
+    void loadInventory(List<String> skus);
 }

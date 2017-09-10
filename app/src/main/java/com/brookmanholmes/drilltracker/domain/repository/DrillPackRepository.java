@@ -1,5 +1,6 @@
 package com.brookmanholmes.drilltracker.domain.repository;
 
+import com.brookmanholmes.drilltracker.domain.Drill;
 import com.brookmanholmes.drilltracker.domain.DrillPack;
 
 import java.util.List;
@@ -16,9 +17,9 @@ public interface DrillPackRepository {
     Observable<List<DrillPack>> observeDrillPacks();
 
     /**
-     * Get an {@link Observable} which will emit a {@link DrillPack}.
+     * Get an {@link Observable} which will emit a List of {@link Drill} that the drill pack contains.
      *
      * @param sku The sku used to retrieve the product data.
      */
-    Observable<DrillPack> observeDrillPack(String sku);
+    Observable<List<Drill>> observeDrillPack(String sku);
 }

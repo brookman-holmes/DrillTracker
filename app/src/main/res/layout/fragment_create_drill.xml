@@ -41,7 +41,7 @@
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:foreground="?android:attr/selectableItemBackground"
-                    android:src="@drawable/table_horizontal"
+                    android:src="@drawable/pool_table"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintDimensionRatio="h,16:9"
                     app:layout_constraintHorizontal_bias="0.0"

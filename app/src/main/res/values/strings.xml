@@ -35,6 +35,8 @@
     <string name="target_score">Target score</string>
     <string name="undo_attempt">Undo attempt</string>
     <string name="edit">Edit</string>
+    <string name="purchased">Purchased</string>
+    <string name="drills_included_in">Drills included in %1$s</string>
 
 
     <string-array name="create_drill_array">

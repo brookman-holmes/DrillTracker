@@ -1,25 +1,41 @@
 package com.brookmanholmes.drilltracker.presentation.purchasedrills;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentSender;
 import android.os.Bundle;
+import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.brookmanholmes.drilltracker.MyApp;
 import com.brookmanholmes.drilltracker.R;
-import com.brookmanholmes.drilltracker.data.repository.DrillPackDataRepository;
-import com.brookmanholmes.drilltracker.data.repository.datasource.DataStoreFactory;
-import com.brookmanholmes.drilltracker.domain.interactor.GetDrillPackList;
 import com.brookmanholmes.drilltracker.presentation.base.BaseFragment;
+import com.brookmanholmes.drilltracker.presentation.drillpackdetail.DrillPackDetailDialog;
 import com.brookmanholmes.drilltracker.presentation.drills.ActivityCallback;
 import com.brookmanholmes.drilltracker.presentation.drills.FragmentCallback;
 import com.brookmanholmes.drilltracker.presentation.model.DrillModel;
 import com.brookmanholmes.drilltracker.presentation.model.DrillPackModel;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
+
+import org.solovyev.android.checkout.Checkout;
+import org.solovyev.android.checkout.IntentStarter;
+import org.solovyev.android.checkout.Inventory;
+import org.solovyev.android.checkout.ProductTypes;
+import org.solovyev.android.checkout.Purchase;
+import org.solovyev.android.checkout.RequestListener;
+import org.solovyev.android.checkout.UiCheckout;
 
 import java.util.List;
+
+import javax.annotation.Nonnull;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -29,19 +45,26 @@ import butterknife.ButterKnife;
  */
 
 public class PurchaseDrillsFragment extends BaseFragment<PurchaseDrillsContract> implements
-        PurchaseDrillsView, ActivityCallback, PurchaseDrillsAdapter.OnItemClickListener {
+        PurchaseDrillsView,
+        ActivityCallback,
+        PurchaseDrillsAdapter.OnItemClickListener<DrillPackModel>,
+        IntentStarter {
+    private static final String TAG = PurchaseDrillsFragment.class.getName();
     @BindView(R.id.scrollView)
     RecyclerView recyclerView;
-
     private PurchaseDrillsAdapter adapter;
-    private DrillPackDataRepository repository = new DrillPackDataRepository(DataStoreFactory.getDrillPackDataStore());
+    private UiCheckout checkout;
+    private InventoryCallback inventoryCallback;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        checkout = Checkout.forUi(this, TAG, MyApp.get().getBilling());
+        checkout.start();
+
         adapter = new PurchaseDrillsAdapter(getContext());
-        GetDrillPackList getDrillPackList = new GetDrillPackList(repository);
-        presenter = new PurchaseDrillsPresenter(getDrillPackList);
+        inventoryCallback = new InventoryCallback(adapter);
+        presenter = new PurchaseDrillsPresenter();
     }
 
     @Nullable
@@ -52,9 +75,10 @@ public class PurchaseDrillsFragment extends BaseFragment<PurchaseDrillsContract>
         presenter.setView(this);
         adapter.setOnItemClickListener(this);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setDrawingCacheEnabled(true);
-        recyclerView.setItemViewCacheSize(10);
+        recyclerView.setItemViewCacheSize(5);
+        recyclerView.setHasFixedSize(true);
         recyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
+        recyclerView.setDrawingCacheEnabled(true);
         recyclerView.setAdapter(adapter);
 
         getCallback().addListener(this);
@@ -75,6 +99,24 @@ public class PurchaseDrillsFragment extends BaseFragment<PurchaseDrillsContract>
         super.onDestroyView();
     }
 
+    @Override
+    public void onDestroy() {
+        checkout.stop();
+        super.onDestroy();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.i(TAG, "onActivityResult: " + requestCode);
+        checkout.onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void startForResult(@Nonnull IntentSender intentSender, int requestCode, @Nonnull Intent intent) throws IntentSender.SendIntentException {
+        this.startIntentSenderForResult(intentSender, requestCode, intent, 0, 0, 0, null);
+    }
+
     private FragmentCallback getCallback() {
         if (getActivity() instanceof FragmentCallback) {
             return ((FragmentCallback) getActivity());
@@ -83,16 +125,33 @@ public class PurchaseDrillsFragment extends BaseFragment<PurchaseDrillsContract>
         }
     }
 
-    /*
-        PurchaseDrillsAdapter.OnItemClickListener
-     */
+    @Override
+    public void loadInventory(List<String> skus) {
+        final Inventory.Request request = Inventory.Request.create();
+        request.loadAllPurchases();
+        request.loadSkus(ProductTypes.IN_APP, skus);
+        checkout.loadInventory(request, inventoryCallback);
+        Log.i(TAG, "loadInventory: ");
+    }
 
     @Override
-    public void onDrillPackSelected(DrillPackModel pack) {
+    public void onItemClicked(DrillPackModel pack, @IdRes int id) {
+        if (id == R.id.price) {
+            Log.i(TAG, "onDrillPackSelected: " + pack.sku);
+            if (!pack.purchased)
+                checkout.startPurchaseFlow(ProductTypes.IN_APP, pack.sku, FirebaseAuth.getInstance().getCurrentUser().getUid(), new PurchaseListener());
+        } else if (id == R.id.cv_drill_pack) {
+            viewDrillPack(pack);
+        }
+    }
+
+    @Override
+    public void onItemLongClicked(DrillPackModel item) {
 
     }
+
     /*
-        PurchaseDrillsView methods
+        PurchaseDrillsAdapter.OnItemClickListener
      */
 
     @Override
@@ -102,8 +161,13 @@ public class PurchaseDrillsFragment extends BaseFragment<PurchaseDrillsContract>
 
     @Override
     public void viewDrillPack(DrillPackModel drillModel) {
-
+        DialogFragment dialog = DrillPackDetailDialog.newInstance(getString(R.string.drills_included_in, drillModel.name), drillModel.sku);
+        dialog.show(getFragmentManager(), drillModel.name);
     }
+
+    /*
+        PurchaseDrillsView methods
+     */
 
     @Override
     public void showLoading() {
@@ -135,12 +199,47 @@ public class PurchaseDrillsFragment extends BaseFragment<PurchaseDrillsContract>
         return getContext();
     }
 
+    @Override
+    public void setFilterSelection(DrillModel.Type type) {
+
+    }
+
+    private static class PurchaseListener implements RequestListener<Purchase> {
+        @Override
+        public void onSuccess(@Nonnull Purchase result) {
+            Log.i(TAG, "onSuccess: " + result);
+        }
+
+        @Override
+        public void onError(int response, @Nonnull Exception e) {
+            Log.i(TAG, "onError: " + response);
+            Log.i(TAG, "onError: " + e.getCause());
+        }
+    }
+
     /*
         ActivityCallback methods
      */
 
-    @Override
-    public void setFilterSelection(DrillModel.Type type) {
+    private static class InventoryCallback implements Inventory.Callback {
+        private final PurchaseDrillsAdapter adapter;
 
+        InventoryCallback(PurchaseDrillsAdapter adapter) {
+            this.adapter = adapter;
+        }
+
+        @Override
+        public void onLoaded(@Nonnull Inventory.Products products) {
+            final Inventory.Product product = products.get(ProductTypes.IN_APP);
+            Log.i(TAG, "onLoaded: checking if product.supported");
+            Log.i(TAG, "onLoaded: " + product.supported);
+            if (!product.supported)
+                return;
+
+            Log.i(TAG, "onLoaded: should update the adapter with the new products");
+            Log.i(TAG, "onLoaded: " + products);
+            FirebaseDatabase.getInstance().getReference().child("log").child("products").setValue(product.getSkus());
+            adapter.updatePurchases(product);
+        }
     }
 }
