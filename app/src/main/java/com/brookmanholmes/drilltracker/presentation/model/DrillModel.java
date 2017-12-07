@@ -20,6 +20,7 @@ public class DrillModel extends Model {
     public int maxScore;
     public int defaultTargetScore;
     public Type drillType;
+    public boolean purchased;
     public Collection<AttemptModel> attemptModels;
 
     public DrillModel() {
@@ -35,6 +36,7 @@ public class DrillModel extends Model {
         this.defaultTargetScore = model.defaultTargetScore;
         this.drillType = model.drillType;
         this.attemptModels = model.attemptModels;
+        this.purchased = model.purchased;
     }
 
     public static DrillModel getSessionModel(DrillModel model) {

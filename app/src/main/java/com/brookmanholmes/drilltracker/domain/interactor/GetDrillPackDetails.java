@@ -11,10 +11,10 @@ import io.reactivex.Observable;
  * Created by Brookman Holmes on 8/16/2017.
  */
 
-public class GetDrillPackDrillsList extends UseCase<List<Drill>, GetDrillPackDrillsList.Params> {
+public class GetDrillPackDetails extends UseCase<List<Drill>, GetDrillPackDetails.Params> {
     DrillPackRepository repository;
 
-    public GetDrillPackDrillsList(DrillPackRepository drillPackRepository) {
+    public GetDrillPackDetails(DrillPackRepository drillPackRepository) {
         super();
         this.repository = drillPackRepository;
     }

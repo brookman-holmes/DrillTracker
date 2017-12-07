@@ -11,4 +11,19 @@ public class DrillPackModel extends Model {
     public String sku;
     public String url;
     public boolean purchased = false;
+    public String token;
+
+
+    @Override
+    public String toString() {
+        return "DrillPackModel{" +
+                "name='" + name + '\'' +
+                ", price='" + price + '\'' +
+                ", description='" + description + '\'' +
+                ", sku='" + sku + '\'' +
+                ", url='" + url + '\'' +
+                ", purchased=" + purchased +
+                ", token='" + token + '\'' +
+                '}';
+    }
 }

@@ -1,7 +1,9 @@
 package com.brookmanholmes.drilltracker;
 
 import android.app.Application;
+import android.support.annotation.NonNull;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
@@ -13,7 +15,7 @@ import javax.annotation.Nonnull;
  * Created by Brookman Holmes on 7/16/2017.
  */
 
-public class MyApp extends Application {
+public class MyApp extends Application implements FirebaseAuth.AuthStateListener {
     private static MyApp instance;
     private final Billing billing = new Billing(this, new Billing.DefaultConfiguration() {
         @Nonnull
@@ -43,5 +45,10 @@ public class MyApp extends Application {
 
     public Billing getBilling() {
         return billing;
+    }
+
+    @Override
+    public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+
     }
 }

@@ -22,8 +22,22 @@ public interface DrillRepository {
      * @param type        The type of the drill
      * @param maxScore    The maximum possible score in the drill
      * @param targetScore The target goal for the drill
+     * @param purchased   If the drill was purchased
      */
-    Observable<Drill> addDrill(String name, String description, byte[] image, String type, int maxScore, int targetScore);
+    Observable<Drill> addDrill(String name, String description, byte[] image, String type, int maxScore, int targetScore, boolean purchased);
+
+    /**
+     * Get a {@link Observable} which will emit a {@link Drill} of the drill that was just added
+     *
+     * @param name        The name of the drill
+     * @param description The description of the drill
+     * @param imageUrl    The url of the image of the drill
+     * @param type        The type of the drill
+     * @param maxScore    The maximum possible score in the drill
+     * @param targetScore The target goal for the drill
+     * @param purchased   If the drill was purchased
+     */
+    Observable<Drill> addDrill(String name, String description, String imageUrl, String type, int maxScore, int targetScore, boolean purchased);
 
     /**
      * Get a {@link Observable} which will emit a list of {@link Drill}

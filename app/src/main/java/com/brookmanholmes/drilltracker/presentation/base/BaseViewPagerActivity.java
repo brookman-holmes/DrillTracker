@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import com.brookmanholmes.drilltracker.R;
+import com.brookmanholmes.drilltracker.presentation.signin.SignInActivity;
 import com.google.firebase.auth.FirebaseAuth;
 
 import butterknife.BindView;

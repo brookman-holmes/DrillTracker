@@ -9,4 +9,10 @@
 
     <color name="chart_red">#FF6E40</color>
     <color name="chart_blue">#448AFF</color>
+    <color name="chart_purple">#536DFE</color>
+    <color name="chart_green">#69F0AE</color>
+    <color name="chart_yellow">#FFFF00</color>
+    <color name="chart_orange">#FFAB40</color>
+    <color name="chart_cyan">#18FFFF</color>
+
 </resources>

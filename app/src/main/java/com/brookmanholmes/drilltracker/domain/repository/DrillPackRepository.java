@@ -22,4 +22,12 @@ public interface DrillPackRepository {
      * @param sku The sku used to retrieve the product data.
      */
     Observable<List<Drill>> observeDrillPack(String sku);
+
+    /**
+     * Get an {@link Observable} which will emit a list of {@link Drill} that the drill pack contains and
+     * that the user purchased
+     *
+     * @param sku
+     */
+    Observable<List<Drill>> purchaseDrillPack(String sku);
 }

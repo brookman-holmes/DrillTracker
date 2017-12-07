@@ -23,6 +23,7 @@ class AddEditDrillPresenter implements AddEditDrillContract {
     private AddEditDrillView view;
     private String drillName;
     private String drillDescription;
+    private String imageUrl;
     private int maximumScore;
     private int targetScore;
     private byte[] image;
@@ -31,6 +32,7 @@ class AddEditDrillPresenter implements AddEditDrillContract {
     private GetDrillDetails getDrillDetails;
     private UpdateDrill updateDrill;
     private String drillId;
+    private boolean purchased;
 
     AddEditDrillPresenter(AddDrill addDrill, GetDrillDetails getDrillDetails, UpdateDrill updateDrill, @Nullable String drillId) {
         this.addDrill = addDrill;
@@ -85,7 +87,7 @@ class AddEditDrillPresenter implements AddEditDrillContract {
     private boolean isDrillComplete() {
         return !TextUtils.isEmpty(drillName) &&
                 !TextUtils.isEmpty(drillDescription) &&
-                image != null;
+                (image != null || imageUrl != null);
     }
 
     @Override
@@ -103,15 +105,20 @@ class AddEditDrillPresenter implements AddEditDrillContract {
     @Override
     public void setImage(byte[] image) {
         this.image = image;
+        this.imageUrl = null;
         this.view.isDrillComplete(isDrillComplete());
     }
 
     @Override
     public void saveDrill() {
         if (drillId != null) {
-            updateDrill.execute(new EditDrillObserver(), UpdateDrill.Params.create(drillName, drillDescription, drillId, image, type, maximumScore, targetScore));
+            if (imageUrl != null) {
+                updateDrill.execute(new EditDrillObserver(), UpdateDrill.Params.create(drillName, drillDescription, drillId, imageUrl, type, maximumScore, targetScore));
+            } else {
+                updateDrill.execute(new EditDrillObserver(), UpdateDrill.Params.create(drillName, drillDescription, drillId, image, type, maximumScore, targetScore));
+            }
         } else {
-            addDrill.execute(new AddDrillObserver(), AddDrill.Params.create(drillName, drillDescription, image, type, maximumScore, targetScore));
+            addDrill.execute(new AddDrillObserver(), AddDrill.Params.create(drillName, drillDescription, image, type, maximumScore, targetScore, purchased));
         }
     }
 
@@ -147,6 +154,9 @@ class AddEditDrillPresenter implements AddEditDrillContract {
         @Override
         public void onNext(Drill drill) {
             DrillModel model = new DrillModelDataMapper().transform(drill);
+            purchased = model.purchased;
+            imageUrl = model.imageUrl;
+            image = null;
             populateView(model);
             onComplete();
             dispose();

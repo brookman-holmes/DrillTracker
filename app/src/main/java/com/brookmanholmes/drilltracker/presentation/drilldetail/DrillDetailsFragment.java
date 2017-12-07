@@ -2,9 +2,9 @@ package com.brookmanholmes.drilltracker.presentation.drilldetail;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.util.Preconditions;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -20,13 +20,12 @@ import com.brookmanholmes.drilltracker.presentation.base.BaseFragment;
 import com.brookmanholmes.drilltracker.presentation.model.DrillModel;
 import com.brookmanholmes.drilltracker.presentation.model.DrillModelMathUtil;
 import com.brookmanholmes.drilltracker.presentation.view.util.ChartUtil;
+import com.brookmanholmes.drilltracker.presentation.view.util.ImageHandler;
 import com.github.chrisbanes.photoview.PhotoView;
-import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
 import lecho.lib.hellocharts.view.LineChartView;
 
 /**
@@ -127,7 +126,6 @@ public class DrillDetailsFragment extends BaseFragment<DrillDetailsContract> imp
 
     private String getDrillId() {
         final Bundle arguments = getArguments();
-        Preconditions.checkNotNull(arguments, "Fragment arguments cannot be null");
         return arguments.getString(PARAM_DRILL_ID);
     }
 
@@ -182,12 +180,12 @@ public class DrillDetailsFragment extends BaseFragment<DrillDetailsContract> imp
         if (drill != null) {
             //ImageHandler.loadImage(image, drill.imageUrl);
             setArguments(drill);
-            Picasso.with(context()).load(drill.imageUrl).transform(new RoundedCornersTransformation(50, 10)).into(image);
+            ImageHandler.loadImage(image, drill.imageUrl);
             DrillModelMathUtil lifetimeStats = new DrillModelMathUtil(drill.attemptModels);
             DrillModelMathUtil sessionStats = new DrillModelMathUtil(drill.getSessionAttempts());
             description.setText(drill.description);
             ChartUtil.setupLifetimeChart(lifetimeChart, drill, true);
-            ChartUtil.setupChart(sessionChart, DrillModel.getSessionModel(drill));
+            ChartUtil.setupChart(sessionChart, drill);
             toolbar.setTitle(drill.name);
 
             sessionHigh.setText(getString(R.string.number, sessionStats.getMax()));
@@ -203,9 +201,14 @@ public class DrillDetailsFragment extends BaseFragment<DrillDetailsContract> imp
             maxScoreAttainable.setText(getString(R.string.max_score_attainable, drill.maxScore));
             targetScore.setText(getString(R.string.target_score_with_number, drill.defaultTargetScore));
 
-            toolbar.getMenu().findItem(R.id.ic_undo_attempt).setEnabled(drill.attemptModels.size() > 0);
-            toolbar.getMenu().findItem(R.id.ic_undo_attempt).getIcon().setAlpha(drill.attemptModels.size() > 0 ? 255 : 127);
+            setMenuIconEnabled(R.id.ic_edit, !drill.purchased);
+            setMenuIconEnabled(R.id.ic_undo_attempt, drill.attemptModels.size() > 0);
         }
+    }
+
+    private void setMenuIconEnabled(@IdRes int res, boolean enabled) {
+        toolbar.getMenu().findItem(res).setEnabled(enabled);
+        toolbar.getMenu().findItem(res).getIcon().setAlpha(enabled ? 255 : 127);
     }
 
     @Override

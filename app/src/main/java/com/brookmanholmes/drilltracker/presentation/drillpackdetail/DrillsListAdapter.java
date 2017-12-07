@@ -9,7 +9,7 @@ import android.widget.TextView;
 import com.brookmanholmes.drilltracker.R;
 import com.brookmanholmes.drilltracker.presentation.base.BaseRecyclerViewAdapter;
 import com.brookmanholmes.drilltracker.presentation.model.DrillModel;
-import com.brookmanholmes.drilltracker.presentation.view.util.ImageHandler;
+import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -57,7 +57,12 @@ class DrillsListAdapter extends BaseRecyclerViewAdapter<DrillModel> {
             super.bind(model, onItemClickListener);
             name.setText(model.name);
             description.setText(model.description);
-            ImageHandler.loadImage(image, model.imageUrl);
+            Picasso.with(image.getContext())
+                    .load(model.imageUrl)
+                    .fit()
+                    .placeholder(R.drawable.pool_table)
+                    .error(R.drawable.pool_table_error)
+                    .into(image);
         }
     }
 }

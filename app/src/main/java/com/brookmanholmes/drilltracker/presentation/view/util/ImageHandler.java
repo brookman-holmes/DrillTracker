@@ -24,32 +24,36 @@ public class ImageHandler {
     public static void loadImage(ImageView imageView, String url) {
         Picasso.with(imageView.getContext())
                 .load(url)
+                .fit()
                 .placeholder(R.drawable.pool_table)
-                .error(R.drawable.pool_table)
+                .error(R.drawable.pool_table_error)
                 .into(imageView);
     }
 
     public static void loadImage(ImageView imageView, String url, Callback callback) {
         Picasso.with(imageView.getContext())
                 .load(url)
+                .fit()
                 .placeholder(R.drawable.pool_table)
-                .error(R.drawable.pool_table)
+                .error(R.drawable.pool_table_error)
                 .into(imageView, callback);
     }
 
     public static void loadImage(ImageView imageView, File file) {
         Picasso.with(imageView.getContext())
                 .load(file)
+                .fit()
                 .placeholder(R.drawable.pool_table)
-                .error(R.drawable.pool_table)
+                .error(R.drawable.pool_table_error)
                 .into(imageView);
     }
 
     public static void loadImage(ImageView imageView, Uri uri) {
         Picasso.with(imageView.getContext())
                 .load(uri)
+                .fit()
                 .placeholder(R.drawable.pool_table)
-                .error(R.drawable.pool_table)
+                .error(R.drawable.pool_table_error)
                 .into(imageView);
     }
 }

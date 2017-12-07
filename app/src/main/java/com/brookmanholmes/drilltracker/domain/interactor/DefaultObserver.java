@@ -14,7 +14,6 @@ public class DefaultObserver<T> extends DisposableObserver<T> {
 
     @Override
     public void onError(Throwable e) {
-
     }
 
     @Override

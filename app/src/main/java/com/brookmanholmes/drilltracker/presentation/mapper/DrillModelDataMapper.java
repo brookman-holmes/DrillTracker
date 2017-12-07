@@ -5,7 +5,6 @@ import com.brookmanholmes.drilltracker.presentation.model.DrillModel;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -28,6 +27,7 @@ public class DrillModelDataMapper {
         drillModel.description = drill.getDescription();
         drillModel.defaultTargetScore = drill.getDefaultTargetScore();
         drillModel.drillType = DrillModel.Type.values()[drill.getType().ordinal()];
+        drillModel.purchased = drill.isPurchased();
         return drillModel;
     }
 

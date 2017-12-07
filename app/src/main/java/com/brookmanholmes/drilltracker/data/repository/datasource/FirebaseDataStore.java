@@ -20,6 +20,8 @@ import durdinapps.rxfirebase2.RxFirebaseDatabase;
 import durdinapps.rxfirebase2.RxFirebaseStorage;
 import io.reactivex.Maybe;
 import io.reactivex.Observable;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Consumer;
 
 /**
  * Created by Brookman Holmes on 7/14/2017.
@@ -42,12 +44,18 @@ class FirebaseDataStore implements DrillDataStore {
         drillsRef = userRef.child("drills");
         drillsRef.keepSynced(true);
         userRef.keepSynced(true);
+        onLogin();
     }
 
     @Override
     public Observable<DrillEntity> addDrill(DrillEntity entity) {
-        String key = drillsRef.push().getKey();
-        entity.id = key;
+        String key;
+        if (entity.id == null) {
+            key = drillsRef.push().getKey();
+            entity.id = key;
+        } else {
+            key = entity.id;
+        }
         drillsRef.child(key).setValue(entity);
         return RxFirebaseDatabase.observeValueEvent(drillsRef.child(key), DrillEntity.class).toObservable();
     }
@@ -110,5 +118,37 @@ class FirebaseDataStore implements DrillDataStore {
     public void deleteDrill(String drillId) {
         imagesRef.child(drillId + ".jpg").delete();
         drillsRef.child(drillId).setValue(null);
+    }
+
+    private void onLogin() {
+        userRef.child("lastLogin").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Long lastLogin = dataSnapshot.getValue(Long.class);
+                if (lastLogin == null)
+                    lastLogin = 0L;
+
+                if (lastLogin < 1506630827534L) {
+                    FirebaseDrillPackDataStore drillPacks = new FirebaseDrillPackDataStore();
+                    drillPacks.drillPackEntity("drill_pack_3")
+                            .subscribe(new Consumer<List<DrillEntity>>() {
+                                @Override
+                                public void accept(@NonNull List<DrillEntity> drillEntities) throws Exception {
+                                    for (DrillEntity entity : drillEntities) {
+                                        addDrill(entity);
+                                    }
+                                }
+                            });
+                }
+
+                userRef.child("lastLogin").setValue(System.currentTimeMillis());
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 }

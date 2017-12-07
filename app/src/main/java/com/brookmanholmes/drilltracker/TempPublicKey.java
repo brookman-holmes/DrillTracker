@@ -1,0 +1,9 @@
+package com.brookmanholmes.drilltracker;
+
+/**
+ * Created by brookman on 9/11/17.
+ */
+
+class TempPublicKey {
+    static final String KEY = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApFcdJ6RQPfFw+HApPJtxRoPZ3DByTwuAKELOoIQ6Uow3zJN1J3NeeQMXkde5ANW42cz7hJQxQWmYoQWMtp9GDdeRQSymC7MTkh3B3AnVD22nlVmeeagbh9GCHhPVCgrdQoo+9yigTRUllc566qHDmljvuiGxwbbtZcLFmYC7dALN2tQssvgPo2bxIK9tt3z8ldYfFFt+6zxaF27pCgDoJrwf775fodIS9XNDSn9wnpGAYM3Kd7rjk3G046c+VNlubqh9SFfhO2/D1z3JDKH2sDy7NVKGM8GzwLqGGfNJbCgRcm1LmFXb2LVAzd3FliDJ/cQ39As05tltIAUKmNhxlQIDAQAB";
+}

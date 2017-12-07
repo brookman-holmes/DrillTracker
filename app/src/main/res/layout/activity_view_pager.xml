@@ -24,7 +24,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:tabBackground="?android:attr/selectableItemBackground"
+            app:tabGravity="fill"
             app:tabIndicatorColor="?colorAccent"
+            app:tabMaxWidth="600dp"
             app:tabMode="fixed"
             app:tabSelectedTextColor="@android:color/white"
             app:tabTextColor="#d1c9c9" />

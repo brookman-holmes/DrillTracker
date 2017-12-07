@@ -33,7 +33,7 @@ public class DrillPackDetailDialog extends BaseDialogFragment<DrillPackDetailPre
     private static final String PARAM_TITLE = "param_title";
     private static final String PARAM_DRILL_PACK_ID = "param_drill_pack_id";
 
-    @BindView(R.id.scrollView)
+    @BindView(R.id.scrollView2)
     RecyclerView recyclerView;
     @BindView(R.id.rl_progress)
     View rl_progress;

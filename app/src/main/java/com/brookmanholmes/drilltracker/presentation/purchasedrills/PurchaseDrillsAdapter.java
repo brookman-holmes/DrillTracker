@@ -1,6 +1,7 @@
 package com.brookmanholmes.drilltracker.presentation.purchasedrills;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -14,6 +15,7 @@ import com.brookmanholmes.drilltracker.presentation.view.util.ImageHandler;
 import com.google.firebase.database.FirebaseDatabase;
 
 import org.solovyev.android.checkout.Inventory;
+import org.solovyev.android.checkout.Purchase;
 import org.solovyev.android.checkout.Sku;
 
 import butterknife.BindView;
@@ -43,7 +45,11 @@ class PurchaseDrillsAdapter extends BaseRecyclerViewAdapter<DrillPackModel> {
             Sku sku = product.getSku(model.sku);
             if (sku != null) {
                 model.purchased = product.isPurchased(sku);
-                model.price = sku.price;
+                //model.price = sku.price;
+                for (Purchase purchase : product.getPurchases()) {
+                    if (purchase.sku.equals(model.sku))
+                        model.token = purchase.token;
+                }
             } else {
                 FirebaseDatabase.getInstance().getReference().child("log").child(model.sku).setValue("sku for " + model.sku + " is null");
             }
@@ -52,7 +58,18 @@ class PurchaseDrillsAdapter extends BaseRecyclerViewAdapter<DrillPackModel> {
         notifyItemRangeChanged(0, data.size());
     }
 
-    static class DrillPackViewHolder extends BaseRecyclerViewAdapter.ViewHolder<DrillPackModel> {
+    public void consumePurchase(String sku) {
+        for (DrillPackModel model : data) {
+            if (model.sku.equals(sku)) {
+                model.purchased = false;
+                model.token = null;
+                notifyItemRangeChanged(0, data.size());
+            }
+        }
+    }
+
+    static class DrillPackViewHolder extends BaseRecyclerViewAdapter.ViewHolder<DrillPackModel>
+            implements View.OnLongClickListener {
         @BindView(R.id.name)
         TextView name;
         @BindView(R.id.description)
@@ -70,6 +87,7 @@ class PurchaseDrillsAdapter extends BaseRecyclerViewAdapter<DrillPackModel> {
         @Override
         public void bind(DrillPackModel model, OnItemClickListener<DrillPackModel> onItemClickListener) {
             super.bind(model, onItemClickListener);
+            Log.i(TAG, "bind: " + model);
             this.onItemClickListener = onItemClickListener;
             name.setText(model.name);
             description.setText(model.description);
@@ -81,6 +99,8 @@ class PurchaseDrillsAdapter extends BaseRecyclerViewAdapter<DrillPackModel> {
                 price.setEnabled(true);
             }
             ImageHandler.loadImage(image, model.url);
+
+            itemView.setOnLongClickListener(this);
         }
 
         @OnClick(R.id.price)
@@ -91,6 +111,11 @@ class PurchaseDrillsAdapter extends BaseRecyclerViewAdapter<DrillPackModel> {
         @OnClick(R.id.cv_drill_pack)
         void onDrillPackClicked(View view) {
             onItemClick(view.getId());
+        }
+
+        @Override
+        public boolean onLongClick(View view) {
+            return onItemLongClick();
         }
     }
 }

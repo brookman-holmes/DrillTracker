@@ -23,4 +23,12 @@ interface PurchaseDrillsContract extends Presenter {
      * @param typeSelection The type of drills to display
      */
     void loadDrillsList(DrillModel.Type typeSelection);
+
+    /**
+     * Purchase a drill pack for the user (add the drills within the drill pack into the user's list
+     * of available drills
+     *
+     * @param sku The sku of the drill pack to purchase
+     */
+    void purchaseDrillPack(String sku);
 }

@@ -160,7 +160,9 @@ public class DrillsListFragment extends BaseFragment<DrillsListContract> impleme
 
     @Override
     public void onItemLongClicked(DrillModel drillModel) {
-        DeleteDrillDialog dialog = DeleteDrillDialog.newInstance(drillModel.id);
-        dialog.show(getFragmentManager(), DeleteDrillDialog.class.getName());
+        if (!drillModel.purchased) {
+            DeleteDrillDialog dialog = DeleteDrillDialog.newInstance(drillModel.id);
+            dialog.show(getFragmentManager(), DeleteDrillDialog.class.getName());
+        }
     }
 }

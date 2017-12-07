@@ -9,6 +9,7 @@ import java.util.List;
  * A class that represents a Drill in the domain layer
  */
 public class Drill {
+    private final boolean purchased;
     private String id;
     private String name;
     private String imageUrl;
@@ -18,16 +19,17 @@ public class Drill {
     private int defaultTargetScore;
     private List<Attempt> attempts = new ArrayList<>();
 
-    public Drill(String name, String description, String imageUrl, Type type, int maxScore, int defaultTargetScore) {
+    public Drill(String name, String description, String imageUrl, Type type, int maxScore, int defaultTargetScore, boolean purchased) {
         this.name = name;
         this.imageUrl = imageUrl;
         this.description = description;
         this.maxScore = maxScore;
         this.defaultTargetScore = defaultTargetScore;
         this.type = type;
+        this.purchased = purchased;
     }
 
-    public Drill(String id, String name, String description, String imageUrl, Type type, int maxScore, int defaultTargetScore) {
+    public Drill(String id, String name, String description, String imageUrl, Type type, int maxScore, int defaultTargetScore, boolean purchased) {
         this.id = id;
         this.name = name;
         this.imageUrl = imageUrl;
@@ -35,6 +37,7 @@ public class Drill {
         this.maxScore = maxScore;
         this.defaultTargetScore = defaultTargetScore;
         this.type = type;
+        this.purchased = purchased;
     }
 
     public String getId() {
@@ -55,6 +58,10 @@ public class Drill {
 
     public int getMaxScore() {
         return maxScore;
+    }
+
+    public boolean isPurchased() {
+        return purchased;
     }
 
     public List<Attempt> getAttempts() {

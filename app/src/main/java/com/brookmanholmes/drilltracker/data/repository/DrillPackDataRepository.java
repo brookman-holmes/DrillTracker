@@ -50,6 +50,11 @@ public class DrillPackDataRepository implements DrillPackRepository {
                 });
     }
 
+    @Override
+    public Observable<List<Drill>> purchaseDrillPack(String sku) {
+        return observeDrillPack(sku);
+    }
+
     private Function<DrillPackEntity, DrillPack> transformEntity() {
         return new Function<DrillPackEntity, DrillPack>() {
             @Override

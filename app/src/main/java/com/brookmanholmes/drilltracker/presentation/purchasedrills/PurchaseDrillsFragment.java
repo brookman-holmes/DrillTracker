@@ -9,7 +9,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +22,6 @@ import com.brookmanholmes.drilltracker.presentation.drills.FragmentCallback;
 import com.brookmanholmes.drilltracker.presentation.model.DrillModel;
 import com.brookmanholmes.drilltracker.presentation.model.DrillPackModel;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.FirebaseDatabase;
 
 import org.solovyev.android.checkout.Checkout;
 import org.solovyev.android.checkout.IntentStarter;
@@ -49,9 +47,12 @@ public class PurchaseDrillsFragment extends BaseFragment<PurchaseDrillsContract>
         ActivityCallback,
         PurchaseDrillsAdapter.OnItemClickListener<DrillPackModel>,
         IntentStarter {
+
     private static final String TAG = PurchaseDrillsFragment.class.getName();
+
     @BindView(R.id.scrollView)
     RecyclerView recyclerView;
+
     private PurchaseDrillsAdapter adapter;
     private UiCheckout checkout;
     private InventoryCallback inventoryCallback;
@@ -107,7 +108,6 @@ public class PurchaseDrillsFragment extends BaseFragment<PurchaseDrillsContract>
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.i(TAG, "onActivityResult: " + requestCode);
         checkout.onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -131,22 +131,20 @@ public class PurchaseDrillsFragment extends BaseFragment<PurchaseDrillsContract>
         request.loadAllPurchases();
         request.loadSkus(ProductTypes.IN_APP, skus);
         checkout.loadInventory(request, inventoryCallback);
-        Log.i(TAG, "loadInventory: ");
     }
 
     @Override
     public void onItemClicked(DrillPackModel pack, @IdRes int id) {
         if (id == R.id.price) {
-            Log.i(TAG, "onDrillPackSelected: " + pack.sku);
             if (!pack.purchased)
-                checkout.startPurchaseFlow(ProductTypes.IN_APP, pack.sku, FirebaseAuth.getInstance().getCurrentUser().getUid(), new PurchaseListener());
+                checkout.startPurchaseFlow(ProductTypes.IN_APP, pack.sku, FirebaseAuth.getInstance().getCurrentUser().getUid(), new PurchaseListener(presenter));
         } else if (id == R.id.cv_drill_pack) {
             viewDrillPack(pack);
         }
     }
 
     @Override
-    public void onItemLongClicked(DrillPackModel item) {
+    public void onItemLongClicked(final DrillPackModel item) {
 
     }
 
@@ -205,15 +203,19 @@ public class PurchaseDrillsFragment extends BaseFragment<PurchaseDrillsContract>
     }
 
     private static class PurchaseListener implements RequestListener<Purchase> {
+        PurchaseDrillsContract presenter;
+
+        public PurchaseListener(PurchaseDrillsContract presenter) {
+            this.presenter = presenter;
+        }
+
         @Override
         public void onSuccess(@Nonnull Purchase result) {
-            Log.i(TAG, "onSuccess: " + result);
+            presenter.purchaseDrillPack(result.sku);
         }
 
         @Override
         public void onError(int response, @Nonnull Exception e) {
-            Log.i(TAG, "onError: " + response);
-            Log.i(TAG, "onError: " + e.getCause());
         }
     }
 
@@ -231,14 +233,9 @@ public class PurchaseDrillsFragment extends BaseFragment<PurchaseDrillsContract>
         @Override
         public void onLoaded(@Nonnull Inventory.Products products) {
             final Inventory.Product product = products.get(ProductTypes.IN_APP);
-            Log.i(TAG, "onLoaded: checking if product.supported");
-            Log.i(TAG, "onLoaded: " + product.supported);
             if (!product.supported)
                 return;
 
-            Log.i(TAG, "onLoaded: should update the adapter with the new products");
-            Log.i(TAG, "onLoaded: " + products);
-            FirebaseDatabase.getInstance().getReference().child("log").child("products").setValue(product.getSkus());
             adapter.updatePurchases(product);
         }
     }

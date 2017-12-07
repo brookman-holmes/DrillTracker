@@ -37,9 +37,15 @@ public class DrillDataRepository implements DrillRepository {
     }
 
     @Override
-    public Observable<Drill> addDrill(final String name, final String description, final byte[] image, final String type, final int maxScore, final int targetScore) {
-        return dataStore.addDrill(new DrillEntity(name, description, null, null, type, maxScore, targetScore))
+    public Observable<Drill> addDrill(final String name, final String description, final byte[] image, final String type, final int maxScore, final int targetScore, boolean purchased) {
+        return dataStore.addDrill(new DrillEntity(name, description, null, null, type, maxScore, targetScore, purchased))
                 .map(uploadImageMap(image))
+                .map(transformDrillEntity());
+    }
+
+    @Override
+    public Observable<Drill> addDrill(String name, String description, String imageUrl, String type, int maxScore, int targetScore, boolean purchased) {
+        return dataStore.addDrill(new DrillEntity(name, description, null, imageUrl, type, maxScore, targetScore, purchased))
                 .map(transformDrillEntity());
     }
 

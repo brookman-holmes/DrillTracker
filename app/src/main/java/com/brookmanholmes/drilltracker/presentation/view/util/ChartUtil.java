@@ -39,7 +39,7 @@ public class ChartUtil {
     private static final String TAG = ChartUtil.class.getName();
 
     public static void setupChart(LineChartView chart, DrillModel model) {
-        List<PointValue> points = getPointValues(getScoreArray(new ArrayList<>(model.attemptModels)));
+        List<PointValue> points = getPointValues(getScoreArray(new ArrayList<>(model.getSessionAttempts())));
 
         Line line = getLine(points, getColor(chart.getContext(), R.color.chart_blue));
 
@@ -50,6 +50,7 @@ public class ChartUtil {
 
         setChartStyle(chart, data, model.maxScore, line.getValues().size());
     }
+
 
     public static void setupLifetimeChart(LineChartView chart, DrillModel model, boolean hasLabels) {
         List<PointValue> points = model.attemptModels.size() > 0 ? getPointValuesByBucket(new ArrayList<>(model.attemptModels)) : new ArrayList<PointValue>();
@@ -91,7 +92,7 @@ public class ChartUtil {
             viewport.top = model.maxScore + 1;
             chart.setCurrentViewport(viewport);
         } else {
-            setChartStyle(chart, data, model.maxScore, 5);
+            setChartStyle(chart, data, model.maxScore, 7);
         }
     }
 

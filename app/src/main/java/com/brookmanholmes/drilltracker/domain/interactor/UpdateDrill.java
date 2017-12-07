@@ -22,7 +22,11 @@ public class UpdateDrill extends UseCase<Drill, UpdateDrill.Params> {
 
     @Override
     Observable<Drill> buildUseCaseObservable(Params params) {
-        return drillRepository.updateDrill(params.name, params.description, params.id, params.image, params.type, params.maxScore, params.defaultTargetScore);
+        if (params.image != null)
+            return drillRepository.updateDrill(params.name, params.description, params.id, params.image, params.type, params.maxScore, params.defaultTargetScore);
+        else if (params.imageUrl != null)
+            return drillRepository.updateDrill(new Drill(params.id, params.name, params.description, params.imageUrl, Drill.Type.valueOf(params.type), params.maxScore, params.defaultTargetScore, false));
+        else throw new IllegalStateException("Both image and imageUrl are null");
     }
 
     public static class Params {
@@ -33,6 +37,7 @@ public class UpdateDrill extends UseCase<Drill, UpdateDrill.Params> {
         int defaultTargetScore;
         String type;
         byte[] image;
+        String imageUrl;
 
         private Params(String name, String description, String id, byte[] image, DrillModel.Type type, int maxScore, int targetScore) {
             DrillEntityDataMapper mapper = new DrillEntityDataMapper();
@@ -48,6 +53,12 @@ public class UpdateDrill extends UseCase<Drill, UpdateDrill.Params> {
 
         public static Params create(String name, String description, String id, byte[] image, DrillModel.Type type, int maxScore, int targetScore) {
             return new Params(name, description, id, image, type, maxScore, targetScore);
+        }
+
+        public static Params create(String name, String description, String id, String imageUrl, DrillModel.Type type, int maxScore, int targetScore) {
+            Params param = new Params(name, description, id, null, type, maxScore, targetScore);
+            param.imageUrl = imageUrl;
+            return param;
         }
     }
 }

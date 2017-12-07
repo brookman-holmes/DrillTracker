@@ -37,7 +37,7 @@ public class DrillEntityDataMapper {
      * @param entity Object to be transformed.
      */
     public Drill transform(DrillEntity entity) {
-        final Drill drill = new Drill(entity.id, entity.name, entity.description, entity.imageUrl, transform(entity.type), entity.maxScore, entity.targetScore);
+        final Drill drill = new Drill(entity.id, entity.name, entity.description, entity.imageUrl, transform(entity.type), entity.maxScore, entity.targetScore, entity.purchased);
         drill.setAttempts(transformAttempts(entity.attempts.values()));
         return drill;
     }

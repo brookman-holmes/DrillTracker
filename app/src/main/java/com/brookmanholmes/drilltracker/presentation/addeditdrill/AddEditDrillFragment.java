@@ -15,7 +15,6 @@ import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,7 +30,6 @@ import com.brookmanholmes.drilltracker.presentation.model.DrillModel;
 import com.brookmanholmes.drilltracker.presentation.view.CustomNumberPicker;
 import com.brookmanholmes.drilltracker.presentation.view.util.ImageHandler;
 import com.google.firebase.crash.FirebaseCrash;
-import com.squareup.picasso.Callback;
 import com.theartofdev.edmodo.cropper.CropImage;
 
 import java.io.ByteArrayOutputStream;
@@ -173,7 +171,6 @@ public class AddEditDrillFragment extends BaseFragment<AddEditDrillPresenter> im
             } catch (IOException ex) {
                 // Error occurred while creating the File
                 FirebaseCrash.log(ex.getMessage());
-                Log.i(TAG, "startTakePictureActivity: " + ex);
             }
             // Continue only if the File was successfully created
             if (photoFile != null) {
@@ -314,20 +311,7 @@ public class AddEditDrillFragment extends BaseFragment<AddEditDrillPresenter> im
 
         drillTypeSpinner.setSelection(model.drillType.ordinal());
         toolbar.setTitle(R.string.title_edit_drill);
-        ImageHandler.loadImage(image, model.imageUrl, new Callback() {
-            @Override
-            public void onSuccess() {
-                Bitmap bitmap = ((BitmapDrawable)image.getDrawable()).getBitmap();
-                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, COMPRESSION_AMOUNT, outputStream);
-                presenter.setImage(outputStream.toByteArray());
-            }
-
-            @Override
-            public void onError() {
-                presenter.setImage(null);
-            }
-        });
+        ImageHandler.loadImage(image, model.imageUrl);
     }
 
     @Override

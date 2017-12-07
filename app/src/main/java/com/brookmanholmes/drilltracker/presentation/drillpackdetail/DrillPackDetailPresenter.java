@@ -5,7 +5,7 @@ import android.support.annotation.NonNull;
 import com.brookmanholmes.drilltracker.data.repository.datasource.DataStoreFactory;
 import com.brookmanholmes.drilltracker.domain.Drill;
 import com.brookmanholmes.drilltracker.domain.interactor.DefaultObserver;
-import com.brookmanholmes.drilltracker.domain.interactor.GetDrillPackDrillsList;
+import com.brookmanholmes.drilltracker.domain.interactor.GetDrillPackDetails;
 import com.brookmanholmes.drilltracker.presentation.base.Presenter;
 import com.brookmanholmes.drilltracker.presentation.mapper.DrillModelDataMapper;
 
@@ -17,16 +17,16 @@ import java.util.List;
 
 class DrillPackDetailPresenter implements Presenter {
     private DrillPackDetailView view;
-    private GetDrillPackDrillsList getDrillPackDrillsList;
+    private GetDrillPackDetails getDrillPackDetails;
     private DrillModelDataMapper mapper;
 
     DrillPackDetailPresenter() {
-        getDrillPackDrillsList = new GetDrillPackDrillsList(DataStoreFactory.getDrillPackRepo());
+        getDrillPackDetails = new GetDrillPackDetails(DataStoreFactory.getDrillPackRepo());
         mapper = new DrillModelDataMapper();
     }
 
-    DrillPackDetailPresenter(GetDrillPackDrillsList getDrillPackDrillsList, DrillModelDataMapper drillModelDataMapper) {
-        this.getDrillPackDrillsList = getDrillPackDrillsList;
+    DrillPackDetailPresenter(GetDrillPackDetails getDrillPackDetails, DrillModelDataMapper drillModelDataMapper) {
+        this.getDrillPackDetails = getDrillPackDetails;
         mapper = drillModelDataMapper;
     }
 
@@ -46,13 +46,13 @@ class DrillPackDetailPresenter implements Presenter {
 
     @Override
     public void destroy() {
-        getDrillPackDrillsList.dispose();
+        getDrillPackDetails.dispose();
         this.view = null;
     }
 
     void getDrillPackDrillList(String id) {
-        getDrillPackDrillsList.execute(new GetDrillPackDrillListObserver(),
-                GetDrillPackDrillsList.Params.forDrillPack(id));
+        getDrillPackDetails.execute(new GetDrillPackDrillListObserver(),
+                GetDrillPackDetails.Params.forDrillPack(id));
     }
 
     private class GetDrillPackDrillListObserver extends DefaultObserver<List<Drill>> {
