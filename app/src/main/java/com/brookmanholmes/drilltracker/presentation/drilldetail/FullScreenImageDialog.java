@@ -52,8 +52,15 @@ public class FullScreenImageDialog extends DialogFragment {
         View view = inflater.inflate(R.layout.fragment_fullscreen_drill, container, false);
         unbinder = ButterKnife.bind(this, view);
         ImageHandler.loadImage(imageView, getUrl());
+        imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
         getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 
     private String getUrl() {

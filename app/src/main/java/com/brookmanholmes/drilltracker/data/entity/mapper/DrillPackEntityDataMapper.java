@@ -39,7 +39,8 @@ public class DrillPackEntityDataMapper {
         if (drillPackEntities != null && !drillPackEntities.isEmpty()) {
             result = new ArrayList<>();
             for (DrillPackEntity drillPackEntity : drillPackEntities) {
-                result.add(transform(drillPackEntity));
+                if (isResultValid(drillPackEntity))
+                    result.add(transform(drillPackEntity));
             }
         } else {
             result = Collections.emptyList();
@@ -47,5 +48,13 @@ public class DrillPackEntityDataMapper {
 
         return result;
 
+    }
+
+    private boolean isResultValid(DrillPackEntity entity) {
+        return entity.description != null &&
+                entity.name != null &&
+                entity.price != null &&
+                entity.sku != null &&
+                entity.url != null;
     }
 }

@@ -66,9 +66,8 @@ public class DrillEntityDataMapper {
     public List<Drill> transform(Collection<DrillEntity> drillEntityList) {
         final List<Drill> drillList = new ArrayList<>();
         for (DrillEntity entity : drillEntityList) {
-            final Drill drill = transform(entity);
-            if (drill != null)
-                drillList.add(drill);
+            if (isEntityValid(entity))
+                drillList.add(transform(entity));
         }
 
         return drillList;
@@ -150,5 +149,15 @@ public class DrillEntityDataMapper {
             default:
                 throw new IllegalArgumentException("Drill.Type " + type + " does not exist");
         }
+    }
+
+    private boolean isEntityValid(DrillEntity entity) {
+        return entity != null &&
+                entity.description != null &&
+                entity.attempts != null &&
+                entity.id != null &&
+                entity.imageUrl != null &&
+                entity.name != null &&
+                entity.type != null;
     }
 }

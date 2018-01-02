@@ -5,18 +5,28 @@
     android:layout_height="match_parent"
     android:background="#7F000000"
     android:orientation="vertical">
-    <com.github.chrisbanes.photoview.PhotoView
-        android:id="@+id/image"
+
+    <LinearLayout
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:rotation="90"
         android:scaleX="1.6"
         android:scaleY="1.6"
-        android:src="@drawable/pool_table"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="h,9:5"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.5">
+
+        <com.github.chrisbanes.photoview.PhotoView
+            android:id="@+id/image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitCenter"
+            android:src="@drawable/pool_table" />
+    </LinearLayout>
+
 
 </android.support.constraint.ConstraintLayout>

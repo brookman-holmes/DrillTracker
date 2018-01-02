@@ -232,7 +232,10 @@ public class DrillDetailsFragment extends BaseFragment<DrillDetailsContract> imp
 
     @OnClick(R.id.fab)
     public void onAddAttemptClicked() {
+
         AddAttemptDialog addAttemptDialog = AddAttemptDialog.newInstance(getDrillId(), getMaxScore(), getTargetScore());
+        //AddEightBallPatternAttemptDialog addAttemptDialog = new AddEightBallPatternAttemptDialog();
+        //AddSafetyAttemptDialog addAttemptDialog = new AddSafetyAttemptDialog();
         addAttemptDialog.show(getFragmentManager(), AddAttemptDialog.class.getName());
     }
 

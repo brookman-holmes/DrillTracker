@@ -75,4 +75,16 @@
         <item name="android:paddingRight">16dp</item>
         <item name="useDefaultMargins">true</item>
     </style>
+
+    <style name="horizontal_picker_style">
+        <item name="android:layout_margin">8dp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">48dp</item>
+        <item name="itemMargin">8dp</item>
+        <item name="textSize">16sp</item>
+        <item name="itemHeight">48dp</item>
+        <item name="itemWidth">96dp</item>
+        <item name="textColorSelector">@color/add_attempt_text_color_selector</item>
+        <item name="backgroundSelector">@drawable/add_attempt_background_selector</item>
+    </style>
 </resources>

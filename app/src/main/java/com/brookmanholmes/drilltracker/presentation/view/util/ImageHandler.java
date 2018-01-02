@@ -1,6 +1,7 @@
 package com.brookmanholmes.drilltracker.presentation.view.util;
 
 import android.net.Uri;
+import android.util.Log;
 import android.widget.ImageView;
 
 import com.brookmanholmes.drilltracker.R;
@@ -22,6 +23,8 @@ public class ImageHandler {
     }
 
     public static void loadImage(ImageView imageView, String url) {
+        Log.i(TAG, "loadImage: " + imageView.getHeight());
+        Log.i(TAG, "loadImage: " + imageView.getWidth());
         Picasso.with(imageView.getContext())
                 .load(url)
                 .fit()

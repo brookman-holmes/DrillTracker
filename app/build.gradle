@@ -7,9 +7,9 @@ android {
         applicationId "com.brookmanholmes.drilltracker"
         minSdkVersion 21
         targetSdkVersion 27
-        versionCode 11
-        versionName ".92"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        versionCode 14
+        versionName ".94"
+        testInstrumentationRunner "android.support.dialog_pattern_input.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
@@ -63,6 +63,8 @@ dependencies {
     compile 'com.google.firebase:firebase-auth:11.4.2'
 
     compile 'com.jakewharton:butterknife:8.7.0'
+    compile 'com.github.GoodieBag:HorizontalPicker:v1.0'
+    compile 'com.github.travijuu:numberpicker:1.0.7'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'jp.wasabeef:picasso-transformations:2.1.2'
     compile 'jp.co.cyberagent.android.gpuimage:gpuimage-library:1.4.1'
