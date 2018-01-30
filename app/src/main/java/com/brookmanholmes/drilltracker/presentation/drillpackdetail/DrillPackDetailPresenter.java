@@ -18,16 +18,13 @@ import java.util.List;
 class DrillPackDetailPresenter implements Presenter {
     private DrillPackDetailView view;
     private GetDrillPackDetails getDrillPackDetails;
-    private DrillModelDataMapper mapper;
 
     DrillPackDetailPresenter() {
         getDrillPackDetails = new GetDrillPackDetails(DataStoreFactory.getDrillPackRepo());
-        mapper = new DrillModelDataMapper();
     }
 
-    DrillPackDetailPresenter(GetDrillPackDetails getDrillPackDetails, DrillModelDataMapper drillModelDataMapper) {
+    DrillPackDetailPresenter(GetDrillPackDetails getDrillPackDetails) {
         this.getDrillPackDetails = getDrillPackDetails;
-        mapper = drillModelDataMapper;
     }
 
     void setView(@NonNull DrillPackDetailView view) {
@@ -58,7 +55,7 @@ class DrillPackDetailPresenter implements Presenter {
     private class GetDrillPackDrillListObserver extends DefaultObserver<List<Drill>> {
         @Override
         public void onNext(List<Drill> drills) {
-            view.renderDrillList(mapper.transform(drills));
+            view.renderDrillList(DrillModelDataMapper.transform(drills));
         }
     }
 }

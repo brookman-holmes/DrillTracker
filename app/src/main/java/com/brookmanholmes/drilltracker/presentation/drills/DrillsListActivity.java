@@ -7,7 +7,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.view.ContextThemeWrapper;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -73,11 +72,11 @@ public class DrillsListActivity extends BaseViewPagerActivity implements Adapter
     private ArrayAdapter<CharSequence> createAdapter() {
         ArrayAdapter<CharSequence> spinnerAdapter
                 = ArrayAdapter.createFromResource(
-                new ContextThemeWrapper(this, android.R.style.ThemeOverlay_Material_Dark_ActionBar),
+                getSupportActionBar().getThemedContext(),
                 R.array.drill_types,
                 android.R.layout.simple_spinner_item);
 
-        spinnerAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
+        spinnerAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item);
 
         return spinnerAdapter;
     }

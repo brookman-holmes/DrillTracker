@@ -136,8 +136,10 @@ public class PurchaseDrillsFragment extends BaseFragment<PurchaseDrillsContract>
     @Override
     public void onItemClicked(DrillPackModel pack, @IdRes int id) {
         if (id == R.id.price) {
-            if (!pack.purchased)
+            if (!pack.purchased) {
+                //presenter.purchaseDrillPack(pack.sku);
                 checkout.startPurchaseFlow(ProductTypes.IN_APP, pack.sku, FirebaseAuth.getInstance().getCurrentUser().getUid(), new PurchaseListener(presenter));
+            }
         } else if (id == R.id.cv_drill_pack) {
             viewDrillPack(pack);
         }

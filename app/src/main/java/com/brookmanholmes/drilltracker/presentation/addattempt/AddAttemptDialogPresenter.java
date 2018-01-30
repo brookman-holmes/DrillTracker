@@ -5,6 +5,7 @@ import com.brookmanholmes.drilltracker.domain.Drill;
 import com.brookmanholmes.drilltracker.domain.interactor.AddAttempt;
 import com.brookmanholmes.drilltracker.domain.interactor.DefaultObserver;
 import com.brookmanholmes.drilltracker.presentation.base.Presenter;
+import com.brookmanholmes.drilltracker.presentation.model.DrillModel;
 
 import java.util.Date;
 
@@ -22,9 +23,19 @@ class AddAttemptDialogPresenter implements Presenter {
         this.addAttempt = addAttempt;
     }
 
-    void addAttempt(String drillId, int score, int target) {
+    void addAttempt(String drillId, int score, int target, int obPosition, int cbPosition) {
         addAttempt.execute(new DefaultObserver<Drill>(),
-                AddAttempt.Params.create(drillId, new Drill.Attempt(score, target, new Date())));
+                AddAttempt.Params.create(
+                        drillId,
+                        new DrillModel.AttemptModel(
+                                score,
+                                target,
+                                new Date(),
+                                obPosition,
+                                cbPosition
+                        )
+                )
+        );
     }
 
     @Override

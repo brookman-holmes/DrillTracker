@@ -20,19 +20,16 @@ class DrillDetailsPresenter implements DrillDetailsContract {
     private static final String TAG = DrillDetailsPresenter.class.getName();
     private final GetDrillDetails getDrillDetailsUseCase;
     private final DeleteAttempt deleteAttemptUseCase;
-    private final DrillModelDataMapper mapper;
     private DrillDetailsView view;
-    private DrillModel model;
+    private Drill drill;
 
     DrillDetailsPresenter() {
         getDrillDetailsUseCase = new GetDrillDetails(DataStoreFactory.getDrillRepo());
         deleteAttemptUseCase = new DeleteAttempt(DataStoreFactory.getDrillRepo());
-        mapper = new DrillModelDataMapper();
     }
 
-    DrillDetailsPresenter(GetDrillDetails getDrillDetailsUseCase, DeleteAttempt deleteAttemptUseCase, DrillModelDataMapper mapper) {
+    DrillDetailsPresenter(GetDrillDetails getDrillDetailsUseCase, DeleteAttempt deleteAttemptUseCase) {
         this.getDrillDetailsUseCase = getDrillDetailsUseCase;
-        this.mapper = mapper;
         this.deleteAttemptUseCase = deleteAttemptUseCase;
     }
 
@@ -62,7 +59,6 @@ class DrillDetailsPresenter implements DrillDetailsContract {
         hideViewRetry();
         showViewLoading();
         getDrillDetails(drillId);
-
     }
 
     private void getDrillDetails(String drillId) {
@@ -91,16 +87,16 @@ class DrillDetailsPresenter implements DrillDetailsContract {
     }
 
     private void showDrillDetailsInView(Drill drill) {
-        final DrillModel drillModel = mapper.transform(drill);
+        this.drill = drill;
+        final DrillModel drillModel = DrillModelDataMapper.transform(drill);
         if (drillModel != null) {
             view.renderDrill(drillModel);
-            this.model = drillModel;
         }
     }
 
     @Override
     public void onUndoClicked() {
-        deleteAttemptUseCase.execute(new DeleteAttemptObserver(), model.id);
+        deleteAttemptUseCase.execute(new DeleteAttemptObserver(), drill.getId());
     }
 
     private final class DrillDetailsObserver extends DefaultObserver<Drill> {

@@ -37,15 +37,39 @@ public class DrillDataRepository implements DrillRepository {
     }
 
     @Override
-    public Observable<Drill> addDrill(final String name, final String description, final byte[] image, final String type, final int maxScore, final int targetScore, boolean purchased) {
-        return dataStore.addDrill(new DrillEntity(name, description, null, null, type, maxScore, targetScore, purchased))
+    public Observable<Drill> addDrill(Drill drill, byte[] image) {
+        return dataStore.addDrill(
+                new DrillEntity(
+                        drill.getName(),
+                        drill.getDescription(),
+                        null,
+                        null,
+                        drillEntityDataMapper.transform(drill.getType()),
+                        drill.getMaxScore(),
+                        drill.getDefaultTargetScore(),
+                        drill.getObPositions(),
+                        drill.getCbPositions(),
+                        drill.isPurchased()
+                )
+        )
                 .map(uploadImageMap(image))
                 .map(transformDrillEntity());
     }
 
     @Override
-    public Observable<Drill> addDrill(String name, String description, String imageUrl, String type, int maxScore, int targetScore, boolean purchased) {
-        return dataStore.addDrill(new DrillEntity(name, description, null, imageUrl, type, maxScore, targetScore, purchased))
+    public Observable<Drill> addDrill(Drill drill) {
+        return dataStore.addDrill(
+                new DrillEntity(
+                        drill.getName(),
+                        drill.getDescription(),
+                        drill.getId(),
+                        drill.getImageUrl(),
+                        drillEntityDataMapper.transform(drill.getType()),
+                        drill.getMaxScore(),
+                        drill.getDefaultTargetScore(),
+                        drill.getObPositions(),
+                        drill.getCbPositions(),
+                        drill.isPurchased()))
                 .map(transformDrillEntity());
     }
 
@@ -89,13 +113,37 @@ public class DrillDataRepository implements DrillRepository {
 
     @Override
     public Observable<Drill> updateDrill(Drill drill) {
-        return dataStore.updateDrill(new DrillEntity(drill.getName(), drill.getDescription(), drill.getId(), drill.getImageUrl(), drillEntityDataMapper.transform(drill.getType()), drill.getMaxScore(), drill.getDefaultTargetScore()))
+        return dataStore.updateDrill(
+                new DrillEntity(
+                        drill.getName(),
+                        drill.getDescription(),
+                        drill.getId(),
+                        drill.getImageUrl(),
+                        drillEntityDataMapper.transform(drill.getType()),
+                        drill.getMaxScore(),
+                        drill.getDefaultTargetScore(),
+                        drill.getCbPositions(),
+                        drill.getObPositions()
+                )
+        )
                 .map(transformDrillEntity());
     }
 
     @Override
-    public Observable<Drill> updateDrill(String name, String description, final String id, final byte[] image, String type, int maxScore, int targetScore) {
-        return dataStore.updateDrill(new DrillEntity(name, description, id, null, type, maxScore, targetScore))
+    public Observable<Drill> updateDrill(Drill drill, final byte[] image) {
+        return dataStore.updateDrill(
+                new DrillEntity(
+                        drill.getName(),
+                        drill.getDescription(),
+                        drill.getId(),
+                        null,
+                        drillEntityDataMapper.transform(drill.getType()),
+                        drill.getMaxScore(),
+                        drill.getDefaultTargetScore(),
+                        drill.getCbPositions(),
+                        drill.getObPositions()
+                )
+        )
                 .map(uploadImageMap(image))
                 .map(transformDrillEntity());
     }

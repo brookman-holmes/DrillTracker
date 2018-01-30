@@ -21,17 +21,14 @@ import java.util.List;
 class DrillsListPresenter implements DrillsListContract {
     private static final String TAG = DrillsListPresenter.class.getName();
     private final GetDrillList getDrillListUseCase;
-    private final DrillModelDataMapper drillModelDataMapper;
     private DrillsListView view;
 
-    DrillsListPresenter(GetDrillList getDrillListUseCase, DrillModelDataMapper drillModelDataMapper) {
+    DrillsListPresenter(GetDrillList getDrillListUseCase) {
         this.getDrillListUseCase = getDrillListUseCase;
-        this.drillModelDataMapper = drillModelDataMapper;
     }
 
     DrillsListPresenter() {
         getDrillListUseCase = new GetDrillList(DataStoreFactory.getDrillRepo());
-        drillModelDataMapper = new DrillModelDataMapper();
     }
 
     @Override
@@ -92,7 +89,7 @@ class DrillsListPresenter implements DrillsListContract {
     }
 
     private void showDrillCollectionInView(List<Drill> drillCollection) {
-        final List<DrillModel> drillModelCollection = this.drillModelDataMapper.transform(drillCollection);
+        final List<DrillModel> drillModelCollection = DrillModelDataMapper.transform(drillCollection);
         this.view.renderDrillList(drillModelCollection);
     }
 

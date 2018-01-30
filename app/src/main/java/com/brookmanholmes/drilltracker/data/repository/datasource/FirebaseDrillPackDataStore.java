@@ -2,6 +2,7 @@ package com.brookmanholmes.drilltracker.data.repository.datasource;
 
 import com.brookmanholmes.drilltracker.data.entity.DrillEntity;
 import com.brookmanholmes.drilltracker.data.entity.DrillPackEntity;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -30,5 +31,17 @@ class FirebaseDrillPackDataStore implements DrillPackDataStore {
     @Override
     public Observable<List<DrillEntity>> drillPackEntity(String id) {
         return RxFirebaseDatabase.observeValueEvent(drillsRef.child("drills").child(id), DataSnapshotMapper.listOf(DrillEntity.class)).toObservable();
+    }
+
+    @Override
+    public void purchaseDrillPack(String sku) {
+        DatabaseReference userRef = FirebaseDatabase.getInstance()
+                .getReference()
+                .child("users")
+                .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+
+        userRef.child("purchased_drill_packs")
+                .child(sku)
+                .setValue(true);
     }
 }

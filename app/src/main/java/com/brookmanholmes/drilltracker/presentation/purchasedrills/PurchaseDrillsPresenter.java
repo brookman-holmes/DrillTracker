@@ -1,7 +1,6 @@
 package com.brookmanholmes.drilltracker.presentation.purchasedrills;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.brookmanholmes.drilltracker.data.repository.datasource.DataStoreFactory;
 import com.brookmanholmes.drilltracker.domain.Drill;
@@ -114,16 +113,22 @@ class PurchaseDrillsPresenter implements PurchaseDrillsContract {
     private class PurchaseDrillPackObserver extends DefaultObserver<List<Drill>> {
         @Override
         public void onNext(List<Drill> drills) {
-            Log.i("PurchaseDrillPackObsv", "onNext: Drill pack was successfully purchased: " + drills);
             for (Drill drill : drills) {
-                addDrill.execute(new DefaultObserver<Drill>(),
-                        AddDrill.Params.create(drill.getName(),
+                addDrill.execute(
+                        new DefaultObserver<Drill>(),
+                        AddDrill.Params.create(
+                                drill.getId(),
+                                drill.getName(),
                                 drill.getDescription(),
                                 drill.getImageUrl(),
                                 DrillModel.Type.values()[drill.getType().ordinal()],
                                 drill.getMaxScore(),
                                 drill.getDefaultTargetScore(),
-                                true));
+                                drill.getObPositions(),
+                                drill.getCbPositions(),
+                                true
+                        )
+                );
             }
             onComplete();
             dispose();

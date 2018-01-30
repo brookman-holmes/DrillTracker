@@ -3,7 +3,6 @@ package com.brookmanholmes.drilltracker.presentation.mapper;
 import com.brookmanholmes.drilltracker.domain.Drill;
 import com.brookmanholmes.drilltracker.presentation.model.DrillModel;
 
-import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -13,34 +12,64 @@ import java.util.List;
  */
 
 public class DrillModelDataMapper {
-    public DrillModelDataMapper() {
+    private DrillModelDataMapper() {
 
     }
 
-    public DrillModel transform(Drill drill) {
-        final DrillModel drillModel = new DrillModel();
-        drillModel.id = drill.getId();
-        drillModel.name = drill.getName();
-        drillModel.imageUrl = drill.getImageUrl();
-        drillModel.maxScore = drill.getMaxScore();
-        drillModel.attemptModels = transformAttempts(drill.getAttempts());
-        drillModel.description = drill.getDescription();
-        drillModel.defaultTargetScore = drill.getDefaultTargetScore();
-        drillModel.drillType = DrillModel.Type.values()[drill.getType().ordinal()];
-        drillModel.purchased = drill.isPurchased();
-        return drillModel;
+    public static Drill.Attempt transform(DrillModel.AttemptModel model) {
+        return new Drill.Attempt(
+                model.score,
+                model.target,
+                model.date,
+                model.obPosition,
+                model.cbPosition,
+                model.extras
+        );
     }
 
-    private DrillModel.AttemptModel transform(Drill.Attempt attempt) {
-        final DrillModel.AttemptModel attemptModel = new DrillModel.AttemptModel();
-        attemptModel.target = attempt.getTarget();
-        attemptModel.score = attempt.getScore();
-        attemptModel.dateString = DateFormat.getDateInstance().format(attempt.getDate());
-        attemptModel.date = attempt.getDate();
-        return attemptModel;
+    public static Drill transform(DrillModel model) {
+        return new Drill(
+                model.id,
+                model.name,
+                model.description,
+                model.imageUrl,
+                Drill.Type.values()[model.drillType.ordinal()],
+                model.maxScore,
+                model.defaultTargetScore,
+                model.obPositions,
+                model.cbPositions,
+                model.purchased
+        );
     }
 
-    private List<DrillModel.AttemptModel> transformAttempts(List<Drill.Attempt> attemptCollection) {
+    public static DrillModel transform(Drill drill) {
+        return new DrillModel(
+                drill.getId(),
+                drill.getName(),
+                drill.getDescription(),
+                drill.getImageUrl(),
+                drill.getMaxScore(),
+                drill.getDefaultTargetScore(),
+                drill.getObPositions(),
+                drill.getCbPositions(),
+                DrillModel.Type.values()[drill.getType().ordinal()],
+                drill.isPurchased(),
+                transformAttempts(drill.getAttempts())
+        );
+    }
+
+    private static DrillModel.AttemptModel transform(Drill.Attempt attempt) {
+        return new DrillModel.AttemptModel(
+                attempt.getScore(),
+                attempt.getTarget(),
+                attempt.getDate(),
+                attempt.getObPosition(),
+                attempt.getCbPosition(),
+                attempt.getExtras()
+        );
+    }
+
+    private static List<DrillModel.AttemptModel> transformAttempts(List<Drill.Attempt> attemptCollection) {
         List<DrillModel.AttemptModel> attemptModels;
         if (attemptCollection != null && !attemptCollection.isEmpty()) {
             attemptModels = new ArrayList<>();
@@ -54,7 +83,7 @@ public class DrillModelDataMapper {
         return attemptModels;
     }
 
-    public List<DrillModel> transform(List<Drill> drillCollection) {
+    public static List<DrillModel> transform(List<Drill> drillCollection) {
         List<DrillModel> drillModelCollection;
         if (drillCollection != null && !drillCollection.isEmpty()) {
             drillModelCollection = new ArrayList<>();

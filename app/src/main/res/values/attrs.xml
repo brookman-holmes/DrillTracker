@@ -5,5 +5,10 @@
         <attr name="cnp_max" format="integer"/>
         <attr name="cnp_min" format="integer"/>
         <attr name="cnp_starting_value" format="integer"/>
+        <attr name="cnp_step_value" format="integer" />
+    </declare-styleable>
+
+    <declare-styleable name="SpeedPicker">
+        <attr name="sp_title" format="string" />
     </declare-styleable>
 </resources>

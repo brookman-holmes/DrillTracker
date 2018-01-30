@@ -132,7 +132,7 @@ public class PatternPlayInputView extends RecyclerView {
             this.onEntryChanged = onEntryChanged;
 
             adapter = ArrayAdapter.createFromResource(itemView.getContext(), R.array.position_ratings, android.R.layout.simple_spinner_item);
-            adapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item);
+            adapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item_centered);
             spinner.setAdapter(adapter);
         }
 

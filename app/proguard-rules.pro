@@ -28,6 +28,11 @@
 -dontwarn javax.annotation.Nullable
 -dontwarn javax.annotation.ParametersAreNonnullByDefault
 
+-keep public class com.brookmanholmes.drilltracker.data.entity.* {
+    public *;
+}
+-keep class com.brookmanholmes.drilltracker.data.entity.DrillEntity$AttemptEntity { *; }
+
 -keepclasseswithmembernames class * { @butterknife.* <fields>; }
 -keepclasseswithmembernames class * { @butterknife.* <methods>; }
 

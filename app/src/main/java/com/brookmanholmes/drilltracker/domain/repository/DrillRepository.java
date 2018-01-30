@@ -16,28 +16,17 @@ public interface DrillRepository {
     /**
      * Get a {@link Observable} which will emit a {@link Drill} of the drill that was just added
      *
-     * @param name        The name of the drill
-     * @param description The description of the drill
-     * @param image       The image of the drill
-     * @param type        The type of the drill
-     * @param maxScore    The maximum possible score in the drill
-     * @param targetScore The target goal for the drill
-     * @param purchased   If the drill was purchased
+     * @param drill The drill to be added
+     * @param image The image of the drill
      */
-    Observable<Drill> addDrill(String name, String description, byte[] image, String type, int maxScore, int targetScore, boolean purchased);
+    Observable<Drill> addDrill(Drill drill, byte[] image);
 
     /**
      * Get a {@link Observable} which will emit a {@link Drill} of the drill that was just added
      *
-     * @param name        The name of the drill
-     * @param description The description of the drill
-     * @param imageUrl    The url of the image of the drill
-     * @param type        The type of the drill
-     * @param maxScore    The maximum possible score in the drill
-     * @param targetScore The target goal for the drill
-     * @param purchased   If the drill was purchased
+     * @param drill The drill to be added
      */
-    Observable<Drill> addDrill(String name, String description, String imageUrl, String type, int maxScore, int targetScore, boolean purchased);
+    Observable<Drill> addDrill(Drill drill);
 
     /**
      * Get a {@link Observable} which will emit a list of {@link Drill}
@@ -72,15 +61,10 @@ public interface DrillRepository {
 
     /**
      * Get a {@link Observable} which will update a {@link Drill} and re-emit it
-     * @param name The name of the drill
-     * @param description The description of the drill
-     * @param id The id of the drill
-     * @param image The image of the drill
-     * @param type The type of the drill
-     * @param maxScore The maximum possible score in the drill
-     * @param targetScore The target goal for the drill
+     * @param drill The new drill information to update
+     * @param image The image of for the drill
      */
-    Observable<Drill> updateDrill(String name, String description, String id, byte[] image, String type, int maxScore, int targetScore);
+    Observable<Drill> updateDrill(Drill drill, byte[] image);
 
     /**
      * Get a {@link Maybe} which will emit a {@link com.google.firebase.storage.UploadTask.TaskSnapshot}

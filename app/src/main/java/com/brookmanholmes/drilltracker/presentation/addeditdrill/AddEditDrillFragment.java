@@ -24,6 +24,7 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 
 import com.brookmanholmes.drilltracker.R;
+import com.brookmanholmes.drilltracker.presentation.adapters.SpinnerAdapterHelper;
 import com.brookmanholmes.drilltracker.presentation.base.BaseFragment;
 import com.brookmanholmes.drilltracker.presentation.drilldetail.DrillDetailsActivity;
 import com.brookmanholmes.drilltracker.presentation.model.DrillModel;
@@ -48,6 +49,8 @@ import butterknife.OnTextChanged;
  * Created by Brookman Holmes on 7/23/2017.
  */
 
+
+// TODO: 1/11/18 fix up the look of this fragment, it fucking sucks 
 public class AddEditDrillFragment extends BaseFragment<AddEditDrillPresenter> implements AddEditDrillView {
     private static final String TAG = AddEditDrillFragment.class.getName();
     private static final String PARAM_DRILL_ID = "param_drill_id";
@@ -59,7 +62,7 @@ public class AddEditDrillFragment extends BaseFragment<AddEditDrillPresenter> im
 
     private final CustomNumberPicker.OnValueChangeListener targetValueListener = new CustomNumberPicker.OnValueChangeListener() {
         @Override
-        public void onValueChange(int oldVal, int newVal) {
+        public void onValueChange(CustomNumberPicker picker, int oldVal, int newVal) {
             onTargetScoreChanged(newVal);
         }
     };
@@ -73,7 +76,7 @@ public class AddEditDrillFragment extends BaseFragment<AddEditDrillPresenter> im
     CustomNumberPicker targetScorePicker;
     private final CustomNumberPicker.OnValueChangeListener maxValueListener = new CustomNumberPicker.OnValueChangeListener() {
         @Override
-        public void onValueChange(int oldVal, int newVal) {
+        public void onValueChange(CustomNumberPicker picker, int oldVal, int newVal) {
             onMaximumScoreChanged(newVal);
             targetScorePicker.setMax(newVal);
         }
@@ -84,6 +87,10 @@ public class AddEditDrillFragment extends BaseFragment<AddEditDrillPresenter> im
     ImageView image;
     @BindView(R.id.spinner)
     Spinner drillTypeSpinner;
+    @BindView(R.id.obPositionsSpinner)
+    Spinner obPositionsSpinner;
+    @BindView(R.id.cbPositionsSpinner)
+    Spinner cbPositionsSpinner;
 
     private String photoPath;
 
@@ -104,9 +111,11 @@ public class AddEditDrillFragment extends BaseFragment<AddEditDrillPresenter> im
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_create_drill, container, false);
         unbinder = ButterKnife.bind(this, view);
+        obPositionsSpinner.setAdapter(SpinnerAdapterHelper.createNumberedListAdapter(getContext(), 1, 15, "Maximum Object Ball Positions: "));
+        cbPositionsSpinner.setAdapter(SpinnerAdapterHelper.createAdapterFromResource(getContext(), R.array.ball_positions));
         maxScorePicker.setOnValueChangedListener(maxValueListener);
         targetScorePicker.setOnValueChangedListener(targetValueListener);
         targetScorePicker.setMax(maxScorePicker.getValue());
@@ -133,7 +142,7 @@ public class AddEditDrillFragment extends BaseFragment<AddEditDrillPresenter> im
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         presenter.setView(this);
         presenter.setTargetScore(targetScorePicker.getValue());
@@ -235,23 +244,49 @@ public class AddEditDrillFragment extends BaseFragment<AddEditDrillPresenter> im
     @OnItemSelected(R.id.spinner)
     void onDrillTypeSelected(int position) {
         presenter.setDrillType(transformSelectionToModel(position));
+        switch (transformSelectionToModel(position)) {
+            case BANKING:
+            case AIMING:
+            case KICKING:
+                maxScorePicker.setVisibility(View.INVISIBLE);
+                targetScorePicker.setStepValue(10);
+                targetScorePicker.setValue(targetScorePicker.getValue() * 10);
+                targetScorePicker.setMax(100);
+                break;
+            default:
+                maxScorePicker.setVisibility(View.VISIBLE);
+                targetScorePicker.setStepValue(1);
+                targetScorePicker.setValue(7);
+                targetScorePicker.setMax(maxScorePicker.getValue());
+        }
     }
+
+    @OnItemSelected(R.id.cbPositionsSpinner)
+    void onCbPositionsSelected(int position) {
+        presenter.setCbPositions(position + 1);
+    }
+
+    @OnItemSelected(R.id.obPositionsSpinner)
+    void onObPositionsSelected(int position) {
+        presenter.setObPositions(position + 1);
+    }
+
 
     private DrillModel.Type transformSelectionToModel(int selection) {
         switch(selection) {
             case 0:
                 return DrillModel.Type.ANY;
-            case 1:
+            case 5:
                 return DrillModel.Type.POSITIONAL;
-            case 2:
+            case 1:
                 return DrillModel.Type.AIMING;
-            case 3:
+            case 6:
                 return DrillModel.Type.SAFETY;
             case 4:
                 return DrillModel.Type.PATTERN;
-            case 5:
+            case 3:
                 return DrillModel.Type.KICKING;
-            case 6:
+            case 2:
                 return DrillModel.Type.BANKING;
             case 7:
                 return DrillModel.Type.SPEED;
@@ -291,7 +326,16 @@ public class AddEditDrillFragment extends BaseFragment<AddEditDrillPresenter> im
 
     @Override
     public void showDrillDetailsView(DrillModel drill) {
-        startActivity(DrillDetailsActivity.getIntent(getContext(), drill.id, drill.imageUrl, drill.maxScore, drill.defaultTargetScore));
+        startActivity(DrillDetailsActivity.getIntent(
+                getContext(),
+                drill.id,
+                drill.drillType,
+                drill.imageUrl,
+                drill.maxScore,
+                drill.defaultTargetScore,
+                drill.obPositions,
+                drill.cbPositions
+        ));
         getActivity().finish();
     }
 
@@ -310,6 +354,9 @@ public class AddEditDrillFragment extends BaseFragment<AddEditDrillPresenter> im
         targetScorePicker.setValue(model.defaultTargetScore);
 
         drillTypeSpinner.setSelection(model.drillType.ordinal());
+        drillTypeSpinner.setEnabled(false);
+        obPositionsSpinner.setSelection(model.obPositions - 1);
+        cbPositionsSpinner.setSelection(model.cbPositions - 1);
         toolbar.setTitle(R.string.title_edit_drill);
         ImageHandler.loadImage(image, model.imageUrl);
     }

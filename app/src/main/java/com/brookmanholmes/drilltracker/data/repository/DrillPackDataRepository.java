@@ -52,6 +52,7 @@ public class DrillPackDataRepository implements DrillPackRepository {
 
     @Override
     public Observable<List<Drill>> purchaseDrillPack(String sku) {
+        dataStore.purchaseDrillPack(sku);
         return observeDrillPack(sku);
     }
 

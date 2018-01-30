@@ -40,7 +40,7 @@ public class MyApp extends Application implements FirebaseAuth.AuthStateListener
         Billing.setLogger(Billing.newLogger());
         picasso = new Picasso.Builder(this).build();
         Picasso.setSingletonInstance(picasso);
-        picasso.setLoggingEnabled(BuildConfig.DEBUG);
+        //picasso.setLoggingEnabled(BuildConfig.DEBUG);
         FirebaseDatabase.getInstance().setPersistenceEnabled(true);
     }
 

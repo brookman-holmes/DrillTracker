@@ -2,7 +2,6 @@ package com.brookmanholmes.drilltracker.domain.interactor;
 
 import android.support.annotation.Nullable;
 
-import com.brookmanholmes.drilltracker.data.entity.mapper.DrillEntityDataMapper;
 import com.brookmanholmes.drilltracker.domain.Drill;
 import com.brookmanholmes.drilltracker.domain.repository.DrillRepository;
 import com.brookmanholmes.drilltracker.presentation.model.DrillModel;
@@ -24,13 +23,28 @@ public class AddDrill extends UseCase<Drill, AddDrill.Params> {
 
     @Override
     Observable<Drill> buildUseCaseObservable(Params params) {
-        if (params.imageUrl == null)
-            return drillRepository.addDrill(params.name, params.description, params.image, params.type, params.maxScore, params.targetScore, params.purchased);
-        else
-            return drillRepository.addDrill(params.name, params.description, params.imageUrl, params.type, params.maxScore, params.targetScore, params.purchased);
+        Drill drill = new Drill(
+                params.id,
+                params.name,
+                params.description,
+                params.imageUrl,
+                params.type,
+                params.maxScore,
+                params.targetScore,
+                params.obPositions,
+                params.cbPositions,
+                params.purchased
+
+        );
+        if (params.imageUrl == null) {
+            return drillRepository.addDrill(drill, params.image);
+        } else {
+            return drillRepository.addDrill(drill);
+        }
     }
 
     public static final class Params {
+        private String id;
         private String name;
         private String description;
         @Nullable
@@ -39,37 +53,70 @@ public class AddDrill extends UseCase<Drill, AddDrill.Params> {
         private String imageUrl;
         private int maxScore;
         private int targetScore;
-        private String type;
+        private Drill.Type type;
         private boolean purchased;
+        private int obPositions;
+        private int cbPositions;
 
-        public Params(String name, String description, byte[] image, String type, int maxScore, int targetScore, boolean purchased) {
+        public Params(String name, String description, byte[] image, DrillModel.Type type, int maxScore, int targetScore, int obPositions, int cbPositions, boolean purchased) {
             this.name = name;
             this.description = description;
             this.image = image;
             this.maxScore = maxScore;
             this.targetScore = targetScore;
-            this.type = type;
             this.purchased = purchased;
+            this.type = map(type);
+            this.cbPositions = cbPositions;
+            this.obPositions = obPositions;
         }
 
-        public Params(String name, String description, String imageUrl, String type, int maxScore, int targetScore, boolean purchased) {
+        public Params(String name, String description, String imageUrl, DrillModel.Type type, int maxScore, int targetScore, int obPositions, int cbPositions, boolean purchased) {
             this.name = name;
             this.description = description;
             this.imageUrl = imageUrl;
             this.maxScore = maxScore;
             this.targetScore = targetScore;
-            this.type = type;
+            this.type = map(type);
             this.purchased = purchased;
+            this.obPositions = obPositions;
+            this.cbPositions = cbPositions;
         }
 
-        public static Params create(String name, String description, byte[] image, DrillModel.Type type, int maxScore, int targetScore, boolean purchased) {
-            DrillEntityDataMapper mapper = new DrillEntityDataMapper();
-            return new Params(name, description, image, mapper.transform(type), maxScore, targetScore, purchased);
+        public static Params create(String name, String description, byte[] image, DrillModel.Type type, int maxScore, int targetScore, int obPositions, int cbPositions, boolean purchased) {
+            return new Params(name, description, image, type, maxScore, targetScore, obPositions, cbPositions, purchased);
         }
 
-        public static Params create(String name, String description, String imageUrl, DrillModel.Type type, int maxScore, int targetScore, boolean purchased) {
-            DrillEntityDataMapper mapper = new DrillEntityDataMapper();
-            return new Params(name, description, imageUrl, mapper.transform(type), maxScore, targetScore, purchased);
+        public static Params create(String name, String description, String imageUrl, DrillModel.Type type, int maxScore, int targetScore, int obPositions, int cbPositions, boolean purchased) {
+            return new Params(name, description, imageUrl, type, maxScore, targetScore, obPositions, cbPositions, purchased);
+        }
+
+        public static Params create(String id, String name, String description, String imageUrl, DrillModel.Type type, int maxScore, int targetScore, int obPositions, int cbPositions, boolean purchased) {
+            Params params = new Params(name, description, imageUrl, type, maxScore, targetScore, obPositions, cbPositions, purchased);
+            params.id = id;
+            return params;
+        }
+
+        private Drill.Type map(DrillModel.Type type) {
+            switch (type) {
+                case ANY:
+                    return Drill.Type.ANY;
+                case AIMING:
+                    return Drill.Type.AIMING;
+                case BANKING:
+                    return Drill.Type.BANKING;
+                case KICKING:
+                    return Drill.Type.KICKING;
+                case PATTERN:
+                    return Drill.Type.PATTERN;
+                case POSITIONAL:
+                    return Drill.Type.POSITIONAL;
+                case SAFETY:
+                    return Drill.Type.SAFETY;
+                case SPEED:
+                    return Drill.Type.SPEED;
+                default:
+                    throw new IllegalArgumentException("No such type: " + type);
+            }
         }
     }
 }

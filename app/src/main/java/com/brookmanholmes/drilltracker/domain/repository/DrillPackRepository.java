@@ -27,7 +27,7 @@ public interface DrillPackRepository {
      * Get an {@link Observable} which will emit a list of {@link Drill} that the drill pack contains and
      * that the user purchased
      *
-     * @param sku
+     * @param sku The sku of the drill pack to be purchased
      */
     Observable<List<Drill>> purchaseDrillPack(String sku);
 }

@@ -18,15 +18,14 @@ import com.brookmanholmes.drilltracker.R;
  */
 
 public class CustomNumberPicker extends LinearLayout implements View.OnClickListener, View.OnLongClickListener {
-    private static final long LONG_PRESS_UPDATE_INTERVAL = 300;
     private static final float ENABLED_ALPHA = 1f;
     private static final float DISABLED_ALPHA = .5f;
+    private static final int DEFAULT_STEP = 1;
 
     private OnValueChangeListener onValueChangedListener = null;
-    private ChangeCurrentByOneFromLongPressCommand changeCurrentByOneFromLongPressCommand;
-
 
     private int min = 0, max = 15;
+    private int stepValue = 1;
     private int value = 7;
     private String stringTitle;
 
@@ -52,6 +51,7 @@ public class CustomNumberPicker extends LinearLayout implements View.OnClickList
         min = a.getInt(R.styleable.CustomNumberPicker_cnp_min, 0);
         max = a.getInt(R.styleable.CustomNumberPicker_cnp_max, 15);
         value = a.getInt(R.styleable.CustomNumberPicker_cnp_starting_value, 7);
+        stepValue = a.getInt(R.styleable.CustomNumberPicker_cnp_step_value, DEFAULT_STEP);
         a.recycle();
     }
 
@@ -87,30 +87,11 @@ public class CustomNumberPicker extends LinearLayout implements View.OnClickList
         LayoutInflater.from(getContext()).inflate(R.layout.view_number_picker, this);
     }
 
-    private void changeValue(int newValue) {
-        TransitionManager.beginDelayedTransition(this);
-
-        if (value > min && value < max) {
-            notifyChange(value, newValue);
-            setValue(newValue);
-
-            if (value == max) {
-                textNextValue.setVisibility(View.INVISIBLE);
-                plus.setEnabled(false);
-                plus.setAlpha(DISABLED_ALPHA);
-            } else if (value == min) {
-                textPrevValue.setVisibility(View.INVISIBLE);
-                minus.setEnabled(false);
-                minus.setAlpha(DISABLED_ALPHA);
-            }
-        }
-    }
-
     private void increment() {
         TransitionManager.beginDelayedTransition(this);
         if (value < max) {
-            value++;
-            notifyChange(value - 1, value);
+            value += stepValue;
+            notifyChange(value - stepValue, value);
             setTextValues();
         }
     }
@@ -119,8 +100,8 @@ public class CustomNumberPicker extends LinearLayout implements View.OnClickList
     private void decrement() {
         TransitionManager.beginDelayedTransition(this);
         if (value > min) {
-            value--;
-            notifyChange(value + 1, value);
+            value -= stepValue;
+            notifyChange(value + stepValue, value);
             setTextValues();
         }
     }
@@ -128,9 +109,9 @@ public class CustomNumberPicker extends LinearLayout implements View.OnClickList
     private void setTextValues() {
         textValue.setText(Integer.toString(value));
         if (value > min)
-            textPrevValue.setText(Integer.toString(value - 1));
+            textPrevValue.setText(Integer.toString(value - stepValue));
         if (value < max)
-            textNextValue.setText(Integer.toString(value + 1));
+            textNextValue.setText(Integer.toString(value + stepValue));
 
         setTextVisibility();
     }
@@ -196,22 +177,6 @@ public class CustomNumberPicker extends LinearLayout implements View.OnClickList
         return true;
     }
 
-    private void postLongClick(boolean increment) {
-        removeAllCallbacks();
-
-        if (changeCurrentByOneFromLongPressCommand == null) {
-            changeCurrentByOneFromLongPressCommand = new ChangeCurrentByOneFromLongPressCommand();
-        }
-
-        changeCurrentByOneFromLongPressCommand.setIncrement(increment);
-        post(changeCurrentByOneFromLongPressCommand);
-    }
-
-    private void removeAllCallbacks() {
-        if (changeCurrentByOneFromLongPressCommand != null)
-            removeCallbacks(changeCurrentByOneFromLongPressCommand);
-    }
-
     public void setMax(int max) {
         this.max = max;
         if (value > max)
@@ -231,35 +196,22 @@ public class CustomNumberPicker extends LinearLayout implements View.OnClickList
         setTextValues();
     }
 
+    public void setStepValue(int stepValue) {
+        this.stepValue = stepValue;
+        setTextValues();
+    }
+
     public void setOnValueChangedListener(OnValueChangeListener onValueChangedListener) {
         this.onValueChangedListener = onValueChangedListener;
     }
 
     private void notifyChange(int previous, int current) {
         if (onValueChangedListener != null) {
-            onValueChangedListener.onValueChange(previous, current);
+            onValueChangedListener.onValueChange(this, previous, current);
         }
     }
 
     public interface OnValueChangeListener {
-        void onValueChange(int oldVal, int newVal);
-    }
-
-    private class ChangeCurrentByOneFromLongPressCommand implements Runnable {
-        private boolean increment;
-
-        private void setIncrement(boolean increment) {
-            this.increment = increment;
-        }
-
-        @Override
-        public void run() {
-            if (increment)
-                increment();
-            else
-                decrement();
-
-            postDelayed(this, LONG_PRESS_UPDATE_INTERVAL);
-        }
+        void onValueChange(CustomNumberPicker picker, int oldVal, int newVal);
     }
 }

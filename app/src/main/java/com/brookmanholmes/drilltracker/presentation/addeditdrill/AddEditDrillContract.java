@@ -53,6 +53,20 @@ interface AddEditDrillContract extends Presenter {
     void setImage(byte[] image);
 
     /**
+     * Sets the number of possible cue ball positions
+     *
+     * @param positions The number of possible positions
+     */
+    void setCbPositions(int positions);
+
+    /**
+     * Sets the number of possible object ball positions
+     *
+     * @param positions The number of possible positions
+     */
+    void setObPositions(int positions);
+
+    /**
      * Saves the drill to the database/server/etc.
      */
     void saveDrill();

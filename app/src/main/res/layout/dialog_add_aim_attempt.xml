@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:paddingEnd="16dp"
+    android:paddingStart="16dp">
+
+    <TextView
+        android:id="@+id/textView"
+        style="@android:style/TextAppearance.Material.Subhead"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:text="English"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.goodiebag.horizontalpicker.HorizontalPicker
+        android:id="@+id/englishPicker"
+        style="@style/horizontal_picker_style"
+        app:itemWidth="60dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textView" />
+
+    <include
+        layout="@layout/view_position_spinners"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/underCutsPicker" />
+
+    <com.brookmanholmes.drilltracker.presentation.view.CustomNumberPicker
+        android:id="@+id/number_picker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        app:cnp_max="30"
+        app:cnp_min="0"
+        app:cnp_starting_value="0"
+        app:cnp_title="Shots made"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/englishPicker" />
+
+    <com.brookmanholmes.drilltracker.presentation.view.CustomNumberPicker
+        android:id="@+id/overCutsPicker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        app:cnp_max="30"
+        app:cnp_min="0"
+        app:cnp_starting_value="0"
+        app:cnp_title="Missed: over cut"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/number_picker" />
+
+    <com.brookmanholmes.drilltracker.presentation.view.CustomNumberPicker
+        android:id="@+id/underCutsPicker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        app:cnp_max="30"
+        app:cnp_min="0"
+        app:cnp_starting_value="0"
+        app:cnp_title="Missed: under cut"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/overCutsPicker" />
+</android.support.constraint.ConstraintLayout>

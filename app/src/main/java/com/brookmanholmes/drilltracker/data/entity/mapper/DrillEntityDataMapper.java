@@ -23,12 +23,14 @@ public class DrillEntityDataMapper {
      * @param attempt Object to be transformed.
      */
     public DrillEntity.AttemptEntity transform(Drill.Attempt attempt) {
-        final DrillEntity.AttemptEntity entity = new DrillEntity.AttemptEntity();
-        entity.score = attempt.getScore();
-        entity.date = attempt.getDate().getTime();
-        entity.target = attempt.getTarget();
-
-        return entity;
+        return new DrillEntity.AttemptEntity(
+                attempt.getScore(),
+                attempt.getTarget(),
+                attempt.getDate().getTime(),
+                attempt.getObPosition(),
+                attempt.getCbPosition(),
+                attempt.getExtras()
+        );
     }
 
     /**
@@ -37,14 +39,13 @@ public class DrillEntityDataMapper {
      * @param entity Object to be transformed.
      */
     public Drill transform(DrillEntity entity) {
-        final Drill drill = new Drill(entity.id, entity.name, entity.description, entity.imageUrl, transform(entity.type), entity.maxScore, entity.targetScore, entity.purchased);
+        final Drill drill = new Drill(entity.id, entity.name, entity.description, entity.imageUrl, transform(entity.type), entity.maxScore, entity.targetScore, entity.obPositions, entity.cbPositions, entity.purchased);
         drill.setAttempts(transformAttempts(entity.attempts.values()));
         return drill;
     }
 
     private Drill.Attempt transform(DrillEntity.AttemptEntity attemptEntity) {
-        Drill.Attempt attempt = new Drill.Attempt(attemptEntity.score, attemptEntity.target, new Date(attemptEntity.date));
-        return attempt;
+        return new Drill.Attempt(attemptEntity.score, attemptEntity.target, new Date(attemptEntity.date), attemptEntity.obPosition, attemptEntity.cbPosition, attemptEntity.extras);
     }
 
     private List<Drill.Attempt> transformAttempts(Collection<DrillEntity.AttemptEntity> attemptEntities) {

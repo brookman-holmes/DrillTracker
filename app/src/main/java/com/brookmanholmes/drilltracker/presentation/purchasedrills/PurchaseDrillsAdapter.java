@@ -1,7 +1,6 @@
 package com.brookmanholmes.drilltracker.presentation.purchasedrills;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -87,7 +86,6 @@ class PurchaseDrillsAdapter extends BaseRecyclerViewAdapter<DrillPackModel> {
         @Override
         public void bind(DrillPackModel model, OnItemClickListener<DrillPackModel> onItemClickListener) {
             super.bind(model, onItemClickListener);
-            Log.i(TAG, "bind: " + model);
             this.onItemClickListener = onItemClickListener;
             name.setText(model.name);
             description.setText(model.description);

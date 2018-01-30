@@ -20,7 +20,7 @@ import java.util.List;
  */
 
 public abstract class BaseRecyclerViewAdapter<T extends Model> extends RecyclerView.Adapter<BaseRecyclerViewAdapter.ViewHolder<T>> {
-    protected static final int VIEW_FOOTER = 0;
+    protected static final int VIEW_FOOTER = -1;
     protected static final int VIEW_DEFAULT = 1;
     protected final LayoutInflater inflater;
     protected List<T> data;
@@ -118,7 +118,6 @@ public abstract class BaseRecyclerViewAdapter<T extends Model> extends RecyclerV
         Footer(View itemView) {
             super(itemView);
         }
-
     }
 
     private static class DiffUtilCallback<T extends Model> extends DiffUtil.Callback {

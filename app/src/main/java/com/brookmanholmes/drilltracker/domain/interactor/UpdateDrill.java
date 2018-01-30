@@ -23,9 +23,35 @@ public class UpdateDrill extends UseCase<Drill, UpdateDrill.Params> {
     @Override
     Observable<Drill> buildUseCaseObservable(Params params) {
         if (params.image != null)
-            return drillRepository.updateDrill(params.name, params.description, params.id, params.image, params.type, params.maxScore, params.defaultTargetScore);
+            return drillRepository.updateDrill(
+                    new Drill(
+                            params.name,
+                            params.description,
+                            null,
+                            Drill.Type.valueOf(params.type),
+                            params.maxScore,
+                            params.defaultTargetScore,
+                            params.obPositions,
+                            params.cbPositions,
+                            false
+                    ),
+                    params.image
+            );
         else if (params.imageUrl != null)
-            return drillRepository.updateDrill(new Drill(params.id, params.name, params.description, params.imageUrl, Drill.Type.valueOf(params.type), params.maxScore, params.defaultTargetScore, false));
+            return drillRepository.updateDrill(
+                    new Drill(
+                            params.id,
+                            params.name,
+                            params.description,
+                            params.imageUrl,
+                            Drill.Type.valueOf(params.type),
+                            params.maxScore,
+                            params.defaultTargetScore,
+                            params.obPositions,
+                            params.cbPositions,
+                            false
+                    )
+            );
         else throw new IllegalStateException("Both image and imageUrl are null");
     }
 
@@ -35,11 +61,13 @@ public class UpdateDrill extends UseCase<Drill, UpdateDrill.Params> {
         String description;
         int maxScore;
         int defaultTargetScore;
+        int obPositions;
+        int cbPositions;
         String type;
         byte[] image;
         String imageUrl;
 
-        private Params(String name, String description, String id, byte[] image, DrillModel.Type type, int maxScore, int targetScore) {
+        private Params(String name, String description, String id, byte[] image, DrillModel.Type type, int maxScore, int targetScore, int obPositions, int cbPositions) {
             DrillEntityDataMapper mapper = new DrillEntityDataMapper();
             this.name = name;
             this.id = id;
@@ -49,14 +77,16 @@ public class UpdateDrill extends UseCase<Drill, UpdateDrill.Params> {
             this.type = mapper.transform(type);
             this.image = image;
             this.defaultTargetScore = targetScore;
+            this.obPositions = obPositions;
+            this.cbPositions = cbPositions;
         }
 
-        public static Params create(String name, String description, String id, byte[] image, DrillModel.Type type, int maxScore, int targetScore) {
-            return new Params(name, description, id, image, type, maxScore, targetScore);
+        public static Params create(String name, String description, String id, byte[] image, DrillModel.Type type, int maxScore, int targetScore, int obPositions, int cbPositions) {
+            return new Params(name, description, id, image, type, maxScore, targetScore, obPositions, cbPositions);
         }
 
-        public static Params create(String name, String description, String id, String imageUrl, DrillModel.Type type, int maxScore, int targetScore) {
-            Params param = new Params(name, description, id, null, type, maxScore, targetScore);
+        public static Params create(String name, String description, String id, String imageUrl, DrillModel.Type type, int maxScore, int targetScore, int obPositions, int cbPositions) {
+            Params param = new Params(name, description, id, null, type, maxScore, targetScore, obPositions, cbPositions);
             param.imageUrl = imageUrl;
             return param;
         }

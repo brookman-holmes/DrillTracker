@@ -56,7 +56,7 @@ class FirebaseDataStore implements DrillDataStore {
         } else {
             key = entity.id;
         }
-        drillsRef.child(key).setValue(entity);
+        drillsRef.child(key).updateChildren(DrillEntity.toMap(entity));
         return RxFirebaseDatabase.observeValueEvent(drillsRef.child(key), DrillEntity.class).toObservable();
     }
 
@@ -110,7 +110,7 @@ class FirebaseDataStore implements DrillDataStore {
 
     @Override
     public Observable<DrillEntity> updateDrill(DrillEntity entity) {
-        drillsRef.child(entity.id).setValue(entity);
+        drillsRef.child(entity.id).updateChildren(DrillEntity.toMap(entity));
         return drillEntity(entity.id);
     }
 
@@ -121,28 +121,43 @@ class FirebaseDataStore implements DrillDataStore {
     }
 
     private void onLogin() {
-        userRef.child("lastLogin").addListenerForSingleValueEvent(new ValueEventListener() {
+        final FirebaseDrillPackDataStore drillPacks = new FirebaseDrillPackDataStore();
+
+        userRef.child("purchased_drill_packs").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Long lastLogin = dataSnapshot.getValue(Long.class);
-                if (lastLogin == null)
-                    lastLogin = 0L;
-
-                if (lastLogin < 1506630827534L) {
-                    FirebaseDrillPackDataStore drillPacks = new FirebaseDrillPackDataStore();
-                    drillPacks.drillPackEntity("drill_pack_3")
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    drillPacks.drillPackEntity(snapshot.getKey())
                             .subscribe(new Consumer<List<DrillEntity>>() {
                                 @Override
                                 public void accept(@NonNull List<DrillEntity> drillEntities) throws Exception {
                                     for (DrillEntity entity : drillEntities) {
-                                        addDrill(entity);
+                                        updateDrill(entity);
                                     }
                                 }
                             });
                 }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+        userRef.child("lastLogin").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                drillPacks.drillPackEntity("drill_pack_3")
+                        .subscribe(new Consumer<List<DrillEntity>>() {
+                            @Override
+                            public void accept(@NonNull List<DrillEntity> drillEntities) throws Exception {
+                                for (DrillEntity entity : drillEntities) {
+                                    addDrill(entity);
+                                }
+                            }
+                        });
 
                 userRef.child("lastLogin").setValue(System.currentTimeMillis());
-
             }
 
             @Override

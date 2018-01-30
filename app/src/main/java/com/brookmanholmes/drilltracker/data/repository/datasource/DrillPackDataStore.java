@@ -23,4 +23,11 @@ public interface DrillPackDataStore {
      * @param id The id to retrieve drill data.
      */
     Observable<List<DrillEntity>> drillPackEntity(String id);
+
+    /**
+     * Records that the user has purchased a drill pack
+     *
+     * @param sku The sku of the drill pack that was purchased
+     */
+    void purchaseDrillPack(String sku);
 }

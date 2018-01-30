@@ -146,7 +146,15 @@ public class DrillsListFragment extends BaseFragment<DrillsListContract> impleme
 
     @Override
     public void viewDrill(DrillModel drillModel) {
-        startActivity(DrillDetailsActivity.getIntent(getContext(), drillModel.id, drillModel.imageUrl, drillModel.maxScore, drillModel.defaultTargetScore));
+        startActivity(DrillDetailsActivity.getIntent(
+                getContext(),
+                drillModel.id,
+                drillModel.drillType,
+                drillModel.imageUrl,
+                drillModel.maxScore,
+                drillModel.defaultTargetScore,
+                drillModel.obPositions,
+                drillModel.cbPositions));
     }
 
     /**

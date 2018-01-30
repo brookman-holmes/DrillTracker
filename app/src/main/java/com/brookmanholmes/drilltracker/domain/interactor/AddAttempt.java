@@ -2,6 +2,8 @@ package com.brookmanholmes.drilltracker.domain.interactor;
 
 import com.brookmanholmes.drilltracker.domain.Drill;
 import com.brookmanholmes.drilltracker.domain.repository.DrillRepository;
+import com.brookmanholmes.drilltracker.presentation.mapper.DrillModelDataMapper;
+import com.brookmanholmes.drilltracker.presentation.model.DrillModel;
 
 import io.reactivex.Observable;
 
@@ -10,7 +12,7 @@ import io.reactivex.Observable;
  * This class is an implementation of {@link UseCase} that represents a use case for adding an
  * {@link Drill.Attempt} to an existing {@link Drill}
  */
-public final class AddAttempt extends UseCase<Drill, AddAttempt.Params> {
+public class AddAttempt extends UseCase<Drill, AddAttempt.Params> {
     private final DrillRepository drillRepository;
 
     public AddAttempt(DrillRepository drillRepository) {
@@ -19,19 +21,19 @@ public final class AddAttempt extends UseCase<Drill, AddAttempt.Params> {
 
     @Override
     Observable<Drill> buildUseCaseObservable(Params params) {
-        return drillRepository.addAttempt(params.drillId, params.attempt);
+        return drillRepository.addAttempt(params.drillId, DrillModelDataMapper.transform(params.attempt));
     }
 
     public static final class Params {
         private final String drillId;
-        private final Drill.Attempt attempt;
+        private final DrillModel.AttemptModel attempt;
 
-        private Params(String drillId, Drill.Attempt attempt) {
+        private Params(String drillId, DrillModel.AttemptModel attempt) {
             this.drillId = drillId;
             this.attempt = attempt;
         }
 
-        public static Params create(String drillId, Drill.Attempt attempt) {
+        public static Params create(String drillId, DrillModel.AttemptModel attempt) {
             return new Params(drillId, attempt);
         }
     }
