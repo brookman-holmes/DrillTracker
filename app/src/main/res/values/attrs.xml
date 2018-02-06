@@ -8,7 +8,11 @@
         <attr name="cnp_step_value" format="integer" />
     </declare-styleable>
 
-    <declare-styleable name="SpeedPicker">
-        <attr name="sp_title" format="string" />
+    <declare-styleable name="CustomNumberPickerV2">
+        <attr name="cnp2_title" format="string" />
+        <attr name="cnp2_max" format="integer" />
+        <attr name="cnp2_min" format="integer" />
+        <attr name="cnp2_starting_value" format="integer" />
+        <attr name="cnp2_step_value" format="integer" />
     </declare-styleable>
 </resources>

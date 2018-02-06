@@ -3,6 +3,7 @@ package com.brookmanholmes.drilltracker.presentation.drilldetail;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.brookmanholmes.drilltracker.R;
 import com.brookmanholmes.drilltracker.presentation.addattempt.AddSpeedAttemptDialog;
@@ -26,6 +27,32 @@ public class SpeedDrillDetailsFragment extends BaseDrillDetailsFragment {
     @BindView(R.id.sessionChart)
     ColumnChartView sessionChart;
 
+    @BindView(R.id.sessionMakes)
+    TextView sessionMakes;
+    @BindView(R.id.sessionAttempts)
+    TextView sessionAttempts;
+    @BindView(R.id.sessionAvg)
+    TextView sessionAvg;
+    @BindView(R.id.sessionError)
+    TextView sessionError;
+    @BindView(R.id.sessionSoft)
+    TextView sessionSoft;
+    @BindView(R.id.sessionHard)
+    TextView sessionHard;
+
+    @BindView(R.id.lifetimeMakes)
+    TextView lifetimeMakes;
+    @BindView(R.id.lifetimeAttempts)
+    TextView lifetimeAttempts;
+    @BindView(R.id.lifetimeAvg)
+    TextView lifetimeAvg;
+    @BindView(R.id.lifetimeError)
+    TextView lifetimeError;
+    @BindView(R.id.lifetimeSoft)
+    TextView lifetimeSoft;
+    @BindView(R.id.lifetimeHard)
+    TextView lifetimeHard;
+
     @BindView(R.id.spinner)
     Spinner historySelectorSpinner;
 
@@ -47,6 +74,7 @@ public class SpeedDrillDetailsFragment extends BaseDrillDetailsFragment {
         if (drill != null) {
             setArguments(drill);
             DrillModel filteredDrill = new DrillModel(drill, getSelectedCbPosition(), getSelectedObPosition());
+            SpeedDrillModel speedDrillModel = new SpeedDrillModel(filteredDrill.attemptModels);
             ImageHandler.loadImage(image, drill.imageUrl);
 
             toolbar.setTitle(drill.name);
@@ -54,6 +82,21 @@ public class SpeedDrillDetailsFragment extends BaseDrillDetailsFragment {
 
             ChartUtil.setupChart(sessionChart, new SpeedDrillModel(DrillModel.getSessionAttempts(filteredDrill.attemptModels)));
             ChartUtil.setupChart(lifetimeChart, new SpeedDrillModel(DrillModel.getAttemptsBetween(filteredDrill.attemptModels, getDateSelected(), new Date())));
+
+            sessionAttempts.setText(getString(R.string.number, speedDrillModel.sessionAttempts));
+            sessionMakes.setText(getString(R.string.number, speedDrillModel.sessionCorrect));
+            sessionSoft.setText(getString(R.string.number, speedDrillModel.sessionSoft));
+            sessionHard.setText(getString(R.string.number, speedDrillModel.sessionHard));
+            sessionAvg.setText(getString(R.string.number_float, speedDrillModel.sessionSuccessRate));
+            sessionError.setText(getString(R.string.number_float, speedDrillModel.sessionAvgError));
+
+            lifetimeAttempts.setText(getString(R.string.number, speedDrillModel.lifetimeAttempts));
+            lifetimeMakes.setText(getString(R.string.number, speedDrillModel.lifetimeCorrect));
+            lifetimeSoft.setText(getString(R.string.number, speedDrillModel.lifetimeSoft));
+            lifetimeHard.setText(getString(R.string.number, speedDrillModel.lifetimeHard));
+            lifetimeAvg.setText(getString(R.string.number_float, speedDrillModel.lifetimeSuccessRate));
+            lifetimeError.setText(getString(R.string.number_float, speedDrillModel.lifetimeAvgError));
+
 
             setMenuIconEnabled(R.id.ic_edit, !drill.purchased);
             setMenuIconEnabled(R.id.ic_undo_attempt, drill.attemptModels.size() > 0);

@@ -1,5 +1,8 @@
 package com.brookmanholmes.drilltracker.presentation.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by brookman on 1/25/18.
  */
@@ -59,6 +62,24 @@ public enum Speed {
             return 2f;
         }
     };
+
+    public static List<Speed> getHardHits() {
+        List<Speed> result = new ArrayList<>();
+        for (Speed speed : Speed.values()) {
+            if (speed.getDiamondOffset() > 0)
+                result.add(speed);
+        }
+        return result;
+    }
+
+    public static List<Speed> getSoftHits() {
+        List<Speed> result = new ArrayList<>();
+        for (Speed speed : Speed.values()) {
+            if (speed.getDiamondOffset() < 0)
+                result.add(speed);
+        }
+        return result;
+    }
 
     public abstract float getDiamondOffset();
 }

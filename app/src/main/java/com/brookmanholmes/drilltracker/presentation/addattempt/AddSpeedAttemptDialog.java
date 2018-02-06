@@ -10,7 +10,7 @@ import android.widget.Spinner;
 import com.brookmanholmes.drilltracker.R;
 import com.brookmanholmes.drilltracker.presentation.adapters.SpinnerAdapterHelper;
 import com.brookmanholmes.drilltracker.presentation.base.BaseDialogFragment;
-import com.brookmanholmes.drilltracker.presentation.view.SpeedPicker;
+import com.brookmanholmes.drilltracker.presentation.view.CustomNumberPickerV2;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -27,23 +27,23 @@ public class AddSpeedAttemptDialog extends BaseDialogFragment<AddSpeedAttemptDia
     private static final String PARAM_SELECTED_OB_POS = "param_selected_ob_pos";
 
     @BindView(R.id.twoDiamondsSlowPicker)
-    SpeedPicker twoDiamondsSlowPicker;
+    CustomNumberPickerV2 twoDiamondsSlowPicker;
     @BindView(R.id.oneDiamondsSlowPicker)
-    SpeedPicker oneDiamondsSlowPicker;
+    CustomNumberPickerV2 oneDiamondsSlowPicker;
     @BindView(R.id.halfDiamondsSlowPicker)
-    SpeedPicker halfDiamondsSlowPicker;
+    CustomNumberPickerV2 halfDiamondsSlowPicker;
     @BindView(R.id.quarterDiamondsSlowPicker)
-    SpeedPicker quarterDiamondsSlowPicker;
+    CustomNumberPickerV2 quarterDiamondsSlowPicker;
     @BindView(R.id.correctSpeedPicker)
-    SpeedPicker correctSpeedPicker;
+    CustomNumberPickerV2 correctSpeedPicker;
     @BindView(R.id.quarterDiamondsFastPicker)
-    SpeedPicker quarterDiamondsFastPicker;
+    CustomNumberPickerV2 quarterDiamondsFastPicker;
     @BindView(R.id.halfDiamondsFastPicker)
-    SpeedPicker halfDiamondsFastPicker;
+    CustomNumberPickerV2 halfDiamondsFastPicker;
     @BindView(R.id.oneDiamondsFastPicker)
-    SpeedPicker oneDiamondsFastPicker;
+    CustomNumberPickerV2 oneDiamondsFastPicker;
     @BindView(R.id.twoDiamondsFastPicker)
-    SpeedPicker twoDiamondsFastPicker;
+    CustomNumberPickerV2 twoDiamondsFastPicker;
 
     @BindView(R.id.obPositionsSpinner)
     Spinner obPositionsSpinner;
@@ -102,15 +102,15 @@ public class AddSpeedAttemptDialog extends BaseDialogFragment<AddSpeedAttemptDia
                 getDrillId(),
                 obPositionsSpinner.getSelectedItemPosition() + 1,
                 cbPositionsSpinner.getSelectedItemPosition() + 1,
-                twoDiamondsSlowPicker.getPickerValue(),
-                oneDiamondsSlowPicker.getPickerValue(),
-                halfDiamondsSlowPicker.getPickerValue(),
-                quarterDiamondsSlowPicker.getPickerValue(),
-                correctSpeedPicker.getPickerValue(),
-                quarterDiamondsFastPicker.getPickerValue(),
-                halfDiamondsFastPicker.getPickerValue(),
-                oneDiamondsFastPicker.getPickerValue(),
-                twoDiamondsFastPicker.getPickerValue()
+                twoDiamondsSlowPicker.getValue(),
+                oneDiamondsSlowPicker.getValue(),
+                halfDiamondsSlowPicker.getValue(),
+                quarterDiamondsSlowPicker.getValue(),
+                correctSpeedPicker.getValue(),
+                quarterDiamondsFastPicker.getValue(),
+                halfDiamondsFastPicker.getValue(),
+                oneDiamondsFastPicker.getValue(),
+                twoDiamondsFastPicker.getValue()
         );
     }
 

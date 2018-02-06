@@ -18,158 +18,99 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <com.brookmanholmes.drilltracker.presentation.view.SpeedPicker
+            <com.brookmanholmes.drilltracker.presentation.view.CustomNumberPickerV2
                 android:id="@+id/twoDiamondsSlowPicker"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:sp_title="2 Diamonds Slow" />
+                style="@style/speed_picker"
+                app:cnp2_title="2 Diamonds Slow"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
                 android:id="@+id/divider2"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:alpha=".12"
-                android:src="@android:color/black"
-                app:layout_constraintStart_toStartOf="parent"
+                style="@style/divider"
                 app:layout_constraintTop_toBottomOf="@id/twoDiamondsSlowPicker" />
 
-            <com.brookmanholmes.drilltracker.presentation.view.SpeedPicker
+            <com.brookmanholmes.drilltracker.presentation.view.CustomNumberPickerV2
                 android:id="@+id/oneDiamondsSlowPicker"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/divider2"
-                app:sp_title="1 Diamond Slow" />
+                style="@style/speed_picker"
+                app:cnp2_title="1 Diamond Slow"
+                app:layout_constraintTop_toBottomOf="@id/divider2" />
 
             <ImageView
                 android:id="@+id/divider3"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:alpha=".12"
-                android:src="@android:color/black"
-                app:layout_constraintStart_toStartOf="parent"
+                style="@style/divider"
                 app:layout_constraintTop_toBottomOf="@id/oneDiamondsSlowPicker" />
 
-            <com.brookmanholmes.drilltracker.presentation.view.SpeedPicker
+            <com.brookmanholmes.drilltracker.presentation.view.CustomNumberPickerV2
                 android:id="@+id/halfDiamondsSlowPicker"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/divider3"
-                app:sp_title="½ Diamonds Slow" />
+                style="@style/speed_picker"
+                app:cnp2_title="½ Diamonds Slow"
+                app:layout_constraintTop_toBottomOf="@id/divider3" />
 
             <ImageView
                 android:id="@+id/divider4"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:alpha=".12"
-                android:src="@android:color/black"
-                app:layout_constraintStart_toStartOf="parent"
+                style="@style/divider"
                 app:layout_constraintTop_toBottomOf="@id/halfDiamondsSlowPicker" />
 
-            <com.brookmanholmes.drilltracker.presentation.view.SpeedPicker
+            <com.brookmanholmes.drilltracker.presentation.view.CustomNumberPickerV2
                 android:id="@+id/quarterDiamondsSlowPicker"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/divider4"
-                app:sp_title="¼ Diamonds Slow" />
+                style="@style/speed_picker"
+                app:cnp2_title="¼ Diamonds Slow"
+                app:layout_constraintTop_toBottomOf="@id/divider4" />
 
             <ImageView
                 android:id="@+id/divider5"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:alpha=".12"
-                android:src="@android:color/black"
-                app:layout_constraintStart_toStartOf="parent"
+                style="@style/divider"
                 app:layout_constraintTop_toBottomOf="@id/quarterDiamondsSlowPicker" />
 
-            <com.brookmanholmes.drilltracker.presentation.view.SpeedPicker
+            <com.brookmanholmes.drilltracker.presentation.view.CustomNumberPickerV2
                 android:id="@+id/correctSpeedPicker"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/divider5"
-                app:sp_title="Correct Speed" />
+                style="@style/speed_picker"
+                app:cnp2_title="Correct Speed"
+                app:layout_constraintTop_toBottomOf="@id/divider5" />
 
             <ImageView
                 android:id="@+id/divider6"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:alpha=".12"
-                android:src="@android:color/black"
-                app:layout_constraintStart_toStartOf="parent"
+                style="@style/divider"
                 app:layout_constraintTop_toBottomOf="@id/correctSpeedPicker" />
 
-            <com.brookmanholmes.drilltracker.presentation.view.SpeedPicker
+            <com.brookmanholmes.drilltracker.presentation.view.CustomNumberPickerV2
                 android:id="@+id/quarterDiamondsFastPicker"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/divider6"
-                app:sp_title="¼ Diamonds Fast" />
+                style="@style/speed_picker"
+                app:cnp2_title="¼ Diamonds Fast"
+                app:layout_constraintTop_toBottomOf="@id/divider6" />
 
             <ImageView
                 android:id="@+id/divider7"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:alpha=".12"
-                android:src="@android:color/black"
-                app:layout_constraintStart_toStartOf="parent"
+                style="@style/divider"
                 app:layout_constraintTop_toBottomOf="@id/quarterDiamondsFastPicker" />
 
-            <com.brookmanholmes.drilltracker.presentation.view.SpeedPicker
+            <com.brookmanholmes.drilltracker.presentation.view.CustomNumberPickerV2
                 android:id="@+id/halfDiamondsFastPicker"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/divider7"
-                app:sp_title="½ Diamonds Fast" />
+                style="@style/speed_picker"
+                app:cnp2_title="½ Diamonds Fast"
+                app:layout_constraintTop_toBottomOf="@id/divider7" />
 
             <ImageView
                 android:id="@+id/divider8"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:alpha=".12"
-                android:src="@android:color/black"
-                app:layout_constraintStart_toStartOf="parent"
+                style="@style/divider"
                 app:layout_constraintTop_toBottomOf="@id/halfDiamondsFastPicker" />
 
-            <com.brookmanholmes.drilltracker.presentation.view.SpeedPicker
+            <com.brookmanholmes.drilltracker.presentation.view.CustomNumberPickerV2
                 android:id="@+id/oneDiamondsFastPicker"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/divider8"
-                app:sp_title="1 Diamond Fast" />
+                style="@style/speed_picker"
+                app:cnp2_title="1 Diamond Fast"
+                app:layout_constraintTop_toBottomOf="@id/divider8" />
 
             <ImageView
                 android:id="@+id/divider9"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:alpha=".12"
-                android:src="@android:color/black"
-                app:layout_constraintStart_toStartOf="parent"
+                style="@style/divider"
                 app:layout_constraintTop_toBottomOf="@id/oneDiamondsFastPicker" />
 
-            <com.brookmanholmes.drilltracker.presentation.view.SpeedPicker
+            <com.brookmanholmes.drilltracker.presentation.view.CustomNumberPickerV2
                 android:id="@+id/twoDiamondsFastPicker"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/divider9"
-                app:sp_title="2 Diamonds Fast" />
+                style="@style/speed_picker"
+                app:cnp2_title="2 Diamonds Fast"
+                app:layout_constraintTop_toBottomOf="@id/divider9" />
         </android.support.constraint.ConstraintLayout>
     </android.support.v4.widget.NestedScrollView>
 </LinearLayout>

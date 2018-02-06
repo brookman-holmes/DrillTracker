@@ -12,7 +12,7 @@ import com.brookmanholmes.drilltracker.R;
 import com.brookmanholmes.drilltracker.presentation.adapters.SpinnerAdapterHelper;
 import com.brookmanholmes.drilltracker.presentation.base.BaseDialogFragment;
 import com.brookmanholmes.drilltracker.presentation.model.English;
-import com.brookmanholmes.drilltracker.presentation.view.CustomNumberPicker;
+import com.brookmanholmes.drilltracker.presentation.view.CustomNumberPickerV2;
 import com.goodiebag.horizontalpicker.HorizontalPicker;
 
 import java.util.ArrayList;
@@ -24,7 +24,7 @@ import butterknife.ButterKnife;
 /**
  * Created by Brookman Holmes on 7/28/2017.
  */
-public class AddAimAttemptDialog extends BaseDialogFragment<AddAimAttemptDialogPresenter> implements CustomNumberPicker.OnValueChangeListener {
+public class AddAimAttemptDialog extends BaseDialogFragment<AddAimAttemptDialogPresenter> {
     private static final String TAG = AddAimAttemptDialog.class.getName();
 
     private static final String PARAM_DRILL_ID = "param_drill_id";
@@ -39,11 +39,11 @@ public class AddAimAttemptDialog extends BaseDialogFragment<AddAimAttemptDialogP
     private static final String PARAM_ENGLISH = "param_english";
 
     @BindView(R.id.number_picker)
-    CustomNumberPicker makesPicker;
+    CustomNumberPickerV2 makesPicker;
     @BindView(R.id.overCutsPicker)
-    CustomNumberPicker overCutsPicker;
+    CustomNumberPickerV2 overCutsPicker;
     @BindView(R.id.underCutsPicker)
-    CustomNumberPicker underCutsPicker;
+    CustomNumberPickerV2 underCutsPicker;
     @BindView(R.id.englishPicker)
     HorizontalPicker englishPicker;
     @BindView(R.id.obPositionsSpinner)
@@ -101,9 +101,6 @@ public class AddAimAttemptDialog extends BaseDialogFragment<AddAimAttemptDialogP
         View view = LayoutInflater.from(dialogBuilder.getContext())
                 .inflate(R.layout.dialog_add_aim_attempt, null, false);
         ButterKnife.bind(this, view);
-        makesPicker.setOnValueChangedListener(this);
-        overCutsPicker.setOnValueChangedListener(this);
-        underCutsPicker.setOnValueChangedListener(this);
         englishPicker.setItems(getEnglishItems());
         englishPicker.setSelectedIndex(english);
         obPositionsSpinner.setAdapter(SpinnerAdapterHelper.createNumberedListAdapter(getContext(), 1, getObBallPositions() + 1, "OB Position "));
@@ -194,11 +191,6 @@ public class AddAimAttemptDialog extends BaseDialogFragment<AddAimAttemptDialogP
 
     private boolean showObjectBallSpinner() {
         return getObBallPositions() > 1;
-    }
-
-    @Override
-    public void onValueChange(CustomNumberPicker numberPicker, int oldVal, int newVal) {
-
     }
 
     private List<HorizontalPicker.PickerItem> getEnglishItems() {

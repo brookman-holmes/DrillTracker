@@ -87,4 +87,22 @@
         <item name="textColorSelector">@color/add_attempt_text_color_selector</item>
         <item name="backgroundSelector">@drawable/add_attempt_background_selector</item>
     </style>
+
+    <style name="speed_picker">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="cnp2_min">0</item>
+        <item name="cnp2_starting_value">0</item>
+        <item name="cnp2_max">100</item>
+        <item name="layout_constraintEnd_toEndOf">parent</item>
+        <item name="layout_constraintStart_toStartOf">parent</item>
+    </style>
+
+    <style name="divider">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:alpha">.12</item>
+        <item name="android:src">@android:color/black</item>
+        <item name="layout_constraintStart_toStartOf">parent</item>
+    </style>
 </resources>

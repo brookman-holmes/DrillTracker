@@ -101,6 +101,7 @@
                     style="@android:style/TextAppearance.Material.Subhead"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
                     android:layout_weight="1"
                     android:text="@string/type_of_drill" />
                 <Spinner
@@ -110,59 +111,69 @@
                     android:entries="@array/drill_types" />
             </LinearLayout>
 
-            <LinearLayout
+            <ImageView
+                android:id="@+id/cbPositionsDivider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:alpha=".12"
+                android:src="@android:color/black" />
+
+            <com.brookmanholmes.drilltracker.presentation.view.CustomNumberPickerV2
+                android:id="@+id/cbPositionsPicker"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:layout_marginTop="16dp"
-                android:orientation="horizontal">
+                app:cnp2_max="15"
+                app:cnp2_min="1"
+                app:cnp2_starting_value="1"
+                app:cnp2_title="Cue ball positions" />
 
-                <Spinner
-                    android:id="@+id/obPositionsSpinner"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
+            <ImageView
+                android:id="@+id/obPositionsDivider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:alpha=".12"
+                android:src="@android:color/black" />
 
-            <LinearLayout
+            <com.brookmanholmes.drilltracker.presentation.view.CustomNumberPickerV2
+                android:id="@+id/obPositionsPicker"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:layout_marginTop="16dp"
-                android:orientation="horizontal">
+                app:cnp2_max="15"
+                app:cnp2_min="1"
+                app:cnp2_starting_value="1"
+                app:cnp2_title="Object ball positions" />
 
-                <TextView
-                    style="@android:style/TextAppearance.Material.Subhead"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="# of cue ball positions" />
+            <ImageView
+                android:id="@+id/maxScoreDivider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:alpha=".12"
+                android:src="@android:color/black" />
 
-                <Spinner
-                    android:id="@+id/cbPositionsSpinner"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:dropDownWidth="64dp" />
-            </LinearLayout>
-            <LinearLayout
-            android:layout_width="match_parent"
+            <com.brookmanholmes.drilltracker.presentation.view.CustomNumberPickerV2
+                android:id="@+id/maxScorePicker"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
-            <com.brookmanholmes.drilltracker.presentation.view.CustomNumberPicker
-                android:id="@+id/maxScoreNumberPicker"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                app:cnp_min="1"
-                app:cnp_title="@string/maximum_score" />
+                app:cnp2_max="15"
+                app:cnp2_min="1"
+                app:cnp2_starting_value="1"
+                app:cnp2_title="Maximum score" />
 
-                <com.brookmanholmes.drilltracker.presentation.view.CustomNumberPicker
-                android:id="@+id/targetScoreNumberPicker"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                    android:layout_weight="1"
-                app:cnp_starting_value="4"
-                    app:cnp_title="@string/target_score" />
-        </LinearLayout>
+            <ImageView
+                android:id="@+id/targetScoreDivider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:alpha=".12"
+                android:src="@android:color/black" />
+
+            <com.brookmanholmes.drilltracker.presentation.view.CustomNumberPickerV2
+                android:id="@+id/targetScorePicker"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cnp2_max="15"
+                app:cnp2_min="1"
+                app:cnp2_starting_value="1"
+                app:cnp2_title="Target score" />
 
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
