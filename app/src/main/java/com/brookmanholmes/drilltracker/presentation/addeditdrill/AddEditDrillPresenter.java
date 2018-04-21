@@ -21,6 +21,7 @@ class AddEditDrillPresenter implements AddEditDrillContract {
     private static final String TAG = AddEditDrillPresenter.class.getName();
 
     private AddEditDrillView view;
+
     private String drillName;
     private String drillDescription;
     private String imageUrl;
@@ -28,13 +29,15 @@ class AddEditDrillPresenter implements AddEditDrillContract {
     private int targetScore;
     private int obPositions;
     private int cbPositions;
+    private int targetPositions;
     private byte[] image;
     private DrillModel.Type type;
+    private boolean purchased;
+
     private AddDrill addDrill;
     private GetDrillDetails getDrillDetails;
     private UpdateDrill updateDrill;
     private String drillId;
-    private boolean purchased;
 
     AddEditDrillPresenter(AddDrill addDrill, GetDrillDetails getDrillDetails, UpdateDrill updateDrill, @Nullable String drillId) {
         this.addDrill = addDrill;
@@ -115,6 +118,11 @@ class AddEditDrillPresenter implements AddEditDrillContract {
     }
 
     @Override
+    public void setTargetPositions(int targetPositions) {
+        this.targetPositions = targetPositions;
+    }
+
+    @Override
     public void setImage(byte[] image) {
         this.image = image;
         this.imageUrl = null;
@@ -134,7 +142,8 @@ class AddEditDrillPresenter implements AddEditDrillContract {
                         maximumScore,
                         targetScore,
                         obPositions,
-                        cbPositions));
+                        cbPositions,
+                        targetPositions));
             } else {
                 updateDrill.execute(new EditDrillObserver(), UpdateDrill.Params.create(
                         drillName,
@@ -145,7 +154,8 @@ class AddEditDrillPresenter implements AddEditDrillContract {
                         maximumScore,
                         targetScore,
                         obPositions,
-                        cbPositions));
+                        cbPositions,
+                        targetPositions));
             }
         } else {
             addDrill.execute(new AddDrillObserver(), AddDrill.Params.create(
@@ -157,6 +167,7 @@ class AddEditDrillPresenter implements AddEditDrillContract {
                     targetScore,
                     obPositions,
                     cbPositions,
+                    targetPositions,
                     purchased));
         }
     }
@@ -195,6 +206,16 @@ class AddEditDrillPresenter implements AddEditDrillContract {
             DrillModel model = DrillModelDataMapper.transform(drill);
             purchased = model.purchased;
             imageUrl = model.imageUrl;
+            cbPositions = model.cbPositions;
+            obPositions = model.obPositions;
+            targetPositions = model.targetPositions;
+            imageUrl = model.imageUrl;
+            drillName = model.name;
+            drillDescription = model.description;
+            targetScore = model.defaultTargetScore;
+            maximumScore = model.maxScore;
+            type = model.drillType;
+
             image = null;
             populateView(model);
             onComplete();

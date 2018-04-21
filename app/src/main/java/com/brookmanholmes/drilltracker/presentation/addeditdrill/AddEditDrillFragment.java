@@ -76,6 +76,19 @@ public class AddEditDrillFragment extends BaseFragment<AddEditDrillPresenter> im
             onTargetScoreChanged(value);
         }
     };
+    private final ValueChangedListener maxValueListener = new ValueChangedListener() {
+        @Override
+        public void valueChanged(int value, ActionEnum action) {
+            onMaximumScoreChanged(value);
+            targetScorePicker.setMaxValue(value);
+        }
+    };
+    private final ValueChangedListener targetPositionsListener = new ValueChangedListener() {
+        @Override
+        public void valueChanged(int value, ActionEnum action) {
+            presenter.setTargetPositions(value);
+        }
+    };
     @BindView(R.id.input_drill_name)
     EditText drillName;
     @BindView(R.id.input_drill_description)
@@ -84,13 +97,6 @@ public class AddEditDrillFragment extends BaseFragment<AddEditDrillPresenter> im
     CustomNumberPickerV2 maxScorePicker;
     @BindView(R.id.targetScorePicker)
     CustomNumberPickerV2 targetScorePicker;
-    private final ValueChangedListener maxValueListener = new ValueChangedListener() {
-        @Override
-        public void valueChanged(int value, ActionEnum action) {
-            onMaximumScoreChanged(value);
-            targetScorePicker.setMaxValue(value);
-        }
-    };
     @BindView(R.id.maxScoreDivider)
     View maxScoreDivider;
     @BindView(R.id.targetScoreDivider)
@@ -99,6 +105,8 @@ public class AddEditDrillFragment extends BaseFragment<AddEditDrillPresenter> im
     View cbPositionsDivider;
     @BindView(R.id.obPositionsDivider)
     View obPositionsDivider;
+    @BindView(R.id.targetPositionsDivider)
+    View targetPositionsDivider;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.image)
@@ -109,6 +117,8 @@ public class AddEditDrillFragment extends BaseFragment<AddEditDrillPresenter> im
     CustomNumberPickerV2 obPositionsPicker;
     @BindView(R.id.cbPositionsPicker)
     CustomNumberPickerV2 cbPositionsPicker;
+    @BindView(R.id.targetPositionsPicker)
+    CustomNumberPickerV2 targetPositionsPicker;
     private String photoPath;
 
     public static AddEditDrillFragment newInstance(String drillId) {
@@ -133,10 +143,13 @@ public class AddEditDrillFragment extends BaseFragment<AddEditDrillPresenter> im
         unbinder = ButterKnife.bind(this, view);
         obPositionsPicker.setValueChangedListener(obPositionsListener);
         cbPositionsPicker.setValueChangedListener(cbPositionsListener);
+        targetPositionsPicker.setValueChangedListener(targetPositionsListener);
         obPositionsPicker.setMinValue(1);
         cbPositionsPicker.setMinValue(1);
+        targetPositionsPicker.setMinValue(1);
         obPositionsPicker.setMaxValue(15);
         cbPositionsPicker.setMaxValue(15);
+        targetPositionsPicker.setMaxValue(15);
         maxScorePicker.setValueChangedListener(maxValueListener);
         targetScorePicker.setValueChangedListener(targetValueListener);
         targetScorePicker.setMaxValue(maxScorePicker.getValue());
@@ -271,6 +284,8 @@ public class AddEditDrillFragment extends BaseFragment<AddEditDrillPresenter> im
             case KICKING:
                 setMaxScoreVisibility(View.GONE);
                 setTargetScoreVisibility(View.VISIBLE);
+                setTargetPositionsVisibility(View.GONE);
+                setObPositionsVisibility(View.VISIBLE);
                 targetScorePicker.setMaxValue(100);
                 targetScorePicker.setStepValue(10);
                 targetScorePicker.setValue(targetScorePicker.getValue() * 10);
@@ -278,14 +293,26 @@ public class AddEditDrillFragment extends BaseFragment<AddEditDrillPresenter> im
             case SAFETY:
                 setMaxScoreVisibility(View.GONE);
                 setTargetScoreVisibility(View.GONE);
+                setTargetPositionsVisibility(View.GONE);
+                setObPositionsVisibility(View.VISIBLE);
                 break;
             case SPEED:
                 setMaxScoreVisibility(View.GONE);
                 setTargetScoreVisibility(View.GONE);
+                setTargetPositionsVisibility(View.GONE);
+                setObPositionsVisibility(View.VISIBLE);
+                break;
+            case POSITIONAL:
+                setMaxScoreVisibility(View.GONE);
+                setTargetScoreVisibility(View.GONE);
+                setTargetPositionsVisibility(View.VISIBLE);
+                setObPositionsVisibility(View.GONE);
                 break;
             default:
                 setTargetScoreVisibility(View.VISIBLE);
                 setMaxScoreVisibility(View.VISIBLE);
+                setTargetPositionsVisibility(View.VISIBLE);
+                setObPositionsVisibility(View.VISIBLE);
                 targetScorePicker.setMaxValue(maxScorePicker.getValue());
                 targetScorePicker.setValue(7);
                 targetScorePicker.setStepValue(1);
@@ -354,7 +381,8 @@ public class AddEditDrillFragment extends BaseFragment<AddEditDrillPresenter> im
                 drill.maxScore,
                 drill.defaultTargetScore,
                 drill.obPositions,
-                drill.cbPositions
+                drill.cbPositions,
+                drill.targetPositions
         ));
         getActivity().finish();
     }
@@ -377,6 +405,7 @@ public class AddEditDrillFragment extends BaseFragment<AddEditDrillPresenter> im
         drillTypeSpinner.setEnabled(false);
         obPositionsPicker.setValue(model.obPositions);
         cbPositionsPicker.setValue(model.cbPositions);
+        targetPositionsPicker.setValue(model.targetPositions);
         toolbar.setTitle(R.string.title_edit_drill);
         ImageHandler.loadImage(image, model.imageUrl);
     }
@@ -404,5 +433,10 @@ public class AddEditDrillFragment extends BaseFragment<AddEditDrillPresenter> im
     public void setCbPositionsVisibility(int visibility) {
         cbPositionsPicker.setVisibility(visibility);
         cbPositionsDivider.setVisibility(visibility);
+    }
+
+    public void setTargetPositionsVisibility(int visibility) {
+        targetPositionsPicker.setVisibility(visibility);
+        targetPositionsDivider.setVisibility(visibility);
     }
 }

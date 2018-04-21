@@ -1,12 +1,10 @@
 package com.brookmanholmes.drilltracker.presentation.drilldetail;
 
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.brookmanholmes.drilltracker.R;
-import com.brookmanholmes.drilltracker.presentation.addattempt.AddSpeedAttemptDialog;
 import com.brookmanholmes.drilltracker.presentation.model.DrillModel;
 import com.brookmanholmes.drilltracker.presentation.model.SpeedDrillModel;
 import com.brookmanholmes.drilltracker.presentation.view.util.ChartUtil;
@@ -56,7 +54,7 @@ public class SpeedDrillDetailsFragment extends BaseDrillDetailsFragment {
     @BindView(R.id.spinner)
     Spinner historySelectorSpinner;
 
-    public static SpeedDrillDetailsFragment forDrill(String drillId, String url, int maxValue, int targetValue, int obPositions, int cbPositions) {
+    static SpeedDrillDetailsFragment forDrill(String drillId, String url, int maxValue, int targetValue, int obPositions, int cbPositions) {
         final SpeedDrillDetailsFragment fragment = new SpeedDrillDetailsFragment();
         final Bundle args = new Bundle();
         args.putString(PARAM_DRILL_ID, drillId);
@@ -71,14 +69,12 @@ public class SpeedDrillDetailsFragment extends BaseDrillDetailsFragment {
 
     @Override
     public void renderDrill(DrillModel drill) {
+        super.renderDrill(drill);
+
         if (drill != null) {
-            setArguments(drill);
             DrillModel filteredDrill = new DrillModel(drill, getSelectedCbPosition(), getSelectedObPosition());
             SpeedDrillModel speedDrillModel = new SpeedDrillModel(filteredDrill.attemptModels);
             ImageHandler.loadImage(image, drill.imageUrl);
-
-            toolbar.setTitle(drill.name);
-            description.setText(drill.description);
 
             ChartUtil.setupChart(sessionChart, new SpeedDrillModel(DrillModel.getSessionAttempts(filteredDrill.attemptModels)));
             ChartUtil.setupChart(lifetimeChart, new SpeedDrillModel(DrillModel.getAttemptsBetween(filteredDrill.attemptModels, getDateSelected(), new Date())));
@@ -96,10 +92,6 @@ public class SpeedDrillDetailsFragment extends BaseDrillDetailsFragment {
             lifetimeHard.setText(getString(R.string.number, speedDrillModel.lifetimeHard));
             lifetimeAvg.setText(getString(R.string.number_float, speedDrillModel.lifetimeSuccessRate));
             lifetimeError.setText(getString(R.string.number_float, speedDrillModel.lifetimeAvgError));
-
-
-            setMenuIconEnabled(R.id.ic_edit, !drill.purchased);
-            setMenuIconEnabled(R.id.ic_undo_attempt, drill.attemptModels.size() > 0);
         }
     }
 
@@ -122,16 +114,5 @@ public class SpeedDrillDetailsFragment extends BaseDrillDetailsFragment {
     @Override
     protected int getLayoutRes() {
         return R.layout.fragment_speed_drill_details;
-    }
-
-    @Override
-    protected DialogFragment getAddAttemptDialog() {
-        return AddSpeedAttemptDialog.newInstance(
-                getDrillId(),
-                getCbPositions(),
-                getObPositions(),
-                getSelectedCbPosition(),
-                getSelectedObPosition()
-        );
     }
 }

@@ -20,9 +20,10 @@ public class Drill {
     private int defaultTargetScore;
     private int cbPositions;
     private int obPositions;
+    private int targetPositions;
     private List<Attempt> attempts = new ArrayList<>();
 
-    public Drill(String name, String description, String imageUrl, Type type, int maxScore, int defaultTargetScore, int obPositions, int cbPositions, boolean purchased) {
+    public Drill(String name, String description, String imageUrl, Type type, int maxScore, int defaultTargetScore, int obPositions, int cbPositions, int targetPositions, boolean purchased) {
         this.name = name;
         this.imageUrl = imageUrl;
         this.description = description;
@@ -32,10 +33,11 @@ public class Drill {
         this.purchased = purchased;
         this.obPositions = obPositions;
         this.cbPositions = cbPositions;
+        this.targetPositions = targetPositions;
     }
 
-    public Drill(String id, String name, String description, String imageUrl, Type type, int maxScore, int defaultTargetScore, int obPositions, int cbPositions, boolean purchased) {
-        this(name, description, imageUrl, type, maxScore, defaultTargetScore, obPositions, cbPositions, purchased);
+    public Drill(String id, String name, String description, String imageUrl, Type type, int maxScore, int defaultTargetScore, int obPositions, int cbPositions, int targetPositions, boolean purchased) {
+        this(name, description, imageUrl, type, maxScore, defaultTargetScore, obPositions, cbPositions, targetPositions, purchased);
         this.id = id;
     }
 
@@ -142,6 +144,10 @@ public class Drill {
         result = 31 * result + obPositions;
         result = 31 * result + attempts.hashCode();
         return result;
+    }
+
+    public int getTargetPositions() {
+        return targetPositions;
     }
 
     public enum Type {

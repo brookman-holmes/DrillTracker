@@ -26,11 +26,12 @@ public class DrillModel extends Model {
     public int defaultTargetScore;
     public int obPositions;
     public int cbPositions;
+    public int targetPositions;
     public Type drillType;
     public boolean purchased;
     public Collection<AttemptModel> attemptModels;
 
-    public DrillModel(String id, String name, String description, String imageUrl, int maxScore, int defaultTargetScore, int obPositions, int cbPositions, Type drillType, boolean purchased, Collection<AttemptModel> attemptModels) {
+    public DrillModel(String id, String name, String description, String imageUrl, int maxScore, int defaultTargetScore, int obPositions, int cbPositions, int targetPositions, Type drillType, boolean purchased, Collection<AttemptModel> attemptModels) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -42,6 +43,7 @@ public class DrillModel extends Model {
         this.drillType = drillType;
         this.purchased = purchased;
         this.attemptModels = attemptModels;
+        this.targetPositions = targetPositions;
     }
 
     public DrillModel(DrillModel model) {
@@ -56,6 +58,7 @@ public class DrillModel extends Model {
         this.purchased = model.purchased;
         this.obPositions = model.obPositions;
         this.cbPositions = model.cbPositions;
+        this.targetPositions = model.targetPositions;
     }
 
     public DrillModel(DrillModel model, int cbPosition, int obPosition) {

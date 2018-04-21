@@ -1,5 +1,7 @@
 package com.brookmanholmes.drilltracker.domain.interactor;
 
+import android.util.Log;
+
 import com.brookmanholmes.drilltracker.data.entity.mapper.DrillEntityDataMapper;
 import com.brookmanholmes.drilltracker.domain.Drill;
 import com.brookmanholmes.drilltracker.domain.repository.DrillRepository;
@@ -14,6 +16,7 @@ import io.reactivex.Observable;
  */
 
 public class UpdateDrill extends UseCase<Drill, UpdateDrill.Params> {
+    private static final String TAG = UpdateDrill.class.getName();
     private final DrillRepository drillRepository;
 
     public UpdateDrill(DrillRepository drillRepository) {
@@ -22,6 +25,8 @@ public class UpdateDrill extends UseCase<Drill, UpdateDrill.Params> {
 
     @Override
     Observable<Drill> buildUseCaseObservable(Params params) {
+        Log.i(TAG, "buildUseCaseObservable: CB: " + params.cbPositions);
+        Log.i(TAG, "buildUseCaseObservable: OB: " + params.obPositions);
         if (params.image != null)
             return drillRepository.updateDrill(
                     new Drill(
@@ -33,6 +38,7 @@ public class UpdateDrill extends UseCase<Drill, UpdateDrill.Params> {
                             params.defaultTargetScore,
                             params.obPositions,
                             params.cbPositions,
+                            params.targetPositions,
                             false
                     ),
                     params.image
@@ -49,6 +55,7 @@ public class UpdateDrill extends UseCase<Drill, UpdateDrill.Params> {
                             params.defaultTargetScore,
                             params.obPositions,
                             params.cbPositions,
+                            params.targetPositions,
                             false
                     )
             );
@@ -63,11 +70,12 @@ public class UpdateDrill extends UseCase<Drill, UpdateDrill.Params> {
         int defaultTargetScore;
         int obPositions;
         int cbPositions;
+        int targetPositions;
         String type;
         byte[] image;
         String imageUrl;
 
-        private Params(String name, String description, String id, byte[] image, DrillModel.Type type, int maxScore, int targetScore, int obPositions, int cbPositions) {
+        private Params(String name, String description, String id, byte[] image, DrillModel.Type type, int maxScore, int targetScore, int obPositions, int cbPositions, int targetPositions) {
             DrillEntityDataMapper mapper = new DrillEntityDataMapper();
             this.name = name;
             this.id = id;
@@ -79,14 +87,15 @@ public class UpdateDrill extends UseCase<Drill, UpdateDrill.Params> {
             this.defaultTargetScore = targetScore;
             this.obPositions = obPositions;
             this.cbPositions = cbPositions;
+            this.targetPositions = targetPositions;
         }
 
-        public static Params create(String name, String description, String id, byte[] image, DrillModel.Type type, int maxScore, int targetScore, int obPositions, int cbPositions) {
-            return new Params(name, description, id, image, type, maxScore, targetScore, obPositions, cbPositions);
+        public static Params create(String name, String description, String id, byte[] image, DrillModel.Type type, int maxScore, int targetScore, int obPositions, int cbPositions, int targetPositions) {
+            return new Params(name, description, id, image, type, maxScore, targetScore, obPositions, cbPositions, targetPositions);
         }
 
-        public static Params create(String name, String description, String id, String imageUrl, DrillModel.Type type, int maxScore, int targetScore, int obPositions, int cbPositions) {
-            Params param = new Params(name, description, id, null, type, maxScore, targetScore, obPositions, cbPositions);
+        public static Params create(String name, String description, String id, String imageUrl, DrillModel.Type type, int maxScore, int targetScore, int obPositions, int cbPositions, int targetPositions) {
+            Params param = new Params(name, description, id, null, type, maxScore, targetScore, obPositions, cbPositions, targetPositions);
             param.imageUrl = imageUrl;
             return param;
         }

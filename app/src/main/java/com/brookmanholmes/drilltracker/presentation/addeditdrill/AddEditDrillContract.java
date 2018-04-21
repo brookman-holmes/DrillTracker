@@ -77,4 +77,11 @@ interface AddEditDrillContract extends Presenter {
      * @param type The type of the drill
      */
     void setDrillType(DrillModel.Type type);
+
+    /**
+     * Sets the number of possible target positions
+     *
+     * @param targetPositions The number of possible targets
+     */
+    void setTargetPositions(int targetPositions);
 }

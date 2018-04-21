@@ -4,6 +4,7 @@ import android.support.annotation.Keep;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Drill Entity used in the data layer
@@ -19,6 +20,7 @@ public class DrillEntity {
     public int targetScore;
     public int cbPositions;
     public int obPositions;
+    public int targetPositions;
     public String type;
     public Map<String, AttemptEntity> attempts = new HashMap<>();
 
@@ -28,7 +30,7 @@ public class DrillEntity {
 
     }
 
-    public DrillEntity(String name, String description, String id, String imageUrl, String type, int maxScore, int targetScore, int obPositions, int cbPositions) {
+    public DrillEntity(String name, String description, String id, String imageUrl, String type, int maxScore, int targetScore, int obPositions, int cbPositions, int targetPositions) {
         this.name = name;
         this.id = id;
         this.imageUrl = imageUrl;
@@ -38,10 +40,11 @@ public class DrillEntity {
         this.type = type;
         this.cbPositions = cbPositions;
         this.obPositions = obPositions;
+        this.targetPositions = targetPositions;
     }
 
-    public DrillEntity(String name, String description, String id, String imageUrl, String type, int maxScore, int targetScore, int obPositions, int cbPositions, boolean purchased) {
-        this(name, description, id, imageUrl, type, maxScore, targetScore, obPositions, cbPositions);
+    public DrillEntity(String name, String description, String id, String imageUrl, String type, int maxScore, int targetScore, int obPositions, int cbPositions, int targetPositions, boolean purchased) {
+        this(name, description, id, imageUrl, type, maxScore, targetScore, obPositions, cbPositions, targetPositions);
         this.purchased = purchased;
     }
 
@@ -57,7 +60,7 @@ public class DrillEntity {
         result.put("cbPositions", entity.cbPositions);
         result.put("obPositions", entity.obPositions);
         result.put("type", entity.type);
-
+        result.put("targetPositions", entity.targetPositions);
         return result;
     }
 
@@ -65,36 +68,24 @@ public class DrillEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         DrillEntity that = (DrillEntity) o;
-
-        if (purchased != that.purchased) return false;
-        if (maxScore != that.maxScore) return false;
-        if (targetScore != that.targetScore) return false;
-        if (cbPositions != that.cbPositions) return false;
-        if (obPositions != that.obPositions) return false;
-        if (!id.equals(that.id)) return false;
-        if (!name.equals(that.name)) return false;
-        if (!imageUrl.equals(that.imageUrl)) return false;
-        if (!description.equals(that.description)) return false;
-        if (!type.equals(that.type)) return false;
-        return attempts.equals(that.attempts);
+        return purchased == that.purchased &&
+                maxScore == that.maxScore &&
+                targetScore == that.targetScore &&
+                cbPositions == that.cbPositions &&
+                obPositions == that.obPositions &&
+                targetPositions == that.targetPositions &&
+                Objects.equals(id, that.id) &&
+                Objects.equals(name, that.name) &&
+                Objects.equals(imageUrl, that.imageUrl) &&
+                Objects.equals(description, that.description) &&
+                Objects.equals(type, that.type) &&
+                Objects.equals(attempts, that.attempts);
     }
 
     @Override
     public int hashCode() {
-        int result = id.hashCode();
-        result = 31 * result + name.hashCode();
-        result = 31 * result + imageUrl.hashCode();
-        result = 31 * result + (purchased ? 1 : 0);
-        result = 31 * result + description.hashCode();
-        result = 31 * result + maxScore;
-        result = 31 * result + targetScore;
-        result = 31 * result + cbPositions;
-        result = 31 * result + obPositions;
-        result = 31 * result + type.hashCode();
-        result = 31 * result + attempts.hashCode();
-        return result;
+        return Objects.hash(id, name, imageUrl, purchased, description, maxScore, targetScore, cbPositions, obPositions, targetPositions, type, attempts);
     }
 
     public static class AttemptEntity {
@@ -103,6 +94,7 @@ public class DrillEntity {
         public long date;
         public int obPosition;
         public int cbPosition;
+        public int targetPosition;
         public Map<String, Integer> extras = new HashMap<>();
 
         public AttemptEntity(int score, int target, long date, int obPosition, int cbPosition, Map<String, Integer> extras) {

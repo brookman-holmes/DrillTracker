@@ -126,6 +126,7 @@ class PurchaseDrillsPresenter implements PurchaseDrillsContract {
                                 drill.getDefaultTargetScore(),
                                 drill.getObPositions(),
                                 drill.getCbPositions(),
+                                drill.getTargetPositions(),
                                 true
                         )
                 );

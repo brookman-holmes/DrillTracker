@@ -35,6 +35,11 @@ public class UnimplementedAttemptDialog extends BaseDialogFragment<Unimplemented
 
     }
 
+    @Override
+    protected boolean hasNegativeButton() {
+        return false;
+    }
+
     public static class Presenter implements com.brookmanholmes.drilltracker.presentation.base.Presenter {
         @Override
         public void resume() {

@@ -1,17 +1,14 @@
 package com.brookmanholmes.drilltracker.presentation.drilldetail;
 
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.brookmanholmes.drilltracker.R;
-import com.brookmanholmes.drilltracker.presentation.addattempt.AddAimAttemptDialog;
 import com.brookmanholmes.drilltracker.presentation.model.AimDrillModel;
 import com.brookmanholmes.drilltracker.presentation.model.DrillModel;
 import com.brookmanholmes.drilltracker.presentation.model.English;
 import com.brookmanholmes.drilltracker.presentation.view.util.ChartUtil;
-import com.brookmanholmes.drilltracker.presentation.view.util.ImageHandler;
 
 import java.text.DecimalFormat;
 import java.util.EnumSet;
@@ -60,7 +57,7 @@ public class AimDrillDetailsFragment extends BaseDrillDetailsFragment {
 
     private DecimalFormat numberFormatter = new DecimalFormat("#.00");
 
-    public static AimDrillDetailsFragment forDrill(String drillId, String url, int maxValue, int targetValue, int obPositions, int cbPositions) {
+    static AimDrillDetailsFragment forDrill(String drillId, String url, int maxValue, int targetValue, int obPositions, int cbPositions) {
         final AimDrillDetailsFragment fragment = new AimDrillDetailsFragment();
         final Bundle args = new Bundle();
         args.putString(PARAM_DRILL_ID, drillId);
@@ -79,17 +76,12 @@ public class AimDrillDetailsFragment extends BaseDrillDetailsFragment {
 
     @Override
     public void renderDrill(DrillModel drill) {
+        super.renderDrill(drill);
         if (drill != null) {
-            setArguments(drill);
             DrillModel filteredDrillModel = new DrillModel(drill, getSelectedCbPosition(), getSelectedObPosition());
             AimDrillModel aimDrillModel = new AimDrillModel(filteredDrillModel, EnumSet.of(English.values()[englishSpinner.getSelectedItemPosition()]));
 
             ChartUtil.setupAimChart(lifetimeChart, aimDrillModel);
-
-            ImageHandler.loadImage(image, drill.imageUrl);
-
-            toolbar.setTitle(drill.name);
-            description.setText(drill.description);
 
             sessionMakes.setText(getString(R.string.number, aimDrillModel.sessionMakes));
             sessionAttempts.setText(getString(R.string.number, aimDrillModel.sessionAttempts));
@@ -104,22 +96,7 @@ public class AimDrillDetailsFragment extends BaseDrillDetailsFragment {
             lifetimeUnderCuts.setText(getString(R.string.number, aimDrillModel.lifetimeUnderCuts));
 
             targetScore.setText(getString(R.string.target_score_with_number_float, numberFormatter.format(aimDrillModel.targetScore)));
-
-            setMenuIconEnabled(R.id.ic_edit, !drill.purchased);
-            setMenuIconEnabled(R.id.ic_undo_attempt, drill.attemptModels.size() > 0);
         }
-    }
-
-    @Override
-    protected DialogFragment getAddAttemptDialog() {
-        return AddAimAttemptDialog.newInstance(
-                getDrillId(),
-                getTargetScore(),
-                getCbPositions(),
-                getObPositions(),
-                getSelectedCbPosition(),
-                getSelectedObPosition()
-        );
     }
 
     @OnItemSelected(R.id.spinner)

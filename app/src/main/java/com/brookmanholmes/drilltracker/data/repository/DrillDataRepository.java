@@ -1,5 +1,7 @@
 package com.brookmanholmes.drilltracker.data.repository;
 
+import android.util.Log;
+
 import com.brookmanholmes.drilltracker.data.entity.DrillEntity;
 import com.brookmanholmes.drilltracker.data.entity.mapper.DrillEntityDataMapper;
 import com.brookmanholmes.drilltracker.data.repository.datasource.DrillDataStore;
@@ -49,6 +51,7 @@ public class DrillDataRepository implements DrillRepository {
                         drill.getDefaultTargetScore(),
                         drill.getObPositions(),
                         drill.getCbPositions(),
+                        drill.getTargetPositions(),
                         drill.isPurchased()
                 )
         )
@@ -69,6 +72,7 @@ public class DrillDataRepository implements DrillRepository {
                         drill.getDefaultTargetScore(),
                         drill.getObPositions(),
                         drill.getCbPositions(),
+                        drill.getTargetPositions(),
                         drill.isPurchased()))
                 .map(transformDrillEntity());
     }
@@ -122,8 +126,9 @@ public class DrillDataRepository implements DrillRepository {
                         drillEntityDataMapper.transform(drill.getType()),
                         drill.getMaxScore(),
                         drill.getDefaultTargetScore(),
+                        drill.getObPositions(),
                         drill.getCbPositions(),
-                        drill.getObPositions()
+                        drill.getTargetPositions()
                 )
         )
                 .map(transformDrillEntity());
@@ -131,6 +136,8 @@ public class DrillDataRepository implements DrillRepository {
 
     @Override
     public Observable<Drill> updateDrill(Drill drill, final byte[] image) {
+        Log.i(TAG, "updateDrill: CB: " + drill.getCbPositions());
+        Log.i(TAG, "updateDrill: OB: " + drill.getObPositions());
         return dataStore.updateDrill(
                 new DrillEntity(
                         drill.getName(),
@@ -140,8 +147,9 @@ public class DrillDataRepository implements DrillRepository {
                         drillEntityDataMapper.transform(drill.getType()),
                         drill.getMaxScore(),
                         drill.getDefaultTargetScore(),
+                        drill.getObPositions(),
                         drill.getCbPositions(),
-                        drill.getObPositions()
+                        drill.getTargetPositions()
                 )
         )
                 .map(uploadImageMap(image))

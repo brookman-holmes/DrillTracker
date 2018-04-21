@@ -154,7 +154,8 @@ public class DrillsListFragment extends BaseFragment<DrillsListContract> impleme
                 drillModel.maxScore,
                 drillModel.defaultTargetScore,
                 drillModel.obPositions,
-                drillModel.cbPositions));
+                drillModel.cbPositions,
+                drillModel.targetPositions));
     }
 
     /**

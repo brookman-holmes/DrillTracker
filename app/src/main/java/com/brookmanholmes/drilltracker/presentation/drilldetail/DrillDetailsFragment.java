@@ -1,15 +1,12 @@
 package com.brookmanholmes.drilltracker.presentation.drilldetail;
 
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.widget.TextView;
 
 import com.brookmanholmes.drilltracker.R;
-import com.brookmanholmes.drilltracker.presentation.addattempt.UnimplementedAttemptDialog;
 import com.brookmanholmes.drilltracker.presentation.model.DrillModel;
 import com.brookmanholmes.drilltracker.presentation.model.DrillModelMathUtil;
 import com.brookmanholmes.drilltracker.presentation.view.util.ChartUtil;
-import com.brookmanholmes.drilltracker.presentation.view.util.ImageHandler;
 
 import butterknife.BindView;
 import lecho.lib.hellocharts.view.LineChartView;
@@ -47,7 +44,7 @@ public class DrillDetailsFragment extends BaseDrillDetailsFragment {
     @BindView(R.id.targetScore)
     TextView targetScore;
 
-    public static DrillDetailsFragment forDrill(String drillId, String url, int maxValue, int targetValue, int obPositions, int cbPositions) {
+    static DrillDetailsFragment forDrill(String drillId, String url, int maxValue, int targetValue, int obPositions, int cbPositions, int targetPositions) {
         final DrillDetailsFragment fragment = new DrillDetailsFragment();
         final Bundle args = new Bundle();
         args.putString(PARAM_DRILL_ID, drillId);
@@ -56,26 +53,23 @@ public class DrillDetailsFragment extends BaseDrillDetailsFragment {
         args.putString(PARAM_URL, url);
         args.putInt(PARAM_CB_POSITIONS, cbPositions);
         args.putInt(PARAM_OB_POSITIONS, obPositions);
+        args.putInt(PARAM_TARGET_POSITIONS, targetPositions);
         fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void renderDrill(DrillModel drill) {
-        if (drill != null) {
-            setArguments(drill);
-            drill = new DrillModel(drill, getSelectedCbPosition(), getSelectedObPosition());
+        super.renderDrill(drill);
 
-            ImageHandler.loadImage(image, drill.imageUrl);
+        if (drill != null) {
+            drill = new DrillModel(drill, getSelectedCbPosition(), getSelectedObPosition());
 
             DrillModelMathUtil lifetimeStats = new DrillModelMathUtil(drill.attemptModels);
             DrillModelMathUtil sessionStats = new DrillModelMathUtil(DrillModel.getSessionAttempts(drill.attemptModels));
 
             ChartUtil.setupLifetimeChart(lifetimeChart, drill);
             ChartUtil.setupChart(sessionChart, drill);
-
-            toolbar.setTitle(drill.name);
-            description.setText(drill.description);
 
             sessionHigh.setText(getString(R.string.number, sessionStats.getMax()));
             sessionAttempts.setText(getString(R.string.number, sessionStats.getAttempts()));
@@ -89,15 +83,7 @@ public class DrillDetailsFragment extends BaseDrillDetailsFragment {
 
             maxScoreAttainable.setText(getString(R.string.max_score_attainable, drill.maxScore));
             targetScore.setText(getString(R.string.target_score_with_number, drill.defaultTargetScore));
-
-            setMenuIconEnabled(R.id.ic_edit, !drill.purchased);
-            setMenuIconEnabled(R.id.ic_undo_attempt, drill.attemptModels.size() > 0);
         }
-    }
-
-    @Override
-    protected DialogFragment getAddAttemptDialog() {
-        return new UnimplementedAttemptDialog();
     }
 
     @Override

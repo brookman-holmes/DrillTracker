@@ -1,6 +1,9 @@
 package com.brookmanholmes.drilltracker.presentation.model;
 
+import android.util.Pair;
+
 import java.util.Collection;
+import java.util.Date;
 import java.util.EnumSet;
 
 /**
@@ -8,7 +11,7 @@ import java.util.EnumSet;
  */
 
 public class SafetyDrillModel {
-    public static final String SAFETY_TYPES = "safetyTypes";
+    private static final String SAFETY_TYPES = "safetyTypes";
     private int attempts;
     private int speedHard, speedSoft, speedCorrect;
     private int spinLess, spinMore, spinCorrect;
@@ -25,7 +28,7 @@ public class SafetyDrillModel {
         }
     }
 
-    public static int encode(EnumSet<SafetyTypes> set) {
+    private static int encode(EnumSet<SafetyTypes> set) {
         int result = 0;
 
         for (SafetyTypes val : set) {
@@ -35,7 +38,7 @@ public class SafetyDrillModel {
         return result;
     }
 
-    public static EnumSet<SafetyTypes> decode(int code) {
+    private static EnumSet<SafetyTypes> decode(int code) {
         EnumSet<SafetyTypes> result = EnumSet.noneOf(SafetyTypes.class);
         while (code != 0) {
             int ordinal = Integer.numberOfTrailingZeros(code);
@@ -44,6 +47,11 @@ public class SafetyDrillModel {
         }
 
         return result;
+    }
+
+    public static DrillModel.AttemptModel createAttempt(int obPosition, int cbPosition, EnumSet<SafetyTypes> safetyTypes) {
+        return new DrillModel.AttemptModel(0, 0, new Date(), obPosition, cbPosition,
+                new Pair<>(SAFETY_TYPES, encode(safetyTypes)));
     }
 
     private void addSafetyAttempt(SafetyTypes type) {

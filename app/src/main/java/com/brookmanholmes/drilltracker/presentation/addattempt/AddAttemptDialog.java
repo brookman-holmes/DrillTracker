@@ -40,7 +40,7 @@ public class AddAttemptDialog extends BaseDialogFragment<AddAttemptDialogPresent
 
     private int score, maxScore;
 
-    public static AddAttemptDialog newInstance(String drillId, int maxScore, int targetScore, int cbPositions, int obPositions, int selectedCbPosition, int selectedObPosition) {
+    static AddAttemptDialog newInstance(String drillId, int maxScore, int targetScore, int cbPositions, int obPositions, int selectedCbPosition, int selectedObPosition) {
         AddAttemptDialog dialog = new AddAttemptDialog();
         Bundle args = new Bundle();
         args.putInt(PARAM_MAX, maxScore);

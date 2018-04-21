@@ -33,6 +33,7 @@ public class AddDrill extends UseCase<Drill, AddDrill.Params> {
                 params.targetScore,
                 params.obPositions,
                 params.cbPositions,
+                params.targetPositions,
                 params.purchased
 
         );
@@ -57,8 +58,9 @@ public class AddDrill extends UseCase<Drill, AddDrill.Params> {
         private boolean purchased;
         private int obPositions;
         private int cbPositions;
+        private int targetPositions;
 
-        public Params(String name, String description, byte[] image, DrillModel.Type type, int maxScore, int targetScore, int obPositions, int cbPositions, boolean purchased) {
+        public Params(String name, String description, byte[] image, DrillModel.Type type, int maxScore, int targetScore, int obPositions, int cbPositions, int targetPositions, boolean purchased) {
             this.name = name;
             this.description = description;
             this.image = image;
@@ -68,9 +70,10 @@ public class AddDrill extends UseCase<Drill, AddDrill.Params> {
             this.type = map(type);
             this.cbPositions = cbPositions;
             this.obPositions = obPositions;
+            this.targetPositions = targetPositions;
         }
 
-        public Params(String name, String description, String imageUrl, DrillModel.Type type, int maxScore, int targetScore, int obPositions, int cbPositions, boolean purchased) {
+        public Params(String name, String description, String imageUrl, DrillModel.Type type, int maxScore, int targetScore, int obPositions, int cbPositions, int targetPositions, boolean purchased) {
             this.name = name;
             this.description = description;
             this.imageUrl = imageUrl;
@@ -80,18 +83,19 @@ public class AddDrill extends UseCase<Drill, AddDrill.Params> {
             this.purchased = purchased;
             this.obPositions = obPositions;
             this.cbPositions = cbPositions;
+            this.targetPositions = targetPositions;
         }
 
-        public static Params create(String name, String description, byte[] image, DrillModel.Type type, int maxScore, int targetScore, int obPositions, int cbPositions, boolean purchased) {
-            return new Params(name, description, image, type, maxScore, targetScore, obPositions, cbPositions, purchased);
+        public static Params create(String name, String description, byte[] image, DrillModel.Type type, int maxScore, int targetScore, int obPositions, int cbPositions, int targetPositions, boolean purchased) {
+            return new Params(name, description, image, type, maxScore, targetScore, obPositions, cbPositions, targetPositions, purchased);
         }
 
-        public static Params create(String name, String description, String imageUrl, DrillModel.Type type, int maxScore, int targetScore, int obPositions, int cbPositions, boolean purchased) {
-            return new Params(name, description, imageUrl, type, maxScore, targetScore, obPositions, cbPositions, purchased);
+        public static Params create(String name, String description, String imageUrl, DrillModel.Type type, int maxScore, int targetScore, int obPositions, int cbPositions, int targetPositions, boolean purchased) {
+            return new Params(name, description, imageUrl, type, maxScore, targetScore, obPositions, cbPositions, targetPositions, purchased);
         }
 
-        public static Params create(String id, String name, String description, String imageUrl, DrillModel.Type type, int maxScore, int targetScore, int obPositions, int cbPositions, boolean purchased) {
-            Params params = new Params(name, description, imageUrl, type, maxScore, targetScore, obPositions, cbPositions, purchased);
+        public static Params create(String id, String name, String description, String imageUrl, DrillModel.Type type, int maxScore, int targetScore, int obPositions, int cbPositions, int targetPositions, boolean purchased) {
+            Params params = new Params(name, description, imageUrl, type, maxScore, targetScore, obPositions, cbPositions, targetPositions, purchased);
             params.id = id;
             return params;
         }

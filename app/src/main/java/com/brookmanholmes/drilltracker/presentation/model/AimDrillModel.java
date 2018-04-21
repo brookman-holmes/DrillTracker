@@ -1,6 +1,9 @@
 package com.brookmanholmes.drilltracker.presentation.model;
 
+import android.util.Pair;
+
 import java.util.Collection;
+import java.util.Date;
 import java.util.EnumSet;
 
 import static com.brookmanholmes.drilltracker.presentation.model.DrillModel.Dates.LAST_MONTH;
@@ -14,10 +17,10 @@ import static com.brookmanholmes.drilltracker.presentation.model.DrillModel.Date
  */
 
 public class AimDrillModel {
-    public static final String ATTEMPTS = "attempts";
-    public static final String MAKES = "makes";
-    public static final String OVER_CUTS = "over_cuts";
-    public static final String UNDER_CUTS = "under_cuts";
+    private static final String ATTEMPTS = "attempts";
+    private static final String MAKES = "makes";
+    private static final String OVER_CUTS = "over_cuts";
+    private static final String UNDER_CUTS = "under_cuts";
     public static final String ENGLISH = "english";
     public final int lifetimeAttempts;
     public final int lifetimeMakes;
@@ -40,6 +43,22 @@ public class AimDrillModel {
     public final int weekAverageAttempts;
     public final int sessionAverageAttempts;
     public float targetScore;
+
+    public static DrillModel.AttemptModel createAttempt(int makes, int overCuts, int underCuts, int english,
+                                                        int obPosition, int cbPosition) {
+        return new DrillModel.AttemptModel(
+                0,
+                0,
+                new Date(),
+                obPosition,
+                cbPosition,
+                new Pair<>(ATTEMPTS, makes + overCuts + underCuts),
+                new Pair<>(ENGLISH, english),
+                new Pair<>(MAKES, makes),
+                new Pair<>(OVER_CUTS, overCuts),
+                new Pair<>(UNDER_CUTS, underCuts)
+        );
+    }
 
     public AimDrillModel(Collection<DrillModel.AttemptModel> attempts, EnumSet<English> englishes, int targetScore) {
         this.targetScore = (float) targetScore / (float) 100;

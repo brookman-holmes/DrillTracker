@@ -1,6 +1,9 @@
 package com.brookmanholmes.drilltracker.presentation.model;
 
+import android.util.Pair;
+
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -9,6 +12,16 @@ import java.util.Map;
  */
 
 public class SpeedDrillModel {
+    private static final String TWO_DIAMOND_SOFT = "TWO_DIAMOND_SOFT";
+    private static final String ONE_DIAMOND_SOFT = "DIAMOND_SOFT";
+    private static final String HALF_DIAMOND_SOFT = "HALF_DIAMOND_SOFT";
+    private static final String QUARTER_DIAMOND_SOFT = "QUARTER_DIAMOND_SOFT";
+    private static final String CORRECT = "CORRECT";
+    private static final String QUARTER_DIAMOND_HARD = "QUARTER_DIAMOND_HARD";
+    private static final String HALF_DIAMOND_HARD = "HALF_DIAMOND_HARD";
+    private static final String ONE_DIAMOND_HARD = "DIAMOND_HARD";
+    private static final String TWO_DIAMOND_HARD = "TWO_DIAMOND_HARD";
+
     public Map<Speed, Integer> speeds;
 
     public int sessionAttempts, lifetimeAttempts;
@@ -17,6 +30,28 @@ public class SpeedDrillModel {
     public int sessionSoft, lifetimeSoft;
     public float sessionSuccessRate, lifetimeSuccessRate;
     public float sessionAvgError, lifetimeAvgError;
+
+    public static DrillModel.AttemptModel createAttempt(int obPosition, int cbPosition, int twoDiamondsSoftAttempts,
+                                                        int diamondSoftAttempts, int halfDiamondSoftAttempts, int quarterDiamondSoftAttempts,
+                                                        int correctSpeedAttempts, int quarterDiamondHardAttempts, int halfDiamondHardAttempts,
+                                                        int diamondHardAttempts, int twoDiamondsHardAttempts) {
+        return new DrillModel.AttemptModel(
+                0,
+                0,
+                new Date(),
+                obPosition,
+                cbPosition,
+                new Pair<>(TWO_DIAMOND_HARD, twoDiamondsHardAttempts),
+                new Pair<>(ONE_DIAMOND_HARD, diamondHardAttempts),
+                new Pair<>(HALF_DIAMOND_HARD, halfDiamondHardAttempts),
+                new Pair<>(QUARTER_DIAMOND_HARD, quarterDiamondHardAttempts),
+                new Pair<>(CORRECT, correctSpeedAttempts),
+                new Pair<>(QUARTER_DIAMOND_SOFT, quarterDiamondSoftAttempts),
+                new Pair<>(HALF_DIAMOND_SOFT, halfDiamondSoftAttempts),
+                new Pair<>(ONE_DIAMOND_SOFT, diamondSoftAttempts),
+                new Pair<>(TWO_DIAMOND_SOFT, twoDiamondsSoftAttempts)
+        );
+    }
 
     private SpeedDrillModel() {
         speeds = new HashMap<>();

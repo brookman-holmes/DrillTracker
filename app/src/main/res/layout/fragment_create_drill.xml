@@ -144,6 +144,22 @@
                 app:cnp2_title="Object ball positions" />
 
             <ImageView
+                android:id="@+id/targetPositionsDivider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:alpha=".12"
+                android:src="@android:color/black" />
+
+            <com.brookmanholmes.drilltracker.presentation.view.CustomNumberPickerV2
+                android:id="@+id/targetPositionsPicker"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cnp2_max="15"
+                app:cnp2_min="1"
+                app:cnp2_starting_value="1"
+                app:cnp2_title="Number of targets" />
+
+            <ImageView
                 android:id="@+id/maxScoreDivider"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"

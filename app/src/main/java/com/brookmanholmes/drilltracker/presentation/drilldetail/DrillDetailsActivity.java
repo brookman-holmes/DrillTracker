@@ -22,6 +22,7 @@ public class DrillDetailsActivity extends BaseActivity {
     private static final String INTENT_EXTRA_PARAM_DRILL_TYPE = "com.brookmanholmes.INTENT_PARAM_DRILL_TYPE";
     private static final String INTENT_EXTRA_PARAM_DRILL_OB_POS = "com.brookmanholmes.INTENT_PARAM_DRILL_OB_POS";
     private static final String INTENT_EXTRA_PARAM_DRILL_CB_POS = "com.brookmanholmes.INTENT_PARAM_DRILL_CB_POS";
+    private static final String INTENT_EXTRA_PARAM_DRILL_TARGET_POS = "com.brookmanholmes.INTENT_PARAM_DRILL_TARGET_POS";
 
     private static final String INSTANCE_STATE_PARAM_DRILL_ID = "com.brookmanholmes.STATE_PARAM_DRILL_ID";
     private static final String INSTANCE_STATE_PARAM_DRILL_MAX = "com.brookmanholmes.STATE_DRILL_MAX";
@@ -30,17 +31,18 @@ public class DrillDetailsActivity extends BaseActivity {
     private static final String INSTANCE_STATE_PARAM_DRILL_TYPE = "com.brookmanholmes.STATE_PARAM_DRILL_TYPE";
     private static final String INSTANCE_STATE_PARAM_DRILL_CB_POS = "com.brookmanholmes.STATE_DRILL_CB_POS";
     private static final String INSTANCE_STATE_PARAM_DRILL_OB_POS = "com.brookmanholmes.STATE_PARAM_DRILL_OB_POS";
+    private static final String INSTANCE_STATE_PARAM_DRILL_TARGET_POS = "com.brookmanholmes.STATE_PARAM_DRILL_TARGET_POS";
     private String drillId, imageUrl;
-    private int maxValue, targetValue, obPositions, cbPositions;
+    private int maxValue, targetValue, obPositions, cbPositions, targetPositions;
     private DrillModel.Type type;
 
-    public static Intent getIntent(Context context, String drillId, DrillModel.Type type, String url, int maxValue, int targetValue, int obPositions, int cbPositions) {
+    public static Intent getIntent(Context context, String drillId, DrillModel.Type type, String url, int maxValue, int targetValue, int obPositions, int cbPositions, int targetPositions) {
         Intent intent = new Intent(context, DrillDetailsActivity.class);
-        updateExtras(intent, drillId, type, url, maxValue, targetValue, obPositions, cbPositions);
+        updateExtras(intent, drillId, type, url, maxValue, targetValue, obPositions, cbPositions, targetPositions);
         return intent;
     }
 
-    static void updateExtras(Intent intent, String drillId, DrillModel.Type type, String url, int maxValue, int targetValue, int obPositions, int cbPositions) {
+    static void updateExtras(Intent intent, String drillId, DrillModel.Type type, String url, int maxValue, int targetValue, int obPositions, int cbPositions, int targetPositions) {
         intent.putExtra(INTENT_EXTRA_PARAM_DRILL_ID, drillId);
         intent.putExtra(INTENT_EXTRA_PARAM_DRILL_MAX, maxValue);
         intent.putExtra(INTENT_EXTRA_PARAM_DRILL_TARGET, targetValue);
@@ -48,6 +50,7 @@ public class DrillDetailsActivity extends BaseActivity {
         intent.putExtra(INTENT_EXTRA_PARAM_DRILL_TYPE, type);
         intent.putExtra(INTENT_EXTRA_PARAM_DRILL_CB_POS, cbPositions);
         intent.putExtra(INTENT_EXTRA_PARAM_DRILL_OB_POS, obPositions);
+        intent.putExtra(INTENT_EXTRA_PARAM_DRILL_TARGET_POS, targetPositions);
     }
 
     @Override
@@ -61,6 +64,7 @@ public class DrillDetailsActivity extends BaseActivity {
             targetValue = savedInstanceState.getInt(INSTANCE_STATE_PARAM_DRILL_TARGET);
             obPositions = savedInstanceState.getInt(INSTANCE_STATE_PARAM_DRILL_OB_POS);
             cbPositions = savedInstanceState.getInt(INSTANCE_STATE_PARAM_DRILL_CB_POS);
+            targetPositions = savedInstanceState.getInt(INSTANCE_STATE_PARAM_DRILL_TARGET_POS);
             type = (DrillModel.Type) savedInstanceState.getSerializable(INSTANCE_STATE_PARAM_DRILL_TYPE);
         }
     }
@@ -75,6 +79,7 @@ public class DrillDetailsActivity extends BaseActivity {
             outState.putSerializable(INSTANCE_STATE_PARAM_DRILL_TYPE, type);
             outState.putInt(INSTANCE_STATE_PARAM_DRILL_CB_POS, obPositions);
             outState.putInt(INSTANCE_STATE_PARAM_DRILL_CB_POS, cbPositions);
+            outState.putInt(INSTANCE_STATE_PARAM_DRILL_TARGET_POS, targetPositions);
         }
         super.onSaveInstanceState(outState);
     }
@@ -87,16 +92,9 @@ public class DrillDetailsActivity extends BaseActivity {
         targetValue = getIntent().getIntExtra(INTENT_EXTRA_PARAM_DRILL_TARGET, -1);
         cbPositions = getIntent().getIntExtra(INTENT_EXTRA_PARAM_DRILL_CB_POS, -1);
         obPositions = getIntent().getIntExtra(INTENT_EXTRA_PARAM_DRILL_OB_POS, -1);
+        targetPositions = getIntent().getIntExtra(INTENT_EXTRA_PARAM_DRILL_TARGET_POS, -1);
         type = (DrillModel.Type) getIntent().getSerializableExtra(INTENT_EXTRA_PARAM_DRILL_TYPE);
-
-        if (type == DrillModel.Type.SAFETY) {
-            return SafetyDrillDetailsFragment.forDrill(drillId, imageUrl, obPositions, cbPositions);
-        } else if (type == DrillModel.Type.AIMING || type == DrillModel.Type.KICKING || type == DrillModel.Type.BANKING) {
-            return AimDrillDetailsFragment.forDrill(drillId, imageUrl, maxValue, targetValue, obPositions, cbPositions);
-        } else if (type == DrillModel.Type.SPEED) {
-            return SpeedDrillDetailsFragment.forDrill(drillId, imageUrl, maxValue, targetValue, obPositions, cbPositions);
-        } else {
-            return DrillDetailsFragment.forDrill(drillId, imageUrl, maxValue, targetValue, obPositions, cbPositions);
-        }
+        return BaseDrillDetailsFragment.createDrillDetailsFragment(drillId, imageUrl, type, maxValue,
+                targetValue, obPositions, cbPositions, targetPositions);
     }
 }

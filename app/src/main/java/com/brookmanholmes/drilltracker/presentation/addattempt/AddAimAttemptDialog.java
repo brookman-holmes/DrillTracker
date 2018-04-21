@@ -31,7 +31,6 @@ public class AddAimAttemptDialog extends BaseDialogFragment<AddAimAttemptDialogP
     private static final String PARAM_VALUE = "param_value";
     private static final String PARAM_OVER_CUTS = "param_over_cuts";
     private static final String PARAM_UNDER_CUTS = "param_under_cuts";
-    private static final String PARAM_TARGET = "param_target";
     private static final String PARAM_CB_POS = "param_cb_pos";
     private static final String PARAM_OB_POS = "param_ob_pos";
     private static final String PARAM_SELECTED_CB_POS = "param_selected_cb_pos";
@@ -56,13 +55,12 @@ public class AddAimAttemptDialog extends BaseDialogFragment<AddAimAttemptDialogP
             ballsMade = 0,
             english = 2;
 
-    public static AddAimAttemptDialog newInstance(String drillId, int target, int cbPositions, int obPositions, int selectedCbPosition, int selectedObPosition) {
+    static AddAimAttemptDialog newInstance(String drillId, int cbPositions, int obPositions, int selectedCbPosition, int selectedObPosition) {
         AddAimAttemptDialog dialog = new AddAimAttemptDialog();
         Bundle args = new Bundle();
         args.putString(PARAM_DRILL_ID, drillId);
         args.putInt(PARAM_CB_POS, cbPositions);
         args.putInt(PARAM_OB_POS, obPositions);
-        args.putInt(PARAM_TARGET, target);
         args.putInt(PARAM_SELECTED_CB_POS, selectedCbPosition);
         args.putInt(PARAM_SELECTED_OB_POS, selectedObPosition);
 

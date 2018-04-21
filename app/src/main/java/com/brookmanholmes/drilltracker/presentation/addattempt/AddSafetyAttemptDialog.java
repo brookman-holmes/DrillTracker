@@ -28,7 +28,9 @@ public class AddSafetyAttemptDialog extends BaseDialogFragment<AddSafetyAttemptD
     private static final String TAG = AddSafetyAttemptDialog.class.getName();
 
     private static final String PARAM_DRILL_ID = "param_drill_id";
-    private static final String PARAM_VALUE = "param_value";
+    private static final String PARAM_SPIN_VALUE = "param_spin_value";
+    private static final String PARAM_THICKNESS_VALUE = "param_thickness_value";
+    private static final String PARAM_SPEED_VALUE = "param_speed_value";
     private static final String PARAM_CB_POS = "param_cb_pos";
     private static final String PARAM_OB_POS = "param_ob_pos";
     private static final String PARAM_SELECTED_CB_POS = "param_selected_cb_pos";
@@ -45,9 +47,11 @@ public class AddSafetyAttemptDialog extends BaseDialogFragment<AddSafetyAttemptD
     @BindView(R.id.cbPositionsSpinner)
     Spinner cbPositionsSpinner;
 
-    EnumSet<SafetyDrillModel.SafetyTypes> safetyTypes = EnumSet.noneOf(SafetyDrillModel.SafetyTypes.class);
+    SafetyDrillModel.SafetyTypes speedSelection = SafetyDrillModel.SafetyTypes.SPEED_CORRECT;
+    SafetyDrillModel.SafetyTypes spinSelection = SafetyDrillModel.SafetyTypes.SPIN_CORRECT;
+    SafetyDrillModel.SafetyTypes thicknessSelection = SafetyDrillModel.SafetyTypes.THICKNESS_CORRECT;
 
-    public static AddSafetyAttemptDialog newInstance(String drillId, int cbPositions, int obPositions, int selectedCbPosition, int selectedObPosition) {
+    static AddSafetyAttemptDialog newInstance(String drillId, int cbPositions, int obPositions, int selectedCbPosition, int selectedObPosition) {
         AddSafetyAttemptDialog dialog = new AddSafetyAttemptDialog();
         Bundle args = new Bundle();
         args.putString(PARAM_DRILL_ID, drillId);
@@ -65,14 +69,19 @@ public class AddSafetyAttemptDialog extends BaseDialogFragment<AddSafetyAttemptD
         super.onCreate(savedInstanceState);
 
         if (savedInstanceState != null) {
-            safetyTypes = (EnumSet<SafetyDrillModel.SafetyTypes>) savedInstanceState.getSerializable(PARAM_VALUE);
+            spinSelection = (SafetyDrillModel.SafetyTypes) savedInstanceState.getSerializable(PARAM_SPIN_VALUE);
+            speedSelection = (SafetyDrillModel.SafetyTypes) savedInstanceState.getSerializable(PARAM_SPEED_VALUE);
+            thicknessSelection = (SafetyDrillModel.SafetyTypes) savedInstanceState.getSerializable(PARAM_THICKNESS_VALUE);
         }
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putSerializable(PARAM_VALUE, getSafetyTypes());
+
+        outState.putSerializable(PARAM_SPEED_VALUE, getSpeedValue());
+        outState.putSerializable(PARAM_SPIN_VALUE, getSpinValue());
+        outState.putSerializable(PARAM_THICKNESS_VALUE, getThicknessValue());
     }
 
     @Override
@@ -85,9 +94,10 @@ public class AddSafetyAttemptDialog extends BaseDialogFragment<AddSafetyAttemptD
         View view = LayoutInflater.from(dialogBuilder.getContext())
                 .inflate(R.layout.dialog_add_safety_attempt, null, false);
         ButterKnife.bind(this, view);
-        spinPicker.setItems(getSpinItems(), 1);
-        speedPicker.setItems(getSpeedItems(), 1);
-        thicknessPicker.setItems(getThicknessItems(), 1);
+        spinPicker.setItems(createPickerItems("Too little", "Correct", "Too much"), getSafetyTypesSelectionValue(spinSelection));
+        speedPicker.setItems(createPickerItems("Too soft", "Correct", "Too hard"), getSafetyTypesSelectionValue(speedSelection));
+        thicknessPicker.setItems(createPickerItems("Too thin", "Correct", "Too thick"), getSafetyTypesSelectionValue(thicknessSelection));
+
         obPositionsSpinner.setAdapter(SpinnerAdapterHelper.createNumberedListAdapter(getContext(), 1, getObBallPositions() + 1, "OB Position "));
         cbPositionsSpinner.setAdapter(SpinnerAdapterHelper.createNumberedListAdapter(getContext(), 1, getCueBallPositions() + 1, "CB Position "));
         obPositionsSpinner.setSelection(getDefaultSelectedObBallPosition());
@@ -150,6 +160,31 @@ public class AddSafetyAttemptDialog extends BaseDialogFragment<AddSafetyAttemptD
         return getObBallPositions() > 1;
     }
 
+    private int getSafetyTypesSelectionValue(SafetyDrillModel.SafetyTypes type) {
+        switch (type) {
+            case SPEED_HARD:
+                return 2;
+            case SPEED_SOFT:
+                return 0;
+            case SPEED_CORRECT:
+                return 1;
+            case SPIN_LESS:
+                return 0;
+            case SPIN_MORE:
+                return 2;
+            case SPIN_CORRECT:
+                return 1;
+            case THICKNESS_THIN:
+                return 0;
+            case THICKNESS_THICK:
+                return 2;
+            case THICKNESS_CORRECT:
+                return 1;
+            default:
+                return 1;
+        }
+    }
+
     private SafetyDrillModel.SafetyTypes getSpinValue() {
         int value = spinPicker.getSelectedIndex();
 
@@ -190,29 +225,11 @@ public class AddSafetyAttemptDialog extends BaseDialogFragment<AddSafetyAttemptD
         return EnumSet.of(getSpeedValue(), getSpinValue(), getThicknessValue());
     }
 
-    private List<HorizontalPicker.PickerItem> getSpinItems() {
+    private List<HorizontalPicker.PickerItem> createPickerItems(String... items) {
         List<HorizontalPicker.PickerItem> result = new ArrayList<>();
-        result.add(new HorizontalPicker.TextItem("Too little"));
-        result.add(new HorizontalPicker.TextItem("Correct"));
-        result.add(new HorizontalPicker.TextItem("Too much"));
-
-        return result;
-    }
-
-    private List<HorizontalPicker.PickerItem> getSpeedItems() {
-        List<HorizontalPicker.PickerItem> result = new ArrayList<>();
-        result.add(new HorizontalPicker.TextItem("Too soft"));
-        result.add(new HorizontalPicker.TextItem("Correct"));
-        result.add(new HorizontalPicker.TextItem("Too hard"));
-
-        return result;
-    }
-
-    private List<HorizontalPicker.PickerItem> getThicknessItems() {
-        List<HorizontalPicker.PickerItem> result = new ArrayList<>();
-        result.add(new HorizontalPicker.TextItem("Too thin"));
-        result.add(new HorizontalPicker.TextItem("Correct"));
-        result.add(new HorizontalPicker.TextItem("Too Thick"));
+        for (String item : items) {
+            result.add(new HorizontalPicker.TextItem(item));
+        }
 
         return result;
     }

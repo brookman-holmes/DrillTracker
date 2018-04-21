@@ -1,15 +1,12 @@
 package com.brookmanholmes.drilltracker.presentation.drilldetail;
 
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.widget.Spinner;
 
 import com.brookmanholmes.drilltracker.R;
-import com.brookmanholmes.drilltracker.presentation.addattempt.AddSafetyAttemptDialog;
 import com.brookmanholmes.drilltracker.presentation.model.DrillModel;
 import com.brookmanholmes.drilltracker.presentation.model.SafetyDrillModel;
 import com.brookmanholmes.drilltracker.presentation.view.util.ChartUtil;
-import com.brookmanholmes.drilltracker.presentation.view.util.ImageHandler;
 
 import java.util.Date;
 
@@ -41,7 +38,7 @@ public class SafetyDrillDetailsFragment extends BaseDrillDetailsFragment {
     @BindView(R.id.thicknessHistoryChart)
     PieChartView thicknessHistoryChart;
 
-    public static SafetyDrillDetailsFragment forDrill(String drillId, String url, int cbPositions, int obPositions) {
+    static SafetyDrillDetailsFragment forDrill(String drillId, String url, int cbPositions, int obPositions) {
         final SafetyDrillDetailsFragment fragment = new SafetyDrillDetailsFragment();
         final Bundle args = new Bundle();
         args.putString(PARAM_DRILL_ID, drillId);
@@ -54,32 +51,14 @@ public class SafetyDrillDetailsFragment extends BaseDrillDetailsFragment {
 
     @Override
     public void renderDrill(DrillModel drill) {
+        super.renderDrill(drill);
+
         if (drill != null) {
-            setArguments(drill);
             drill = new DrillModel(drill, getSelectedCbPosition(), getSelectedObPosition());
-
-            ImageHandler.loadImage(image, drill.imageUrl);
-
-            toolbar.setTitle(drill.name);
-            description.setText(drill.description);
 
             ChartUtil.setupChart(speedChart, thicknessChart, spinChart, new SafetyDrillModel(DrillModel.getSessionAttempts(drill.attemptModels)));
             ChartUtil.setupChart(speedHistoryChart, thicknessHistoryChart, spinHistoryChart, new SafetyDrillModel(DrillModel.getAttemptsBetween(drill.attemptModels, getDateSelected(), new Date())));
-
-            setMenuIconEnabled(R.id.ic_edit, !drill.purchased);
-            setMenuIconEnabled(R.id.ic_undo_attempt, drill.attemptModels.size() > 0);
         }
-    }
-
-    @Override
-    protected DialogFragment getAddAttemptDialog() {
-        return AddSafetyAttemptDialog.newInstance(
-                getDrillId(),
-                getCbPositions(),
-                getObPositions(),
-                getSelectedCbPosition(),
-                getSelectedObPosition()
-        );
     }
 
     @OnItemSelected(R.id.spinner)

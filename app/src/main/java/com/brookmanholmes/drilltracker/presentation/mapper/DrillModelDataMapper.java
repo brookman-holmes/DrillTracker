@@ -38,6 +38,7 @@ public class DrillModelDataMapper {
                 model.defaultTargetScore,
                 model.obPositions,
                 model.cbPositions,
+                model.targetPositions,
                 model.purchased
         );
     }
@@ -52,6 +53,7 @@ public class DrillModelDataMapper {
                 drill.getDefaultTargetScore(),
                 drill.getObPositions(),
                 drill.getCbPositions(),
+                drill.getTargetPositions(),
                 DrillModel.Type.values()[drill.getType().ordinal()],
                 drill.isPurchased(),
                 transformAttempts(drill.getAttempts())

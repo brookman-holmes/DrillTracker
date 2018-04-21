@@ -5,28 +5,25 @@ import com.brookmanholmes.drilltracker.domain.Drill;
 import com.brookmanholmes.drilltracker.domain.interactor.AddAttempt;
 import com.brookmanholmes.drilltracker.domain.interactor.DefaultObserver;
 import com.brookmanholmes.drilltracker.presentation.base.Presenter;
-import com.brookmanholmes.drilltracker.presentation.model.SafetyDrillModel;
+import com.brookmanholmes.drilltracker.presentation.model.PositionalDrillModel;
 
 import java.util.EnumSet;
 
-/**
- * Created by Brookman Holmes on 7/28/2017.
- */
-class AddSafetyAttemptDialogPresenter implements Presenter {
-    private final AddAttempt addAttempt;
+class AddPositionalAttemptDialogPresenter implements Presenter {
+    private AddAttempt addAttempt;
 
-    AddSafetyAttemptDialogPresenter() {
+    public AddPositionalAttemptDialogPresenter() {
         addAttempt = new AddAttempt(DataStoreFactory.getDrillRepo());
     }
 
-    AddSafetyAttemptDialogPresenter(AddAttempt addAttempt) {
+    public AddPositionalAttemptDialogPresenter(AddAttempt addAttempt) {
         this.addAttempt = addAttempt;
     }
 
-    void addAttempt(String drillId, EnumSet<SafetyDrillModel.SafetyTypes> safetyTypes, int obPosition, int cbPosition) {
+    void addAttempt(String drillId, int cbPosition, int targetPosition, EnumSet<PositionalDrillModel.PositionalTypes> positionalTypes) {
         addAttempt.execute(
                 new DefaultObserver<Drill>(),
-                AddAttempt.Params.create(drillId, SafetyDrillModel.createAttempt(obPosition, cbPosition, safetyTypes))
+                AddAttempt.Params.create(drillId, PositionalDrillModel.createAttempt(cbPosition, targetPosition, positionalTypes))
         );
     }
 

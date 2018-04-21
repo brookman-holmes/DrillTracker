@@ -50,7 +50,7 @@ public class AddSpeedAttemptDialog extends BaseDialogFragment<AddSpeedAttemptDia
     @BindView(R.id.cbPositionsSpinner)
     Spinner cbPositionsSpinner;
 
-    public static AddSpeedAttemptDialog newInstance(String drillId, int cbPositions, int obPositions, int selectedCbPosition, int selectedObPosition) {
+    static AddSpeedAttemptDialog newInstance(String drillId, int cbPositions, int obPositions, int selectedCbPosition, int selectedObPosition) {
         AddSpeedAttemptDialog dialog = new AddSpeedAttemptDialog();
         Bundle args = new Bundle();
         args.putString(PARAM_DRILL_ID, drillId);

@@ -3,12 +3,12 @@ package com.brookmanholmes.drilltracker.presentation.view.util;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.ColorInt;
-import android.util.Log;
 
 import com.brookmanholmes.drilltracker.R;
 import com.brookmanholmes.drilltracker.presentation.model.AimDrillModel;
 import com.brookmanholmes.drilltracker.presentation.model.DrillModel;
 import com.brookmanholmes.drilltracker.presentation.model.English;
+import com.brookmanholmes.drilltracker.presentation.model.PositionalDrillModel;
 import com.brookmanholmes.drilltracker.presentation.model.SafetyDrillModel;
 import com.brookmanholmes.drilltracker.presentation.model.Speed;
 import com.brookmanholmes.drilltracker.presentation.model.SpeedDrillModel;
@@ -48,7 +48,6 @@ public class ChartUtil {
     private static final String TAG = ChartUtil.class.getName();
 
     public static void setupChart(ColumnChartView chart, SpeedDrillModel model) {
-        Log.i(TAG, "setupChart: " + model.speeds);
         int maxValue = 0;
         List<Column> columns = new ArrayList<>();
         for (Speed speed : Speed.values()) {
@@ -80,39 +79,134 @@ public class ChartUtil {
         chart.setColumnChartData(data);
     }
 
+    public static void setupChart(PieChartView vSpinChart, PieChartView hSpinChart, PieChartView speedChart, PieChartView distanceChart, PositionalDrillModel model) {
+        if (model.getAttempts() == 0) {
+            List<SliceValue> blankSlices = new ArrayList<>();
+            blankSlices.add(new SliceValue(1));
+            speedChart.setPieChartData(
+                    new PieChartData(blankSlices)
+                            .setHasCenterCircle(true)
+                            .setCenterText1("Speed")
+                            .setCenterText1FontSize(14)
+            );
+            hSpinChart.setPieChartData(
+                    new PieChartData(blankSlices)
+                            .setHasCenterCircle(true)
+                            .setCenterText1("Horizontal")
+                            .setCenterText2("spin")
+                            .setCenterText2FontSize(14)
+                            .setCenterText1FontSize(14)
+            );
+            vSpinChart.setPieChartData(
+                    new PieChartData(blankSlices)
+                            .setHasCenterCircle(true)
+                            .setCenterText1("Vertical")
+                            .setCenterText2("spin")
+                            .setCenterText2FontSize(14)
+                            .setCenterText1FontSize(14)
+            );
+            distanceChart.setPieChartData(
+                    new PieChartData(blankSlices)
+                            .setHasCenterCircle(true)
+                            .setCenterText1("Distance")
+                            .setCenterText2("from target")
+                            .setCenterText2FontSize(14)
+                            .setCenterText1FontSize(14)
+            );
+        } else {
+            hSpinChart.setPieChartData(createPieChartData(
+                    hSpinChart.getContext(),
+                    "Horizontal",
+                    "spin",
+                    model.gethSpinCorrect(),
+                    model.gethSpinMore(),
+                    model.gethSpinLess()
+            ));
+            vSpinChart.setPieChartData(createPieChartData(
+                    hSpinChart.getContext(),
+                    "Vertical",
+                    "spin",
+                    model.getvSpinCorrect(),
+                    model.getvSpinMore(),
+                    model.getvSpinLess()
+            ));
+            speedChart.setPieChartData(createPieChartData(
+                    hSpinChart.getContext(),
+                    "Speed",
+                    model.getSpeedCorrect(),
+                    model.getSpeedHard(),
+                    model.getSpeedSoft()
+            ));
+            distanceChart.setPieChartData(createPieChartData(
+                    distanceChart.getContext(),
+                    model.getDistanceZero(),
+                    model.getDistanceSix(),
+                    model.getDistanceTwelve(),
+                    model.getDistanceEighteen(),
+                    model.getDistanceTwentyFour()
+            ));
+        }
+    }
+
+    private static PieChartData createPieChartData(Context context, float value1, float value2, float value3, float value4, float value5) {
+        List<SliceValue> sliceValues = new ArrayList<>();
+        sliceValues.add(new SliceValue(value1, getColor(context, R.color.chart_green)));
+        sliceValues.add(new SliceValue(value2, getColor(context, R.color.chart_yellow)));
+        sliceValues.add(new SliceValue(value3, getColor(context, R.color.chart_orange)));
+        sliceValues.add(new SliceValue(value4, getColor(context, R.color.chart_red)));
+        sliceValues.add(new SliceValue(value5, getColor(context, R.color.chart_redder)));
+        PieChartData data = new PieChartData(sliceValues);
+        data.setHasLabels(true)
+                .setHasCenterCircle(true)
+                .setCenterText1("Distance")
+                .setCenterText2("from target")
+                .setCenterText2FontSize(14)
+                .setCenterText1FontSize(14);
+        return data;
+    }
+
     public static void setupChart(PieChartView speedChart, PieChartView thicknessChart, PieChartView spinChart, SafetyDrillModel model) {
         if (model.getAttempts() == 0) {
             List<SliceValue> blankSlices = new ArrayList<>();
             blankSlices.add(new SliceValue(1));
-            speedChart.setPieChartData(new PieChartData(blankSlices));
-            spinChart.setPieChartData(new PieChartData(blankSlices));
-            thicknessChart.setPieChartData(new PieChartData(blankSlices));
+            speedChart.setPieChartData(new PieChartData(blankSlices).setHasCenterCircle(true).setCenterText1("Speed").setCenterText1FontSize(14));
+            spinChart.setPieChartData(new PieChartData(blankSlices).setHasCenterCircle(true).setCenterText1("Spin").setCenterText1FontSize(14));
+            thicknessChart.setPieChartData(new PieChartData(blankSlices).setHasCenterCircle(true).setCenterText1("Thickness").setCenterText1FontSize(14));
         } else {
-            List<SliceValue> speedValues = new ArrayList<>();
-            speedValues.add(new SliceValue(model.getSpeedCorrect(), getColor(speedChart.getContext(), R.color.chart_green)));
-            speedValues.add(new SliceValue(model.getSpeedHard(), getColor(speedChart.getContext(), R.color.chart_red)));
-            speedValues.add(new SliceValue(model.getSpeedSoft(), getColor(speedChart.getContext(), R.color.chart_blue)));
-            PieChartData speedData = new PieChartData(speedValues);
-            speedData.setHasLabels(true);
-            speedChart.setPieChartData(speedData);
-
-            List<SliceValue> thicknessValues = new ArrayList<>();
-            thicknessValues.add(new SliceValue(model.getThicknessCorrect(), getColor(speedChart.getContext(), R.color.chart_green)));
-            thicknessValues.add(new SliceValue(model.getThicknessThick(), getColor(speedChart.getContext(), R.color.chart_red)));
-            thicknessValues.add(new SliceValue(model.getThicknessThin(), getColor(speedChart.getContext(), R.color.chart_blue)));
-            PieChartData thicknessData = new PieChartData(thicknessValues);
-            thicknessData.setHasLabels(true);
-            thicknessChart.setPieChartData(thicknessData);
-
-            List<SliceValue> spinValues = new ArrayList<>();
-            spinValues.add(new SliceValue(model.getSpinCorrect(), getColor(speedChart.getContext(), R.color.chart_green)));
-            spinValues.add(new SliceValue(model.getSpinMore(), getColor(speedChart.getContext(), R.color.chart_red)));
-            spinValues.add(new SliceValue(model.getSpinLess(), getColor(speedChart.getContext(), R.color.chart_blue)));
-            PieChartData spinData = new PieChartData(spinValues);
-            spinData.setHasLabels(true);
-            spinChart.setPieChartData(spinData);
+            speedChart.setPieChartData(createPieChartData(speedChart.getContext(), "Speed", model.getSpeedCorrect(), model.getSpeedHard(), model.getSpeedSoft()));
+            thicknessChart.setPieChartData(createPieChartData(spinChart.getContext(), "Thickness", model.getThicknessCorrect(), model.getThicknessThick(), model.getThicknessThin()));
+            spinChart.setPieChartData(createPieChartData(spinChart.getContext(), "Spin", model.getSpinCorrect(), model.getSpinMore(), model.getSpinLess()));
         }
     }
+
+    private static PieChartData createPieChartData(Context context, String label, float value1, float value2, float value3) {
+        List<SliceValue> sliceValues = new ArrayList<>();
+        sliceValues.add(new SliceValue(value1, getColor(context, R.color.chart_green)));
+        sliceValues.add(new SliceValue(value2, getColor(context, R.color.chart_red)));
+        sliceValues.add(new SliceValue(value3, getColor(context, R.color.chart_blue)));
+        PieChartData data = new PieChartData(sliceValues);
+        data.setHasLabels(true)
+                .setCenterText1(label)
+                .setCenterText1FontSize(14)
+                .setHasCenterCircle(true);
+        return data;
+    }
+
+    private static PieChartData createPieChartData(Context context, String label1, String label2, float value1, float value2, float value3) {
+        List<SliceValue> sliceValues = new ArrayList<>();
+        sliceValues.add(new SliceValue(value1, getColor(context, R.color.chart_green)));
+        sliceValues.add(new SliceValue(value2, getColor(context, R.color.chart_red)));
+        sliceValues.add(new SliceValue(value3, getColor(context, R.color.chart_blue)));
+        PieChartData data = new PieChartData(sliceValues);
+        data.setHasLabels(true)
+                .setCenterText1(label1)
+                .setCenterText2(label2)
+                .setCenterText1FontSize(14)
+                .setCenterText2FontSize(14)
+                .setHasCenterCircle(true);
+        return data;
+    }
+
 
     public static void setupChart(LineChartView chart, DrillModel model) {
         List<PointValue> points = getPointValues(getScoreArray(new ArrayList<>(DrillModel.getSessionAttempts(model.attemptModels))));
