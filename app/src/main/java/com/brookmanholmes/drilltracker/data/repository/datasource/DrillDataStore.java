@@ -5,8 +5,8 @@ import com.google.firebase.storage.UploadTask;
 
 import java.util.List;
 
-import io.reactivex.Maybe;
 import io.reactivex.Observable;
+import io.reactivex.Single;
 
 /**
  * Interface that represents a data store from where data is retrieved.
@@ -46,12 +46,12 @@ public interface DrillDataStore {
     void removeLastAttempt(final String id);
 
     /**
-     * Get a {@link Maybe} which will upload an image to the data store and emit an
+     * Get a {@link Single} which will upload an image to the data store and emit an
      * {@link UploadTask.TaskSnapshot} to allow access to the URL of the image
      * @param id The id of the drill
      * @param image The image of the drill
      */
-    Maybe<UploadTask.TaskSnapshot> uploadImage(String id, byte[] image);
+    Single<UploadTask.TaskSnapshot> uploadImage(String id, byte[] image);
 
     /**
      * Get an {@link Observable} which will update a drill and emit a {@link DrillEntity}

@@ -1,13 +1,15 @@
 package com.brookmanholmes.drilltracker.presentation.base;
 
 import android.content.Context;
-import android.support.annotation.CallSuper;
-import android.support.annotation.IdRes;
-import android.support.v7.util.DiffUtil;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.CallSuper;
+import androidx.annotation.IdRes;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.brookmanholmes.drilltracker.R;
 import com.brookmanholmes.drilltracker.presentation.model.Model;
@@ -20,28 +22,29 @@ import java.util.List;
  */
 
 public abstract class BaseRecyclerViewAdapter<T extends Model> extends RecyclerView.Adapter<BaseRecyclerViewAdapter.ViewHolder<T>> {
-    protected static final int VIEW_FOOTER = -1;
+    private static final int VIEW_FOOTER = -1;
     protected static final int VIEW_DEFAULT = 1;
     protected final LayoutInflater inflater;
     protected List<T> data;
     private OnItemClickListener<T> onItemClickListener;
 
-    public BaseRecyclerViewAdapter(Context context) {
+    protected BaseRecyclerViewAdapter(Context context) {
         inflater = LayoutInflater.from(context);
         this.data = Collections.emptyList();
     }
 
+    @NonNull
     @Override
-    public ViewHolder<T> onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder<T> onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         if (viewType == VIEW_FOOTER) {
             return new Footer<>(inflater.inflate(R.layout.row_footer, parent, false));
         } else {
-            return getDefaultViewHolder(parent, viewType);
+            return getDefaultViewHolder(parent);
         }
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder<T> holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder<T> holder, int position) {
         if (getItemViewType(position) != VIEW_FOOTER) {
             holder.bind(data.get(position), onItemClickListener);
         }
@@ -77,17 +80,16 @@ public abstract class BaseRecyclerViewAdapter<T extends Model> extends RecyclerV
         this.onItemClickListener = listener;
     }
 
-    protected abstract ViewHolder<T> getDefaultViewHolder(ViewGroup parent, int viewType);
+    protected abstract ViewHolder<T> getDefaultViewHolder(ViewGroup parent);
 
     public interface OnItemClickListener<T> {
         void onItemClicked(T item, @IdRes int res);
-
         void onItemLongClicked(T item);
     }
 
     protected static class ViewHolder<T> extends RecyclerView.ViewHolder {
         protected OnItemClickListener<T> onItemClickListener;
-        protected T model;
+        T model;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -121,7 +123,8 @@ public abstract class BaseRecyclerViewAdapter<T extends Model> extends RecyclerV
     }
 
     private static class DiffUtilCallback<T extends Model> extends DiffUtil.Callback {
-        List<T> oldData, newData;
+        final List<T> oldData;
+        final List<T> newData;
 
         private DiffUtilCallback(List<T> oldData, List<T> newData) {
             this.oldData = oldData;

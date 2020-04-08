@@ -1,6 +1,6 @@
 package com.brookmanholmes.drilltracker.presentation.drilldetail;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.brookmanholmes.drilltracker.data.repository.datasource.DataStoreFactory;
 import com.brookmanholmes.drilltracker.domain.Drill;
@@ -12,6 +12,8 @@ import com.brookmanholmes.drilltracker.domain.interactor.GetDrillDetails;
 import com.brookmanholmes.drilltracker.presentation.exception.ErrorMessageFactory;
 import com.brookmanholmes.drilltracker.presentation.mapper.DrillModelDataMapper;
 import com.brookmanholmes.drilltracker.presentation.model.DrillModel;
+
+import java.util.List;
 
 /**
  * Created by Brookman Holmes on 7/11/2017.
@@ -28,7 +30,7 @@ class DrillDetailsPresenter implements DrillDetailsContract {
         deleteAttemptUseCase = new DeleteAttempt(DataStoreFactory.getDrillRepo());
     }
 
-    DrillDetailsPresenter(GetDrillDetails getDrillDetailsUseCase, DeleteAttempt deleteAttemptUseCase) {
+    private DrillDetailsPresenter(GetDrillDetails getDrillDetailsUseCase, DeleteAttempt deleteAttemptUseCase) {
         this.getDrillDetailsUseCase = getDrillDetailsUseCase;
         this.deleteAttemptUseCase = deleteAttemptUseCase;
     }
@@ -82,7 +84,7 @@ class DrillDetailsPresenter implements DrillDetailsContract {
     }
 
     private void showErrorMessage(ErrorBundle errorBundle) {
-        String error = ErrorMessageFactory.create(view.context(), errorBundle.getException());
+        String error = ErrorMessageFactory.create(errorBundle.getException());
         view.showError(error);
     }
 
@@ -97,6 +99,17 @@ class DrillDetailsPresenter implements DrillDetailsContract {
     @Override
     public void onUndoClicked() {
         deleteAttemptUseCase.execute(new DeleteAttemptObserver(), drill.getId());
+    }
+
+    @Override
+    public void onAddAttemptClicked(String drillId, DrillModel.Type type, int maxScore,
+                                    int targetScore, int cbPositions, int obPositions,
+                                    int targetPositions, int selectedCbPosition,
+                                    int selectedObPosition, int selectedTargetPosition,
+                                    List<Integer> selectedPattern) {
+        view.showAddAttemptDialog(drillId, type, maxScore, targetScore, cbPositions, obPositions,
+                targetPositions, selectedCbPosition, selectedObPosition, selectedTargetPosition,
+                selectedPattern);
     }
 
     private final class DrillDetailsObserver extends DefaultObserver<Drill> {

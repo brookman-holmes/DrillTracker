@@ -27,7 +27,7 @@ public class GetDrillList extends UseCase<List<Drill>, GetDrillList.Params>{
     }
 
     public static class Params {
-        private DrillModel.Type filter;
+        private final DrillModel.Type filter;
 
         private Params(DrillModel.Type filter) {
             this.filter = filter;

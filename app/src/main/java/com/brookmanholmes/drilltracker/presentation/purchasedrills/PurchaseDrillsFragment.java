@@ -4,14 +4,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.os.Bundle;
-import android.support.annotation.IdRes;
-import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.IdRes;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.brookmanholmes.drilltracker.MyApp;
 import com.brookmanholmes.drilltracker.R;
@@ -32,6 +33,7 @@ import org.solovyev.android.checkout.RequestListener;
 import org.solovyev.android.checkout.UiCheckout;
 
 import java.util.List;
+import java.util.Objects;
 
 import javax.annotation.Nonnull;
 
@@ -90,7 +92,7 @@ public class PurchaseDrillsFragment extends BaseFragment<PurchaseDrillsContract>
     @Override
     public void onResume() {
         super.onResume();
-        this.presenter.loadDrillsList(getCallback().getTypeSelection());
+        this.presenter.loadDrillsList();
     }
 
     @Override
@@ -138,7 +140,7 @@ public class PurchaseDrillsFragment extends BaseFragment<PurchaseDrillsContract>
         if (id == R.id.price) {
             if (!pack.purchased) {
                 //presenter.purchaseDrillPack(pack.sku);
-                checkout.startPurchaseFlow(ProductTypes.IN_APP, pack.sku, FirebaseAuth.getInstance().getCurrentUser().getUid(), new PurchaseListener(presenter));
+                checkout.startPurchaseFlow(ProductTypes.IN_APP, pack.sku, Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid(), new PurchaseListener(presenter));
             }
         } else if (id == R.id.cv_drill_pack) {
             viewDrillPack(pack);
@@ -162,7 +164,7 @@ public class PurchaseDrillsFragment extends BaseFragment<PurchaseDrillsContract>
     @Override
     public void viewDrillPack(DrillPackModel drillModel) {
         DialogFragment dialog = DrillPackDetailDialog.newInstance(getString(R.string.drills_included_in, drillModel.name), drillModel.sku);
-        dialog.show(getFragmentManager(), drillModel.name);
+        dialog.show(Objects.requireNonNull(getFragmentManager()), drillModel.name);
     }
 
     /*
@@ -205,9 +207,9 @@ public class PurchaseDrillsFragment extends BaseFragment<PurchaseDrillsContract>
     }
 
     private static class PurchaseListener implements RequestListener<Purchase> {
-        PurchaseDrillsContract presenter;
+        final PurchaseDrillsContract presenter;
 
-        public PurchaseListener(PurchaseDrillsContract presenter) {
+        PurchaseListener(PurchaseDrillsContract presenter) {
             this.presenter = presenter;
         }
 

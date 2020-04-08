@@ -15,7 +15,7 @@ public class DrillPackModelDataMapper {
     public DrillPackModelDataMapper() {
     }
 
-    public DrillPackModel transform(DrillPack drillPack) {
+    private DrillPackModel transform(DrillPack drillPack) {
         DrillPackModel model = new DrillPackModel();
         model.name = drillPack.name;
         model.price = drillPack.price;

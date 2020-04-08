@@ -3,15 +3,18 @@ package com.brookmanholmes.drilltracker.presentation.drilldetail;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
+
 import com.brookmanholmes.drilltracker.R;
 import com.brookmanholmes.drilltracker.presentation.view.util.ImageHandler;
+
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -22,14 +25,14 @@ import butterknife.Unbinder;
  * Created by Brookman Holmes on 7/28/2017.
  */
 
-public class FullScreenImageDialog extends DialogFragment {
+class FullScreenImageDialog extends DialogFragment {
     private static final String TAG = FullScreenImageDialog.class.getName();
     private static final String PARAM_URL = "param_url";
 
     @BindView(R.id.image)
     ImageView imageView;
 
-    Unbinder unbinder;
+    private Unbinder unbinder;
 
     static FullScreenImageDialog newInstance(String url) {
         FullScreenImageDialog fragment = new FullScreenImageDialog();
@@ -53,7 +56,7 @@ public class FullScreenImageDialog extends DialogFragment {
         unbinder = ButterKnife.bind(this, view);
         ImageHandler.loadImage(imageView, getUrl());
         imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
-        getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        Objects.requireNonNull(Objects.requireNonNull(getDialog()).getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         return view;
     }
 
@@ -64,7 +67,7 @@ public class FullScreenImageDialog extends DialogFragment {
     }
 
     private String getUrl() {
-        return getArguments().getString(PARAM_URL);
+        return Objects.requireNonNull(getArguments()).getString(PARAM_URL);
     }
 
     @OnClick(R.id.image)

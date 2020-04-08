@@ -1,0 +1,398 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".presentation.drills.DrillsListActivity">
+
+    <include layout="@layout/view_fab" />
+
+    <include layout="@layout/view_drill_details_toolbar" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                tools:visibility="gone">
+
+                <TextView
+                    style="@android:style/TextAppearance.Material.Subhead"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:text="Patterns"
+                    tools:visibility="gone" />
+
+                <Button
+                    android:id="@+id/createNewPattern"
+                    style="@android:style/Widget.Material.Button.Borderless"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:text="New pattern"
+                    android:textColor="@color/colorAccent"
+                    tools:visibility="gone" />
+
+            </LinearLayout>
+
+            <androidx.cardview.widget.CardView
+                style="@style/card_view_style"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
+                android:visibility="visible"
+                tools:visibility="gone">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp">
+
+                    <TextView
+                        android:id="@+id/textView4"
+                        style="@style/player_stats"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:text="Pattern:"
+                        app:layout_constraintBottom_toBottomOf="@+id/patternSpinner"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <Spinner
+                        android:id="@+id/patternSpinner"
+                        android:layout_width="0dp"
+                        android:layout_height="48dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/textView4"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <androidx.gridlayout.widget.GridLayout
+                        style="@style/match_info_grid"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/patternSpinner">
+
+                        <TextView
+                            style="@style/player_stats"
+                            android:text="This pattern"
+                            app:layout_column="1" />
+
+                        <TextView
+                            style="@style/player_stats"
+                            android:text="All patterns"
+                            app:layout_column="2" />
+
+                        <TextView
+                            style="@style/player_stats"
+                            android:gravity="start"
+                            android:text="@string/attempts"
+                            android:textColor="@color/primary_text"
+                            app:layout_columnWeight="0"
+                            app:layout_gravity="start" />
+
+                        <TextView
+                            android:id="@+id/thisPatternAttempts"
+                            style="@style/player_stats"
+                            android:text="0"
+                            android:textColor="@color/primary_text" />
+
+                        <TextView
+                            android:id="@+id/allPatternAttempts"
+                            style="@style/player_stats"
+                            android:text="0"
+                            android:textColor="@color/primary_text"
+                            app:layout_column="2" />
+
+                        <TextView
+                            style="@style/player_stats"
+                            android:gravity="start"
+                            android:text="Completion rate"
+                            android:textColor="@color/secondary_text"
+                            app:layout_columnWeight="0"
+                            app:layout_gravity="start" />
+
+                        <TextView
+                            android:id="@+id/thisPatternCompPct"
+                            style="@style/player_stats"
+                            android:text=".000"
+                            android:textColor="@color/secondary_text" />
+
+                        <TextView
+                            android:id="@+id/allPatternCompPct"
+                            style="@style/player_stats"
+                            android:text=".000"
+                            android:textColor="@color/secondary_text"
+                            app:layout_column="2" />
+
+                        <TextView
+                            style="@style/player_stats"
+                            android:gravity="start"
+                            android:text="Average run length"
+                            android:textColor="@color/primary_text"
+                            app:layout_columnWeight="0"
+                            app:layout_gravity="start" />
+
+                        <TextView
+                            android:id="@+id/thisPatternRunLength"
+                            style="@style/player_stats"
+                            android:text="0"
+                            android:textColor="@color/primary_text" />
+
+                        <TextView
+                            android:id="@+id/allPatternRunLength"
+                            style="@style/player_stats"
+                            android:text="0"
+                            android:textColor="@color/primary_text"
+                            app:layout_column="2" />
+
+                    </androidx.gridlayout.widget.GridLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
+
+            <TextView
+                style="@android:style/TextAppearance.Material.Subhead"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:gravity="center_vertical"
+                android:paddingStart="16dp"
+                android:text="Positional rating for transitions"
+                tools:visibility="gone" />
+
+            <androidx.cardview.widget.CardView
+                style="@style/card_view_style"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
+                tools:visibility="gone">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp">
+
+                    <lecho.lib.hellocharts.view.ColumnChartView
+                        android:id="@+id/transitionRatingsChart"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_margin="8dp"
+                        app:layout_constraintDimensionRatio="h,1.4:1"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:text="Ratings"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/transitionRatingsChart" />
+
+                    <TextView
+                        android:id="@+id/text1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="8dp"
+                        android:drawableStart="@drawable/legend_excellent"
+                        android:drawablePadding="4dp"
+                        android:text="4 - Excellent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/text" />
+
+                    <TextView
+                        android:id="@+id/text2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="8dp"
+                        android:drawableStart="@drawable/legend_good"
+                        android:drawablePadding="4dp"
+                        android:text="3 - Good"
+                        app:layout_constraintStart_toEndOf="@id/text1"
+                        app:layout_constraintTop_toBottomOf="@id/text" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="8dp"
+                        android:drawableStart="@drawable/legend_fair"
+                        android:drawablePadding="4dp"
+                        android:text="2 - Fair"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/text1" />
+
+                    <TextView
+                        android:id="@+id/text4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="8dp"
+                        android:drawableStart="@drawable/legend_poor"
+                        android:drawablePadding="4dp"
+                        android:text="1 - Poor"
+                        app:layout_constraintStart_toEndOf="@id/text1"
+                        app:layout_constraintTop_toBottomOf="@id/text1" />
+
+                    <lecho.lib.hellocharts.view.ColumnChartView
+                        android:id="@+id/averageTransitionRatingsChart"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_margin="8dp"
+                        app:layout_constraintDimensionRatio="h,1.4:1"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/text4" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                style="@android:style/TextAppearance.Material.Subhead"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:gravity="center_vertical"
+                android:paddingStart="16dp"
+                android:text="Ball potting"
+                tools:visibility="gone" />
+
+            <androidx.cardview.widget.CardView
+                style="@style/card_view_style"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
+                tools:visibility="gone">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp">
+
+                    <lecho.lib.hellocharts.view.LineChartView
+                        android:id="@+id/chart"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_margin="8dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintDimensionRatio="h,16:9"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.0" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:drawableStart="@drawable/legend_red_line"
+                        android:drawablePadding="4dp"
+                        android:text="Target score"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/chart" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                style="@android:style/TextAppearance.Material.Subhead"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:gravity="center_vertical"
+                android:paddingStart="16dp"
+                android:text="Miss frequency" />
+
+            <androidx.cardview.widget.CardView
+                style="@style/card_view_style"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp">
+
+                    <lecho.lib.hellocharts.view.ColumnChartView
+                        android:id="@+id/missFrequencyChart"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_margin="8dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintDimensionRatio="h,16:9"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.0" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:drawableStart="@drawable/legend_miss"
+                        android:drawablePadding="4dp"
+                        android:text="Misses"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintLeft_toRightOf="@id/make_legend"
+                        app:layout_constraintTop_toBottomOf="@id/missFrequencyChart" />
+
+                    <TextView
+                        android:id="@+id/make_legend"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:drawableStart="@drawable/legend_make"
+                        android:drawablePadding="4dp"
+                        android:text="Makes"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/missFrequencyChart" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.legacy.widget.Space
+                android:layout_width="wrap_content"
+                android:layout_height="60dp" />
+
+            <include layout="@layout/view_progress" />
+
+            <include layout="@layout/view_retry" />
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

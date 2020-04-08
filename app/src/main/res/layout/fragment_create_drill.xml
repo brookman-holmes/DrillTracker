@@ -1,25 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".presentation.drills.DrillsListActivity">
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/app_bar_layout"
+
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
-        <android.support.v7.widget.Toolbar
+
+        <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:layout_collapseMode="pin"
             app:navigationIcon="@drawable/ic_arrow_back"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
-    </android.support.design.widget.AppBarLayout>
-    <android.support.v4.widget.NestedScrollView
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
@@ -30,10 +32,7 @@
             android:layout_marginStart="8dp"
             android:orientation="vertical">
 
-            <android.support.constraint.ConstraintLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                xmlns:tools="http://schemas.android.com/tools"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
                 <ImageView
@@ -60,9 +59,9 @@
                     android:src="@drawable/ic_photo_camera"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintRight_toRightOf="parent" />
-            </android.support.constraint.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="8dp">
@@ -74,10 +73,11 @@
                     android:freezesText="true"
                     android:hint="@string/drill_name"
                     android:imeOptions="actionNext"
+                    android:inputType="textNoSuggestions"
                     android:maxLines="1" />
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="8dp">
@@ -87,9 +87,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:freezesText="true"
-                    android:hint="@string/description" />
+                    android:hint="@string/description"
+                    android:inputType="textMultiLine" />
 
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -99,7 +100,7 @@
                 android:orientation="horizontal">
                 <TextView
                     style="@android:style/TextAppearance.Material.Subhead"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_weight="1"
@@ -192,5 +193,5 @@
                 app:cnp2_title="Target score" />
 
         </LinearLayout>
-    </android.support.v4.widget.NestedScrollView>
-</android.support.design.widget.CoordinatorLayout>
+    </androidx.core.widget.NestedScrollView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

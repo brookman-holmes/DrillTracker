@@ -15,35 +15,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "630526958550-ogtob1atds12lo764phuri37s9girisn.apps.googleusercontent.com",
+          "client_id": "630526958550-iql31fm7eups43atr33bn7l8bm5p4o3a.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.brookmanholmes.drilltracker",
-            "certificate_hash": "0d72de9d580f40492230fff44a2fd59328fb8812"
-          }
-        },
-        {
-          "client_id": "630526958550-0of9ige04jsk6ns25blgieu8fu8bs0v6.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.brookmanholmes.drilltracker",
-            "certificate_hash": "a9a4a4b23396954884350a51feb5d8cb57258b9e"
-          }
-        },
-        {
-          "client_id": "630526958550-8clqfg4ovvid36dcilm8o6qpr8ai5rum.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.brookmanholmes.drilltracker",
-            "certificate_hash": "a7157c7f1eba6cfb3de61a5db05fb2009ab68d00"
-          }
-        },
-        {
-          "client_id": "630526958550-th303shjcr7s5rl9c2vr717niastvfc0.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.brookmanholmes.drilltracker",
-            "certificate_hash": "f70c2772ad142b299b582eafa8a53df509037270"
+            "certificate_hash": "a05c2308fb28e29f40382f0dfe328765fc2630cd"
           }
         },
         {
@@ -57,20 +33,13 @@
         }
       ],
       "services": {
-        "analytics_service": {
-          "status": 1
-        },
         "appinvite_service": {
-          "status": 2,
           "other_platform_oauth_client": [
             {
               "client_id": "630526958550-k7a5bj5ahoils13lsdus1k74c17hdrhc.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
-        },
-        "ads_service": {
-          "status": 2
         }
       }
     }

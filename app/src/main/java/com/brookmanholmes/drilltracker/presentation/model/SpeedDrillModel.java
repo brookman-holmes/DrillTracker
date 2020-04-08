@@ -22,7 +22,7 @@ public class SpeedDrillModel {
     private static final String ONE_DIAMOND_HARD = "DIAMOND_HARD";
     private static final String TWO_DIAMOND_HARD = "TWO_DIAMOND_HARD";
 
-    public Map<Speed, Integer> speeds;
+    public final Map<Speed, Integer> speeds;
 
     public int sessionAttempts, lifetimeAttempts;
     public int sessionCorrect, lifetimeCorrect;

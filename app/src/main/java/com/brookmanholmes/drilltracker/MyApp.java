@@ -1,7 +1,8 @@
 package com.brookmanholmes.drilltracker;
 
 import android.app.Application;
-import android.support.annotation.NonNull;
+
+import androidx.annotation.NonNull;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
@@ -24,7 +25,6 @@ public class MyApp extends Application implements FirebaseAuth.AuthStateListener
             return TempPublicKey.KEY;
         }
     });
-    private Picasso picasso;
 
     public MyApp() {
         instance = this;
@@ -38,7 +38,7 @@ public class MyApp extends Application implements FirebaseAuth.AuthStateListener
     public void onCreate() {
         super.onCreate();
         Billing.setLogger(Billing.newLogger());
-        picasso = new Picasso.Builder(this).build();
+        Picasso picasso = new Picasso.Builder(this).build();
         Picasso.setSingletonInstance(picasso);
         //picasso.setLoggingEnabled(BuildConfig.DEBUG);
         FirebaseDatabase.getInstance().setPersistenceEnabled(true);

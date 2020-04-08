@@ -1,10 +1,13 @@
 package com.brookmanholmes.drilltracker.domain.interactor;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 import com.brookmanholmes.drilltracker.domain.Drill;
 import com.brookmanholmes.drilltracker.domain.repository.DrillRepository;
 import com.brookmanholmes.drilltracker.presentation.model.DrillModel;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import io.reactivex.Observable;
 
@@ -15,6 +18,7 @@ import io.reactivex.Observable;
  */
 
 public class AddDrill extends UseCase<Drill, AddDrill.Params> {
+    private static final String TAG = AddDrill.class.getSimpleName();
     private final DrillRepository drillRepository;
 
     public AddDrill(DrillRepository drillRepository) {
@@ -34,7 +38,8 @@ public class AddDrill extends UseCase<Drill, AddDrill.Params> {
                 params.obPositions,
                 params.cbPositions,
                 params.targetPositions,
-                params.purchased
+                params.purchased,
+                params.patterns
 
         );
         if (params.imageUrl == null) {
@@ -46,21 +51,22 @@ public class AddDrill extends UseCase<Drill, AddDrill.Params> {
 
     public static final class Params {
         private String id;
-        private String name;
-        private String description;
+        private final String name;
+        private final String description;
         @Nullable
         private byte[] image;
         @Nullable
         private String imageUrl;
-        private int maxScore;
-        private int targetScore;
-        private Drill.Type type;
-        private boolean purchased;
-        private int obPositions;
-        private int cbPositions;
-        private int targetPositions;
+        private final int maxScore;
+        private final int targetScore;
+        private final Drill.Type type;
+        private final boolean purchased;
+        private final int obPositions;
+        private final int cbPositions;
+        private final int targetPositions;
+        private final List<List<Integer>> patterns = new ArrayList<>();
 
-        public Params(String name, String description, byte[] image, DrillModel.Type type, int maxScore, int targetScore, int obPositions, int cbPositions, int targetPositions, boolean purchased) {
+        Params(String name, String description, @Nullable byte[] image, DrillModel.Type type, int maxScore, int targetScore, int obPositions, int cbPositions, int targetPositions, boolean purchased) {
             this.name = name;
             this.description = description;
             this.image = image;
@@ -73,7 +79,7 @@ public class AddDrill extends UseCase<Drill, AddDrill.Params> {
             this.targetPositions = targetPositions;
         }
 
-        public Params(String name, String description, String imageUrl, DrillModel.Type type, int maxScore, int targetScore, int obPositions, int cbPositions, int targetPositions, boolean purchased) {
+        Params(String name, String description, @Nullable String imageUrl, DrillModel.Type type, int maxScore, int targetScore, int obPositions, int cbPositions, int targetPositions, boolean purchased) {
             this.name = name;
             this.description = description;
             this.imageUrl = imageUrl;

@@ -3,12 +3,16 @@ package com.brookmanholmes.drilltracker.presentation.drilldetail;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import com.brookmanholmes.drilltracker.R;
 import com.brookmanholmes.drilltracker.presentation.base.BaseActivity;
 import com.brookmanholmes.drilltracker.presentation.model.DrillModel;
+
+import java.util.Objects;
 
 /**
  * Created by Brookman Holmes on 7/11/2017.
@@ -42,7 +46,7 @@ public class DrillDetailsActivity extends BaseActivity {
         return intent;
     }
 
-    static void updateExtras(Intent intent, String drillId, DrillModel.Type type, String url, int maxValue, int targetValue, int obPositions, int cbPositions, int targetPositions) {
+    private static void updateExtras(Intent intent, String drillId, DrillModel.Type type, String url, int maxValue, int targetValue, int obPositions, int cbPositions, int targetPositions) {
         intent.putExtra(INTENT_EXTRA_PARAM_DRILL_ID, drillId);
         intent.putExtra(INTENT_EXTRA_PARAM_DRILL_MAX, maxValue);
         intent.putExtra(INTENT_EXTRA_PARAM_DRILL_TARGET, targetValue);
@@ -70,7 +74,7 @@ public class DrillDetailsActivity extends BaseActivity {
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
         if (outState != null) {
             outState.putString(INSTANCE_STATE_PARAM_DRILL_ID, drillId);
             outState.putString(INSTANCE_STATE_PARAM_DRILL_URL, imageUrl);
@@ -81,7 +85,7 @@ public class DrillDetailsActivity extends BaseActivity {
             outState.putInt(INSTANCE_STATE_PARAM_DRILL_CB_POS, cbPositions);
             outState.putInt(INSTANCE_STATE_PARAM_DRILL_TARGET_POS, targetPositions);
         }
-        super.onSaveInstanceState(outState);
+        super.onSaveInstanceState(Objects.requireNonNull(outState));
     }
 
     @Override
@@ -94,7 +98,7 @@ public class DrillDetailsActivity extends BaseActivity {
         obPositions = getIntent().getIntExtra(INTENT_EXTRA_PARAM_DRILL_OB_POS, -1);
         targetPositions = getIntent().getIntExtra(INTENT_EXTRA_PARAM_DRILL_TARGET_POS, -1);
         type = (DrillModel.Type) getIntent().getSerializableExtra(INTENT_EXTRA_PARAM_DRILL_TYPE);
-        return BaseDrillDetailsFragment.createDrillDetailsFragment(drillId, imageUrl, type, maxValue,
+        return BaseDrillDetailsFragment.createDrillDetailsFragment(drillId, imageUrl, Objects.requireNonNull(type), maxValue,
                 targetValue, obPositions, cbPositions, targetPositions);
     }
 }

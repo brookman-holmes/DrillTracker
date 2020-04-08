@@ -8,8 +8,6 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
-
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AlertDialogTheme.Fullscreen" parent="AppTheme">
@@ -21,12 +19,6 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="android:windowTitleStyle">@style/AdpTitleStyle</item>
-    </style>
-
-    <style name="AlertDialogThemeNoTitle" parent="Theme.AppCompat.Light.Dialog.Alert">
-        <item name="colorAccent">@color/colorAccent</item>
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
     </style>
 
     <style name="AdpTitleStyle">
@@ -104,5 +96,13 @@
         <item name="android:alpha">.12</item>
         <item name="android:src">@android:color/black</item>
         <item name="layout_constraintStart_toStartOf">parent</item>
+    </style>
+
+    <style name="spinner_pattern_ball_image_view">
+        <item name="android:layout_width">24dp</item>
+        <item name="android:layout_height">24dp</item>
+        <item name="android:src">@drawable/ic_one_ball</item>
+        <item name="layout_constraintTop_toTopOf">parent</item>
+        <item name="layout_constraintBottom_toBottomOf">parent</item>
     </style>
 </resources>

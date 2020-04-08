@@ -15,14 +15,11 @@
  */
 package com.brookmanholmes.drilltracker.domain.interactor;
 
-import android.support.v4.util.Preconditions;
-
 import com.brookmanholmes.drilltracker.data.executor.JobExecutor;
 import com.brookmanholmes.drilltracker.domain.executor.PostExecutionThread;
 import com.brookmanholmes.drilltracker.domain.executor.ThreadExecutor;
 
 import io.reactivex.Observable;
-import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
@@ -42,15 +39,10 @@ public abstract class UseCase<T, Params> {
     private final PostExecutionThread postExecutionThread;
     private final CompositeDisposable disposables;
 
-    public UseCase() {
+    UseCase() {
         this.disposables = new CompositeDisposable();
         threadExecutor = new JobExecutor();
-        postExecutionThread = new PostExecutionThread() {
-            @Override
-            public Scheduler getScheduler() {
-                return AndroidSchedulers.mainThread();
-            }
-        };
+        postExecutionThread = AndroidSchedulers::mainThread;
     }
 
     UseCase(ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread) {
@@ -72,7 +64,6 @@ public abstract class UseCase<T, Params> {
      * @param params Parameters (Optional) used to build/execute this use case.
      */
     public void execute(DisposableObserver<T> observer, Params params) {
-        Preconditions.checkNotNull(observer);
         final Observable<T> observable = this.buildUseCaseObservable(params)
                 .subscribeOn(Schedulers.from(threadExecutor))
                 .observeOn(postExecutionThread.getScheduler());
@@ -92,8 +83,6 @@ public abstract class UseCase<T, Params> {
      * Dispose from current {@link CompositeDisposable}.
      */
     private void addDisposable(Disposable disposable) {
-        Preconditions.checkNotNull(disposable);
-        Preconditions.checkNotNull(disposables);
         disposables.add(disposable);
     }
 }

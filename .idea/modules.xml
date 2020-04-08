@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/DrillTracker.iml" filepath="$PROJECT_DIR$/DrillTracker.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/DrillTracker.iml" filepath="$PROJECT_DIR$/DrillTracker.iml" group="DrillTracker" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" group="DrillTracker/app" />
     </modules>
   </component>
 </project>

@@ -25,7 +25,7 @@ class DrillsListAdapter extends BaseRecyclerViewAdapter<DrillModel> {
     }
 
     @Override
-    protected ViewHolder<DrillModel> getDefaultViewHolder(ViewGroup parent, int viewType) {
+    protected ViewHolder<DrillModel> getDefaultViewHolder(ViewGroup parent) {
         final View view = inflater.inflate(R.layout.row_drill, parent, false);
         return new DrillModelViewHolder(view);
     }

@@ -15,7 +15,7 @@
  */
 package com.brookmanholmes.drilltracker.data.executor;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.brookmanholmes.drilltracker.domain.executor.ThreadExecutor;
 
@@ -30,7 +30,7 @@ import java.util.concurrent.TimeUnit;
 public class JobExecutor implements ThreadExecutor {
     private final ThreadPoolExecutor threadPoolExecutor;
     public JobExecutor() {
-         threadPoolExecutor = new ThreadPoolExecutor(3, 5, 10L, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>(), new JobThreadFactory());
+        threadPoolExecutor = new ThreadPoolExecutor(3, 5, 10L, TimeUnit.SECONDS, new LinkedBlockingQueue<>(), new JobThreadFactory());
     }
 
     @Override

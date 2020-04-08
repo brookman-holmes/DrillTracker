@@ -3,20 +3,23 @@ package com.brookmanholmes.drilltracker.presentation.drillpackdetail;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.brookmanholmes.drilltracker.R;
 import com.brookmanholmes.drilltracker.presentation.base.BaseDialogFragment;
 import com.brookmanholmes.drilltracker.presentation.model.DrillModel;
 
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -54,7 +57,7 @@ public class DrillPackDetailDialog extends BaseDialogFragment<DrillPackDetailPre
     }
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         adapter = new DrillsListAdapter(context);
     }
@@ -62,7 +65,7 @@ public class DrillPackDetailDialog extends BaseDialogFragment<DrillPackDetailPre
     @Override
     public void onResume() {
         super.onResume();
-        presenter.getDrillPackDrillList(getArguments().getString(PARAM_DRILL_PACK_ID));
+        presenter.getDrillPackDrillList(Objects.requireNonNull(getArguments()).getString(PARAM_DRILL_PACK_ID));
     }
 
     @Override
@@ -84,14 +87,14 @@ public class DrillPackDetailDialog extends BaseDialogFragment<DrillPackDetailPre
         presenter.setView(this);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
-        dividerItemDecoration.setDrawable(ContextCompat.getDrawable(getContext(), R.drawable.divider));
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(Objects.requireNonNull(getContext()), DividerItemDecoration.VERTICAL);
+        dividerItemDecoration.setDrawable(Objects.requireNonNull(ContextCompat.getDrawable(getContext(), R.drawable.divider)));
         recyclerView.addItemDecoration(dividerItemDecoration);
     }
 
     @Override
     protected String getTitle() {
-        return getArguments().getString(PARAM_TITLE);
+        return Objects.requireNonNull(getArguments()).getString(PARAM_TITLE);
     }
 
     @Override

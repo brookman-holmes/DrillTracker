@@ -2,14 +2,6 @@ package com.brookmanholmes.drilltracker.presentation.drilldetail;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.CallSuper;
-import android.support.annotation.IdRes;
-import android.support.annotation.LayoutRes;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,6 +9,15 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import androidx.annotation.CallSuper;
+import androidx.annotation.IdRes;
+import androidx.annotation.LayoutRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
 
 import com.brookmanholmes.drilltracker.R;
 import com.brookmanholmes.drilltracker.presentation.adapters.SpinnerAdapterHelper;
@@ -26,6 +27,11 @@ import com.brookmanholmes.drilltracker.presentation.base.BaseFragment;
 import com.brookmanholmes.drilltracker.presentation.model.DrillModel;
 import com.brookmanholmes.drilltracker.presentation.view.util.ImageHandler;
 import com.github.chrisbanes.photoview.PhotoView;
+
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -38,14 +44,14 @@ import butterknife.OnItemSelected;
 
 public abstract class BaseDrillDetailsFragment extends BaseFragment<DrillDetailsContract> implements DrillDetailsView, Toolbar.OnMenuItemClickListener, View.OnClickListener {
     protected static final String TAG = DrillDetailsFragment.class.getName();
-    protected static final String PARAM_DRILL_ID = "param_drill_id";
-    protected static final String PARAM_DRILL_TYPE = "param_drill_type";
-    protected static final String PARAM_MAX = "param_max";
-    protected static final String PARAM_TARGET = "param_target";
-    protected static final String PARAM_URL = "param_url";
-    protected static final String PARAM_OB_POSITIONS = "param_ob_positions";
-    protected static final String PARAM_CB_POSITIONS = "param_cb_positions";
-    protected static final String PARAM_TARGET_POSITIONS = "param_target_positions";
+    static final String PARAM_DRILL_ID = "param_drill_id";
+    static final String PARAM_MAX = "param_max";
+    static final String PARAM_TARGET = "param_target";
+    static final String PARAM_URL = "param_url";
+    static final String PARAM_OB_POSITIONS = "param_ob_positions";
+    static final String PARAM_CB_POSITIONS = "param_cb_positions";
+    static final String PARAM_TARGET_POSITIONS = "param_target_positions";
+    private static final String PARAM_DRILL_TYPE = "param_drill_type";
 
     @BindView(R.id.cbPositionsSpinner)
     Spinner cbPositionsSpinner;
@@ -68,6 +74,7 @@ public abstract class BaseDrillDetailsFragment extends BaseFragment<DrillDetails
     PhotoView image;
     @BindView(R.id.description)
     TextView description;
+    final DecimalFormat pctf = new DecimalFormat("#.00");
 
     public static Fragment createDrillDetailsFragment(String drillId, String imageUrl, DrillModel.Type type,
                                                       int maxValue, int targetValue, int obPositions,
@@ -83,6 +90,8 @@ public abstract class BaseDrillDetailsFragment extends BaseFragment<DrillDetails
                 return SpeedDrillDetailsFragment.forDrill(drillId, imageUrl, maxValue, targetValue, obPositions, cbPositions);
             case POSITIONAL:
                 return PositionalDrillDetailsFragment.forDrill(drillId, imageUrl, cbPositions, targetPositions);
+            case PATTERN:
+                return PatternDrillDetailsFragment.forDrill(drillId, imageUrl, maxValue);
             default:
                 return DrillDetailsFragment.forDrill(drillId, imageUrl, maxValue, targetValue, obPositions, cbPositions, targetPositions);
         }
@@ -102,7 +111,7 @@ public abstract class BaseDrillDetailsFragment extends BaseFragment<DrillDetails
         presenter.setView(this);
 
         setupToolbar();
-
+        setupSpinners();
         return view;
     }
 
@@ -112,12 +121,12 @@ public abstract class BaseDrillDetailsFragment extends BaseFragment<DrillDetails
         loadDrillDetails();
     }
 
-    protected void loadDrillDetails() {
+    private void loadDrillDetails() {
         if (presenter != null)
             presenter.initialize(getDrillId());
     }
 
-    protected void setupSpinners() {
+    private void setupSpinners() {
         obPositionsSpinner.setAdapter(SpinnerAdapterHelper.createNumberedListAdapter(toolbar.getContext(), 0, getObPositions() + 1, "OB Position "));
         cbPositionsSpinner.setAdapter(SpinnerAdapterHelper.createNumberedListAdapter(toolbar.getContext(), 0, getCbPositions() + 1, "CB Position "));
         targetPositionsSpinner.setAdapter(SpinnerAdapterHelper.createNumberedListAdapter(toolbar.getContext(), 0, getTargetPositions() + 1, "Target "));
@@ -140,7 +149,7 @@ public abstract class BaseDrillDetailsFragment extends BaseFragment<DrillDetails
         }
     }
 
-    protected void setupToolbar() {
+    private void setupToolbar() {
         toolbar.inflateMenu(R.menu.fragment_drill_details_menu);
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
         toolbar.setNavigationOnClickListener(this);
@@ -148,69 +157,86 @@ public abstract class BaseDrillDetailsFragment extends BaseFragment<DrillDetails
         setupSpinners();
     }
 
-    protected void setArguments(DrillModel model) {
-        getArguments().putString(PARAM_DRILL_ID, model.id);
+    void setArguments(DrillModel model) {
+        Objects.requireNonNull(getArguments()).putString(PARAM_DRILL_ID, model.id);
         getArguments().putSerializable(PARAM_DRILL_TYPE, model.drillType);
         getArguments().putInt(PARAM_MAX, model.maxScore);
         getArguments().putInt(PARAM_TARGET, model.defaultTargetScore);
         getArguments().putString(PARAM_URL, model.imageUrl);
+
+        if (getTargetPositions() != model.targetPositions ||
+                getCbPositions() != model.cbPositions ||
+                getObPositions() != model.obPositions) {
+            int targetPositionSelection = Math.min(model.targetPositions, getSelectedTargetPosition());
+            int cbPositionSelection = Math.min(model.cbPositions, getSelectedCbPosition());
+            int obPositionSelection = Math.min(model.obPositions, getSelectedObPosition());
+
+            setupSpinners();
+            targetPositionsSpinner.setSelection(targetPositionSelection);
+            cbPositionsSpinner.setSelection(cbPositionSelection);
+            obPositionsSpinner.setSelection(obPositionSelection);
+        }
         getArguments().putInt(PARAM_CB_POSITIONS, model.cbPositions);
         getArguments().putInt(PARAM_OB_POSITIONS, model.obPositions);
         getArguments().putInt(PARAM_TARGET_POSITIONS, model.targetPositions);
     }
 
-    protected DrillModel.Type getDrillType() {
-        return (DrillModel.Type) getArguments().getSerializable(PARAM_DRILL_TYPE);
+    private DrillModel.Type getDrillType() {
+        return (DrillModel.Type) Objects.requireNonNull(getArguments()).getSerializable(PARAM_DRILL_TYPE);
     }
 
-    protected String getDrillId() {
-        return getArguments().getString(PARAM_DRILL_ID);
+    String getDrillId() {
+        return Objects.requireNonNull(getArguments()).getString(PARAM_DRILL_ID, "invalid drill id");
     }
 
-    protected String getDrillUrl() {
-        return getArguments().getString(PARAM_URL, "invalid url");
+    private String getDrillUrl() {
+        return Objects.requireNonNull(getArguments()).getString(PARAM_URL, "invalid url");
     }
 
-    protected int getMaxScore() {
-        return getArguments().getInt(PARAM_MAX);
+    private int getMaxScore() {
+        return Objects.requireNonNull(getArguments()).getInt(PARAM_MAX, 0);
     }
 
-    protected int getTargetScore() {
-        return getArguments().getInt(PARAM_TARGET);
+    private int getTargetScore() {
+        return Objects.requireNonNull(getArguments()).getInt(PARAM_TARGET, 0);
     }
 
-    protected int getObPositions() {
-        return getArguments().getInt(PARAM_OB_POSITIONS);
+    private int getObPositions() {
+        return Objects.requireNonNull(getArguments()).getInt(PARAM_OB_POSITIONS, 0);
     }
 
-    protected int getCbPositions() {
-        return getArguments().getInt(PARAM_CB_POSITIONS);
+    private int getCbPositions() {
+        return Objects.requireNonNull(getArguments()).getInt(PARAM_CB_POSITIONS, 0);
     }
 
-    protected int getTargetPositions() {
-        return getArguments().getInt(PARAM_TARGET_POSITIONS);
+    private int getTargetPositions() {
+        return Objects.requireNonNull(getArguments()).getInt(PARAM_TARGET_POSITIONS, 0);
     }
 
-    protected int getSelectedTargetPosition() {
+    private int getSelectedTargetPosition() {
         return targetPositionsSpinner.getSelectedItemPosition();
     }
 
-    protected int getSelectedCbPosition() {
+    int getSelectedCbPosition() {
         return cbPositionsSpinner.getSelectedItemPosition();
     }
 
-    protected int getSelectedObPosition() {
+    int getSelectedObPosition() {
         return obPositionsSpinner.getSelectedItemPosition();
     }
 
-    protected void setMenuIconEnabled(@IdRes int res, boolean enabled) {
-        toolbar.getMenu().findItem(res).setEnabled(enabled);
-        toolbar.getMenu().findItem(res).getIcon().setAlpha(enabled ? 255 : 127);
+    List<Integer> getSelectedPattern() {
+        return new ArrayList<>();
+    }
+
+    private void setMenuIconEnabled(@IdRes int res, boolean isEnabled) {
+        toolbar.getMenu().findItem(res).setEnabled(isEnabled);
+        toolbar.getMenu().findItem(res).getIcon().setAlpha(isEnabled ? 255 : 127);
     }
 
     @Override
     public void onClick(View view) {
-        getActivity().finish();
+        Objects.requireNonNull(getActivity()).finish();
     }
 
     @Override
@@ -235,26 +261,18 @@ public abstract class BaseDrillDetailsFragment extends BaseFragment<DrillDetails
     @OnClick(R.id.image)
     public void onImageClicked() {
         DialogFragment dialogFragment = FullScreenImageDialog.newInstance(getDrillUrl());
-        dialogFragment.show(getFragmentManager(), "tag");
+        dialogFragment.show(Objects.requireNonNull(getFragmentManager()), "tag");
     }
 
     @OnClick(R.id.fab)
     public void onAddAttemptClicked() {
-        AddAttemptDialogFactory.createDialog(
-                getDrillId(),
-                getDrillType(),
-                getMaxScore(),
-                getTargetScore(),
-                getCbPositions(),
-                getObPositions(),
-                getTargetPositions(),
-                getSelectedCbPosition(),
-                getSelectedObPosition(),
-                getSelectedTargetPosition()
-        ).show(getFragmentManager(), "AddAttemptDialog");
+        presenter.onAddAttemptClicked(getDrillId(), getDrillType(), getMaxScore(), getTargetScore(),
+                getCbPositions(), getObPositions(), getTargetPositions(), getSelectedCbPosition(),
+                getSelectedObPosition(), getSelectedTargetPosition(), getSelectedPattern());
     }
 
-    @OnItemSelected({R.id.obPositionsSpinner, R.id.cbPositionsSpinner})
+
+    @OnItemSelected({R.id.obPositionsSpinner, R.id.cbPositionsSpinner, R.id.targetPositionsSpinner})
     void onBallPositionSelected() {
         presenter.initialize(getDrillId());
     }
@@ -262,16 +280,25 @@ public abstract class BaseDrillDetailsFragment extends BaseFragment<DrillDetails
     protected abstract @LayoutRes
     int getLayoutRes();
 
+    @Override
+    public void showAddAttemptDialog(String drillId, DrillModel.Type type, int maxScore, int targetScore,
+                                     int cbPositions, int obPositions, int targetPositions, int selectedCbPosition,
+                                     int selectedObPosition, int selectedTargetPosition, List<Integer> selectedPattern) {
+        AddAttemptDialogFactory.createDialog(drillId, type, targetScore, cbPositions,
+                obPositions, targetPositions, selectedCbPosition, selectedObPosition,
+                selectedTargetPosition, selectedPattern).show(Objects.requireNonNull(getFragmentManager()), "AddAttemptDialog");
+    }
+
     /**
      * Implementation of {@link DrillDetailsView}
      */
+
 
     @Override
     @CallSuper
     public void renderDrill(DrillModel drill) {
         if (drill != null) {
             setArguments(drill);
-            setupSpinners();
             ImageHandler.loadImage(image, drill.imageUrl);
             toolbar.setTitle(drill.name);
             description.setText(drill.description);

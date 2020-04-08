@@ -10,7 +10,6 @@ import com.brookmanholmes.drilltracker.presentation.model.DrillModel;
 import com.brookmanholmes.drilltracker.presentation.model.English;
 import com.brookmanholmes.drilltracker.presentation.view.util.ChartUtil;
 
-import java.text.DecimalFormat;
 import java.util.EnumSet;
 
 import butterknife.BindView;
@@ -55,8 +54,6 @@ public class AimDrillDetailsFragment extends BaseDrillDetailsFragment {
     @BindView(R.id.targetScore)
     TextView targetScore;
 
-    private DecimalFormat numberFormatter = new DecimalFormat("#.00");
-
     static AimDrillDetailsFragment forDrill(String drillId, String url, int maxValue, int targetValue, int obPositions, int cbPositions) {
         final AimDrillDetailsFragment fragment = new AimDrillDetailsFragment();
         final Bundle args = new Bundle();
@@ -85,17 +82,16 @@ public class AimDrillDetailsFragment extends BaseDrillDetailsFragment {
 
             sessionMakes.setText(getString(R.string.number, aimDrillModel.sessionMakes));
             sessionAttempts.setText(getString(R.string.number, aimDrillModel.sessionAttempts));
-            sessionAvg.setText(getString(R.string.number_float, aimDrillModel.sessionAverage));
+            sessionAvg.setText(pctf.format(aimDrillModel.sessionAverage));
             sessionOverCuts.setText(getString(R.string.number, aimDrillModel.sessionOverCuts));
             sessionUnderCuts.setText(getString(R.string.number, aimDrillModel.sessionUnderCuts));
 
             lifetimeMakes.setText(getString(R.string.number, aimDrillModel.lifetimeMakes));
             lifetimeAttempts.setText(getString(R.string.number, aimDrillModel.lifetimeAttempts));
-            lifetimeAvg.setText(getString(R.string.number_float, aimDrillModel.allTimeAverage));
+            lifetimeAvg.setText(pctf.format(aimDrillModel.allTimeAverage));
             lifetimeOverCuts.setText(getString(R.string.number, aimDrillModel.lifetimeOverCuts));
             lifetimeUnderCuts.setText(getString(R.string.number, aimDrillModel.lifetimeUnderCuts));
-
-            targetScore.setText(getString(R.string.target_score_with_number_float, numberFormatter.format(aimDrillModel.targetScore)));
+            targetScore.setText(getString(R.string.target_score_with_number_float, pctf.format(aimDrillModel.targetScore)));
         }
     }
 

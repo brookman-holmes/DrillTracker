@@ -42,7 +42,7 @@ public class AimDrillModel {
     public final int oneMonthAverageAttempts;
     public final int weekAverageAttempts;
     public final int sessionAverageAttempts;
-    public float targetScore;
+    public final float targetScore;
 
     public static DrillModel.AttemptModel createAttempt(int makes, int overCuts, int underCuts, int english,
                                                         int obPosition, int cbPosition) {
@@ -60,7 +60,7 @@ public class AimDrillModel {
         );
     }
 
-    public AimDrillModel(Collection<DrillModel.AttemptModel> attempts, EnumSet<English> englishes, int targetScore) {
+    private AimDrillModel(Collection<DrillModel.AttemptModel> attempts, EnumSet<English> englishes, int targetScore) {
         this.targetScore = (float) targetScore / (float) 100;
 
         Collection<DrillModel.AttemptModel> attemptModels = DrillModel.getAttemptsByEnglish(attempts, englishes);

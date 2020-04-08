@@ -1,7 +1,5 @@
 package com.brookmanholmes.drilltracker.domain.interactor;
 
-import android.support.v4.util.Preconditions;
-
 import com.brookmanholmes.drilltracker.domain.Drill;
 import com.brookmanholmes.drilltracker.domain.repository.DrillRepository;
 
@@ -22,7 +20,6 @@ public class GetDrillDetails extends UseCase<Drill, GetDrillDetails.Params> {
 
     @Override
     Observable<Drill> buildUseCaseObservable(Params params) {
-        Preconditions.checkNotNull(params);
         return drillRepository.observeDrill(params.drillId);
     }
 

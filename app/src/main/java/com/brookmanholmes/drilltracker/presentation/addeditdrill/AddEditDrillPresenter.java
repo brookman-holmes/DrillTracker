@@ -1,8 +1,9 @@
 package com.brookmanholmes.drilltracker.presentation.addeditdrill;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.text.TextUtils;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.brookmanholmes.drilltracker.data.repository.datasource.DataStoreFactory;
 import com.brookmanholmes.drilltracker.domain.Drill;
@@ -34,12 +35,12 @@ class AddEditDrillPresenter implements AddEditDrillContract {
     private DrillModel.Type type;
     private boolean purchased;
 
-    private AddDrill addDrill;
-    private GetDrillDetails getDrillDetails;
-    private UpdateDrill updateDrill;
-    private String drillId;
+    private final AddDrill addDrill;
+    private final GetDrillDetails getDrillDetails;
+    private final UpdateDrill updateDrill;
+    private final String drillId;
 
-    AddEditDrillPresenter(AddDrill addDrill, GetDrillDetails getDrillDetails, UpdateDrill updateDrill, @Nullable String drillId) {
+    private AddEditDrillPresenter(AddDrill addDrill, GetDrillDetails getDrillDetails, UpdateDrill updateDrill, @Nullable String drillId) {
         this.addDrill = addDrill;
         this.getDrillDetails = getDrillDetails;
         this.drillId = drillId;

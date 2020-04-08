@@ -13,10 +13,10 @@ import com.google.firebase.storage.UploadTask;
 import java.util.Iterator;
 import java.util.List;
 
-import io.reactivex.Maybe;
 import io.reactivex.Observable;
-import io.reactivex.annotations.NonNull;
-import io.reactivex.functions.Consumer;
+import io.reactivex.Single;
+import io.reactivex.SingleObserver;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Function;
 
 /**
@@ -28,7 +28,7 @@ public class DrillDataRepository implements DrillRepository {
     private final DrillEntityDataMapper drillEntityDataMapper;
     private final DrillDataStore dataStore;
 
-    public DrillDataRepository(DrillEntityDataMapper drillEntityDataMapper, DrillDataStore drillDataStore) {
+    private DrillDataRepository(DrillEntityDataMapper drillEntityDataMapper, DrillDataStore drillDataStore) {
         this.dataStore = drillDataStore;
         this.drillEntityDataMapper = drillEntityDataMapper;
     }
@@ -52,11 +52,9 @@ public class DrillDataRepository implements DrillRepository {
                         drill.getObPositions(),
                         drill.getCbPositions(),
                         drill.getTargetPositions(),
-                        drill.isPurchased()
-                )
-        )
-                .map(uploadImageMap(image))
-                .map(transformDrillEntity());
+                        drill.isPurchased(),
+                        drillEntityDataMapper.transform(drill.getPatterns())
+                )).map(uploadImageMap(image)).map(transformDrillEntity());
     }
 
     @Override
@@ -73,23 +71,21 @@ public class DrillDataRepository implements DrillRepository {
                         drill.getObPositions(),
                         drill.getCbPositions(),
                         drill.getTargetPositions(),
-                        drill.isPurchased()))
-                .map(transformDrillEntity());
+                        drill.isPurchased(),
+                        drillEntityDataMapper.transform(drill.getPatterns())
+                )).map(transformDrillEntity());
     }
 
     @Override
     public Observable<List<Drill>> observeDrills(final DrillModel.Type filter) {
         return dataStore.drillEntityList()
-                .map(new Function<List<DrillEntity>, List<Drill>>() {
-                    @Override
-                    public List<Drill> apply(@NonNull List<DrillEntity> drillEntityList) throws Exception {
-                        for (Iterator<DrillEntity> iterator = drillEntityList.iterator(); iterator.hasNext();) {
-                            DrillEntity entity = iterator.next();
-                            if (!drillEntityDataMapper.transform(filter).equals(entity.type) && !filter.equals(DrillModel.Type.ANY))
-                                iterator.remove();
-                        }
-                        return drillEntityDataMapper.transform(drillEntityList);
+                .map(drillEntityList -> {
+                    for (Iterator<DrillEntity> iterator = drillEntityList.iterator(); iterator.hasNext(); ) {
+                        DrillEntity entity = iterator.next();
+                        if (!drillEntityDataMapper.transform(filter).equals(entity.type) && !filter.equals(DrillModel.Type.ANY))
+                            iterator.remove();
                     }
+                    return drillEntityDataMapper.transform(drillEntityList);
                 });
     }
 
@@ -111,7 +107,7 @@ public class DrillDataRepository implements DrillRepository {
     }
 
     @Override
-    public Maybe<UploadTask.TaskSnapshot> uploadImage(String id, byte[] image) {
+    public Single<UploadTask.TaskSnapshot> uploadImage(String id, byte[] image) {
         return dataStore.uploadImage(id, image);
     }
 
@@ -128,7 +124,8 @@ public class DrillDataRepository implements DrillRepository {
                         drill.getDefaultTargetScore(),
                         drill.getObPositions(),
                         drill.getCbPositions(),
-                        drill.getTargetPositions()
+                        drill.getTargetPositions(),
+                        drillEntityDataMapper.transform(drill.getPatterns())
                 )
         )
                 .map(transformDrillEntity());
@@ -136,8 +133,6 @@ public class DrillDataRepository implements DrillRepository {
 
     @Override
     public Observable<Drill> updateDrill(Drill drill, final byte[] image) {
-        Log.i(TAG, "updateDrill: CB: " + drill.getCbPositions());
-        Log.i(TAG, "updateDrill: OB: " + drill.getObPositions());
         return dataStore.updateDrill(
                 new DrillEntity(
                         drill.getName(),
@@ -149,7 +144,8 @@ public class DrillDataRepository implements DrillRepository {
                         drill.getDefaultTargetScore(),
                         drill.getObPositions(),
                         drill.getCbPositions(),
-                        drill.getTargetPositions()
+                        drill.getTargetPositions(),
+                        drillEntityDataMapper.transform(drill.getPatterns())
                 )
         )
                 .map(uploadImageMap(image))
@@ -162,29 +158,33 @@ public class DrillDataRepository implements DrillRepository {
     }
 
     private Function<DrillEntity, DrillEntity> uploadImageMap(final byte[] image) {
-        return new Function<DrillEntity, DrillEntity>() {
-            @Override
-            public DrillEntity apply(@NonNull final DrillEntity entity) throws Exception {
-                uploadImage(entity.id, image)
-                        .subscribe(new Consumer<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void accept(@NonNull UploadTask.TaskSnapshot taskSnapshot) throws Exception {
-                                entity.imageUrl = taskSnapshot.getDownloadUrl().toString();
-                                dataStore.updateDrill(entity);
-                            }
-                        });
+        return entity -> {
+            DrillEntity newEntity = new DrillEntity(entity.name, entity.description, entity.id, entity.imageUrl, entity.type, entity.maxScore, entity.targetScore, entity.obPositions, entity.cbPositions, entity.targetPositions, entity.patterns);
+            uploadImage(entity.id, image)
+                    .subscribe(new SingleObserver<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSubscribe(Disposable d) {
+                            Log.i(TAG, "onSubscribe: ");
+                        }
 
-                return entity;
-            }
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            taskSnapshot.getStorage().getDownloadUrl().addOnSuccessListener(uri -> {
+                                newEntity.imageUrl = uri.toString();
+                                dataStore.updateDrill(newEntity);
+                            });
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            Log.i(TAG, "onError: " + e);
+                        }
+                    });
+            return entity;
         };
     }
 
     private Function<DrillEntity, Drill> transformDrillEntity() {
-        return new Function<DrillEntity, Drill>() {
-            @Override
-            public Drill apply(@NonNull DrillEntity entity) throws Exception {
-                return drillEntityDataMapper.transform(entity);
-            }
-        };
+        return drillEntityDataMapper::transform;
     }
 }

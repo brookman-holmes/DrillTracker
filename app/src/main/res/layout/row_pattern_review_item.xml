@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?android:attr/selectableItemBackground"
+    android:padding="8dp">
+
+    <ImageView
+        android:id="@+id/ball"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_eight_ball" />
+
+    <TextView
+        android:id="@+id/text13"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="Status: "
+        app:layout_constraintStart_toEndOf="@+id/ball"
+        app:layout_constraintTop_toTopOf="@+id/ball" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Made"
+        android:textColor="@color/text_ball_made"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/text13"
+        app:layout_constraintTop_toTopOf="@+id/text13" />
+
+    <TextView
+        android:id="@+id/textView9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="Shape on"
+        app:layout_constraintStart_toStartOf="@+id/text13"
+        app:layout_constraintTop_toBottomOf="@+id/text13" />
+
+    <ImageView
+        android:id="@+id/nextBall"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="4dp"
+        app:layout_constraintBottom_toBottomOf="@+id/textView9"
+        app:layout_constraintStart_toEndOf="@+id/textView9"
+        app:layout_constraintTop_toTopOf="@+id/textView9"
+        app:srcCompat="@drawable/ic_nine_ball" />
+
+    <TextView
+        android:id="@+id/text14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=": "
+        app:layout_constraintBottom_toBottomOf="@+id/nextBall"
+        app:layout_constraintStart_toEndOf="@+id/nextBall"
+        app:layout_constraintTop_toTopOf="@+id/nextBall" />
+
+    <TextView
+        android:id="@+id/shapeStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Good"
+        android:textColor="@color/shape_rating_two"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/nextBall"
+        app:layout_constraintStart_toEndOf="@+id/text14"
+        app:layout_constraintTop_toTopOf="@+id/nextBall" />
+</androidx.constraintlayout.widget.ConstraintLayout>

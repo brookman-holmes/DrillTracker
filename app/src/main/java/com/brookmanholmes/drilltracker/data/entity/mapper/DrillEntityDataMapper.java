@@ -4,10 +4,14 @@ import com.brookmanholmes.drilltracker.data.entity.DrillEntity;
 import com.brookmanholmes.drilltracker.domain.Drill;
 import com.brookmanholmes.drilltracker.presentation.model.DrillModel;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Mapper class used to transform {@link DrillEntity} (in the data layer) to {@link Drill} in the
@@ -33,6 +37,22 @@ public class DrillEntityDataMapper {
         );
     }
 
+    public Map<String, String> transform(List<List<Integer>> patterns) {
+        Map<String, String> result = new HashMap<>();
+        int count = 0;
+        for (List<Integer> pattern : patterns) {
+            String string = "";
+            for (int i = 0; i < pattern.size(); i++) {
+                string += pattern.get(i);
+                if (i + 1 != pattern.size())
+                    string += ",";
+            }
+            result.put("pattern" + count++, string);
+        }
+
+        return result;
+    }
+
     /**
      * Transform a {@link DrillEntity} into an {@link Drill}.
      *
@@ -50,7 +70,8 @@ public class DrillEntityDataMapper {
                 entity.obPositions,
                 entity.cbPositions,
                 entity.targetPositions,
-                entity.purchased
+                entity.purchased,
+                transform(entity.patterns)
         );
         drill.setAttempts(transformAttempts(entity.attempts.values()));
         return drill;
@@ -69,6 +90,28 @@ public class DrillEntityDataMapper {
         }
 
         return attempts;
+    }
+
+    /**
+     * Transforms a list of patterns encoded as integers into a list of a list of integers
+     * A pattern would be encoded as: 1,2,3,4,5 etc. with , used as a delimiter
+     *
+     * @param patterns The list of patterns
+     * @return A list of a list of integers representing a list of patterns for a run out
+     */
+    private List<List<Integer>> transform(Map<String, String> patterns) {
+        List<List<Integer>> result = new ArrayList<>();
+
+        for (String pattern : patterns.values()) {
+            List<Integer> list = new ArrayList<>();
+            String[] strings = StringUtils.split(pattern, ",");
+            for (String string : strings) {
+                list.add(Integer.valueOf(string));
+            }
+            result.add(list);
+        }
+
+        return result;
     }
 
     /**

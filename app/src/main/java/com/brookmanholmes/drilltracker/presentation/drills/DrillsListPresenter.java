@@ -1,6 +1,6 @@
 package com.brookmanholmes.drilltracker.presentation.drills;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.brookmanholmes.drilltracker.data.repository.datasource.DataStoreFactory;
 import com.brookmanholmes.drilltracker.domain.Drill;
@@ -23,7 +23,7 @@ class DrillsListPresenter implements DrillsListContract {
     private final GetDrillList getDrillListUseCase;
     private DrillsListView view;
 
-    DrillsListPresenter(GetDrillList getDrillListUseCase) {
+    private DrillsListPresenter(GetDrillList getDrillListUseCase) {
         this.getDrillListUseCase = getDrillListUseCase;
     }
 
@@ -84,7 +84,7 @@ class DrillsListPresenter implements DrillsListContract {
     }
 
     private void showErrorMessage(ErrorBundle errorBundle) {
-        String errorMessage = ErrorMessageFactory.create(this.view.context(), errorBundle.getException());
+        String errorMessage = ErrorMessageFactory.create(errorBundle.getException());
         this.view.showError(errorMessage);
     }
 

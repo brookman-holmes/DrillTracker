@@ -6,8 +6,8 @@ import com.google.firebase.storage.UploadTask;
 
 import java.util.List;
 
-import io.reactivex.Maybe;
 import io.reactivex.Observable;
+import io.reactivex.Single;
 
 /**
  * Interface that represents a repository for getting {@link Drill} related data
@@ -67,12 +67,12 @@ public interface DrillRepository {
     Observable<Drill> updateDrill(Drill drill, byte[] image);
 
     /**
-     * Get a {@link Maybe} which will emit a {@link com.google.firebase.storage.UploadTask.TaskSnapshot}
+     * Get a {@link Single} which will emit a {@link com.google.firebase.storage.UploadTask.TaskSnapshot}
      * of an image that was just uploaded to the database
      * @param id The id of the drill for this image
      * @param image The image for the drill
      */
-    Maybe<UploadTask.TaskSnapshot> uploadImage(String id, byte[] image);
+    Single<UploadTask.TaskSnapshot> uploadImage(String id, byte[] image);
 
     /**
      * Removes a drill from the repository

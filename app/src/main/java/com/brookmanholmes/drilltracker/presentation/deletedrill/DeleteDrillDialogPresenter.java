@@ -39,7 +39,7 @@ class DeleteDrillDialogPresenter implements Presenter {
         this.deleteDrill.execute(new DeleteDrillObserver(), id);
     }
 
-    private final class DeleteDrillObserver extends DefaultObserver<Boolean> {
+    private static final class DeleteDrillObserver extends DefaultObserver<Boolean> {
         @Override
         public void onNext(Boolean aBoolean) {
             super.onNext(aBoolean);

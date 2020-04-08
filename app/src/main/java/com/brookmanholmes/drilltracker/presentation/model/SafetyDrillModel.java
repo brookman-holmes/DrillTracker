@@ -12,7 +12,7 @@ import java.util.EnumSet;
 
 public class SafetyDrillModel {
     private static final String SAFETY_TYPES = "safetyTypes";
-    private int attempts;
+    private final int attempts;
     private int speedHard, speedSoft, speedCorrect;
     private int spinLess, spinMore, spinCorrect;
     private int thicknessThin, thicknessThick, thicknessCorrect;

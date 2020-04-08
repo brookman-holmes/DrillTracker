@@ -1,6 +1,6 @@
 package com.brookmanholmes.drilltracker.presentation.drills;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.brookmanholmes.drilltracker.presentation.base.Presenter;
 import com.brookmanholmes.drilltracker.presentation.model.DrillModel;

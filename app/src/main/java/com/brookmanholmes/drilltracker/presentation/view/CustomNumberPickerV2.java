@@ -2,11 +2,12 @@ package com.brookmanholmes.drilltracker.presentation.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.annotation.Nullable;
 
 import com.brookmanholmes.drilltracker.R;
 import com.travijuu.numberpicker.library.Interface.ValueChangedListener;

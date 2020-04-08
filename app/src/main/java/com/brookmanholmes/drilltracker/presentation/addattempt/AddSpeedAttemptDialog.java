@@ -2,29 +2,33 @@ package com.brookmanholmes.drilltracker.presentation.addattempt;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Spinner;
+
+import androidx.appcompat.app.AlertDialog;
 
 import com.brookmanholmes.drilltracker.R;
 import com.brookmanholmes.drilltracker.presentation.adapters.SpinnerAdapterHelper;
 import com.brookmanholmes.drilltracker.presentation.base.BaseDialogFragment;
 import com.brookmanholmes.drilltracker.presentation.view.CustomNumberPickerV2;
 
+import java.util.Objects;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static com.brookmanholmes.drilltracker.presentation.addattempt.AddAttemptDialog.PARAM_CB_POS;
+import static com.brookmanholmes.drilltracker.presentation.addattempt.AddAttemptDialog.PARAM_DRILL_ID;
+import static com.brookmanholmes.drilltracker.presentation.addattempt.AddAttemptDialog.PARAM_OB_POS;
+import static com.brookmanholmes.drilltracker.presentation.addattempt.AddAttemptDialog.PARAM_SELECTED_CB_POS;
+import static com.brookmanholmes.drilltracker.presentation.addattempt.AddAttemptDialog.PARAM_SELECTED_OB_POS;
 
 /**
  * Created by brookman on 1/25/18.
  */
 
-public class AddSpeedAttemptDialog extends BaseDialogFragment<AddSpeedAttemptDialogPresenter> {
-    private static final String PARAM_DRILL_ID = "param_drill_id";
-    private static final String PARAM_CB_POS = "param_cb_pos";
-    private static final String PARAM_OB_POS = "param_ob_pos";
-    private static final String PARAM_SELECTED_CB_POS = "param_selected_cb_pos";
-    private static final String PARAM_SELECTED_OB_POS = "param_selected_ob_pos";
+public class AddSpeedAttemptDialog extends BaseDialogFragment<AddSpeedAttemptPresenter> {
 
     @BindView(R.id.twoDiamondsSlowPicker)
     CustomNumberPickerV2 twoDiamondsSlowPicker;
@@ -92,8 +96,8 @@ public class AddSpeedAttemptDialog extends BaseDialogFragment<AddSpeedAttemptDia
     }
 
     @Override
-    protected AddSpeedAttemptDialogPresenter getPresenter() {
-        return new AddSpeedAttemptDialogPresenter();
+    protected AddSpeedAttemptPresenter getPresenter() {
+        return new AddSpeedAttemptPresenter();
     }
 
     @Override
@@ -115,26 +119,26 @@ public class AddSpeedAttemptDialog extends BaseDialogFragment<AddSpeedAttemptDia
     }
 
     private String getDrillId() {
-        return getArguments().getString(PARAM_DRILL_ID);
+        return Objects.requireNonNull(getArguments()).getString(PARAM_DRILL_ID);
     }
 
     private int getCueBallPositions() {
-        return getArguments().getInt(PARAM_CB_POS, 1);
+        return Objects.requireNonNull(getArguments()).getInt(PARAM_CB_POS, 1);
     }
 
     private int getObBallPositions() {
-        return getArguments().getInt(PARAM_OB_POS, 1);
+        return Objects.requireNonNull(getArguments()).getInt(PARAM_OB_POS, 1);
     }
 
     private int getDefaultSelectedObBallPosition() {
-        int selection = getArguments().getInt(PARAM_SELECTED_OB_POS, 0);
+        int selection = Objects.requireNonNull(getArguments()).getInt(PARAM_SELECTED_OB_POS, 0);
         if (selection > 0)
             return selection - 1;
         else return selection;
     }
 
     private int getDefaultSelectedCbBallPosition() {
-        int selection = getArguments().getInt(PARAM_SELECTED_CB_POS, 0);
+        int selection = Objects.requireNonNull(getArguments()).getInt(PARAM_SELECTED_CB_POS, 0);
         if (selection > 0)
             return selection - 1;
         else return selection;

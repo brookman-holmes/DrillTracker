@@ -1,9 +1,8 @@
 package com.brookmanholmes.drilltracker.presentation.purchasedrills;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.brookmanholmes.drilltracker.presentation.base.Presenter;
-import com.brookmanholmes.drilltracker.presentation.model.DrillModel;
 
 /**
  * Created by Brookman Holmes on 8/11/2017.
@@ -20,9 +19,8 @@ interface PurchaseDrillsContract extends Presenter {
     /**
      * Load the list of purchasable drills, filtering out items not matching the typeSelection
      *
-     * @param typeSelection The type of drills to display
      */
-    void loadDrillsList(DrillModel.Type typeSelection);
+    void loadDrillsList();
 
     /**
      * Purchase a drill pack for the user (add the drills within the drill pack into the user's list

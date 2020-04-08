@@ -20,7 +20,7 @@ public class DrillPackEntityDataMapper {
      *
      * @param entity The entity to transform into a drill
      */
-    public DrillPack transform(DrillPackEntity entity) {
+    private DrillPack transform(DrillPackEntity entity) {
         final DrillPack drillPack = new DrillPack();
         drillPack.name = entity.name;
         drillPack.price = entity.price;

@@ -1,12 +1,7 @@
 package com.brookmanholmes.drilltracker.presentation.model;
 
-import android.util.Log;
-
-import com.brookmanholmes.drilltracker.presentation.model.DrillModel;
-
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 
 /**
  * Created by Brookman Holmes on 7/13/2017.

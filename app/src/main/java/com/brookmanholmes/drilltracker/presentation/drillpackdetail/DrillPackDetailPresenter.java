@@ -1,6 +1,6 @@
 package com.brookmanholmes.drilltracker.presentation.drillpackdetail;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.brookmanholmes.drilltracker.data.repository.datasource.DataStoreFactory;
 import com.brookmanholmes.drilltracker.domain.Drill;
@@ -17,7 +17,7 @@ import java.util.List;
 
 class DrillPackDetailPresenter implements Presenter {
     private DrillPackDetailView view;
-    private GetDrillPackDetails getDrillPackDetails;
+    private final GetDrillPackDetails getDrillPackDetails;
 
     DrillPackDetailPresenter() {
         getDrillPackDetails = new GetDrillPackDetails(DataStoreFactory.getDrillPackRepo());

@@ -1,7 +1,8 @@
 package com.brookmanholmes.drilltracker.presentation.model;
 
-import android.support.annotation.NonNull;
 import android.util.Pair;
+
+import androidx.annotation.NonNull;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -19,19 +20,23 @@ import java.util.TimeZone;
  */
 
 public class DrillModel extends Model {
-    public String name;
-    public String description;
-    public String imageUrl;
-    public int maxScore;
-    public int defaultTargetScore;
-    public int obPositions;
-    public int cbPositions;
-    public int targetPositions;
-    public Type drillType;
-    public boolean purchased;
+    public final String name;
+    public final String description;
+    public final String imageUrl;
+    public final int maxScore;
+    public final int defaultTargetScore;
+    public final int obPositions;
+    public final int cbPositions;
+    public final int targetPositions;
+    public final Type drillType;
+    public final boolean purchased;
+    public final List<List<Integer>> patterns;
     public Collection<AttemptModel> attemptModels;
 
-    public DrillModel(String id, String name, String description, String imageUrl, int maxScore, int defaultTargetScore, int obPositions, int cbPositions, int targetPositions, Type drillType, boolean purchased, Collection<AttemptModel> attemptModels) {
+    public DrillModel(String id, String name, String description, String imageUrl, int maxScore,
+                      int defaultTargetScore, int obPositions, int cbPositions, int targetPositions,
+                      Type drillType, boolean purchased, Collection<AttemptModel> attemptModels,
+                      List<List<Integer>> patterns) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -44,9 +49,10 @@ public class DrillModel extends Model {
         this.purchased = purchased;
         this.attemptModels = attemptModels;
         this.targetPositions = targetPositions;
+        this.patterns = patterns;
     }
 
-    public DrillModel(DrillModel model) {
+    private DrillModel(DrillModel model) {
         this.id = model.id;
         this.name = model.name;
         this.description = model.description;
@@ -59,6 +65,7 @@ public class DrillModel extends Model {
         this.obPositions = model.obPositions;
         this.cbPositions = model.cbPositions;
         this.targetPositions = model.targetPositions;
+        this.patterns = model.patterns;
     }
 
     public DrillModel(DrillModel model, int cbPosition, int obPosition) {
@@ -80,7 +87,7 @@ public class DrillModel extends Model {
         return result;
     }
 
-    public static Collection<AttemptModel> getAttemptsByBallPosition(Collection<AttemptModel> attempts, int cbPosition, int obPosition) {
+    private static Collection<AttemptModel> getAttemptsByBallPosition(Collection<AttemptModel> attempts, int cbPosition, int obPosition) {
         List<AttemptModel> result = new ArrayList<>();
 
         for (AttemptModel attempt : attempts) {
@@ -153,6 +160,7 @@ public class DrillModel extends Model {
         return result;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "DrillModel{" +
@@ -181,12 +189,12 @@ public class DrillModel extends Model {
     }
 
     public static class Dates {
-        public static Date ALL_TIME = new Date(0);
-        public static Date TODAY = getDateInPast(Calendar.HOUR_OF_DAY, 0);
-        public static Date LAST_WEEK = getDateInPast(Calendar.WEEK_OF_YEAR, -1);
-        public static Date LAST_MONTH = getDateInPast(Calendar.MONTH, -1);
-        public static Date LAST_THREE_MONTHS = getDateInPast(Calendar.MONTH, -3);
-        public static Date LAST_SIX_MONTHS = getDateInPast(Calendar.MONTH, -6);
+        public static final Date ALL_TIME = new Date(0);
+        public static final Date TODAY = getDateInPast(Calendar.HOUR_OF_DAY, 0);
+        public static final Date LAST_WEEK = getDateInPast(Calendar.WEEK_OF_YEAR, -1);
+        public static final Date LAST_MONTH = getDateInPast(Calendar.MONTH, -1);
+        public static final Date LAST_THREE_MONTHS = getDateInPast(Calendar.MONTH, -3);
+        public static final Date LAST_SIX_MONTHS = getDateInPast(Calendar.MONTH, -6);
 
         private static Date getDateInPast(int field, int value) {
             Calendar cal = Calendar.getInstance(TimeZone.getDefault());
@@ -201,13 +209,13 @@ public class DrillModel extends Model {
     }
 
     public static class AttemptModel implements Comparable<AttemptModel>{
-        public int score;
-        public int target;
-        public int obPosition;
-        public int cbPosition;
-        public String dateString;
-        public Date date;
-        public Map<String, Integer> extras = new HashMap<>();
+        public final int score;
+        public final int target;
+        public final int obPosition;
+        public final int cbPosition;
+        public final Date date;
+        public final Map<String, Integer> extras = new HashMap<>();
+        final String dateString;
 
         public AttemptModel(int score, int target, Date date, int obPosition, int cbPosition, Map<String, Integer> extras) {
             this.score = score;
@@ -274,6 +282,7 @@ public class DrillModel extends Model {
             return result;
         }
 
+        @NonNull
         @Override
         public String toString() {
             return "AttemptModel{" +

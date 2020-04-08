@@ -9,7 +9,7 @@ import com.brookmanholmes.drilltracker.presentation.base.Presenter;
 class SignInPresenter implements Presenter {
     private SignInView view = null;
 
-    public void attachView(SignInView view) {
+    public void attachView() {
         this.view = view;
     }
 

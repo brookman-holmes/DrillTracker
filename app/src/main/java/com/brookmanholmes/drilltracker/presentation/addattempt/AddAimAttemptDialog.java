@@ -2,11 +2,13 @@ package com.brookmanholmes.drilltracker.presentation.addattempt;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Spinner;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 
 import com.brookmanholmes.drilltracker.R;
 import com.brookmanholmes.drilltracker.presentation.adapters.SpinnerAdapterHelper;
@@ -17,25 +19,26 @@ import com.goodiebag.horizontalpicker.HorizontalPicker;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.brookmanholmes.drilltracker.presentation.addattempt.AddAttemptDialog.PARAM_CB_POS;
+import static com.brookmanholmes.drilltracker.presentation.addattempt.AddAttemptDialog.PARAM_DRILL_ID;
+import static com.brookmanholmes.drilltracker.presentation.addattempt.AddAttemptDialog.PARAM_ENGLISH;
+import static com.brookmanholmes.drilltracker.presentation.addattempt.AddAttemptDialog.PARAM_OB_POS;
+import static com.brookmanholmes.drilltracker.presentation.addattempt.AddAttemptDialog.PARAM_OVER_CUTS;
+import static com.brookmanholmes.drilltracker.presentation.addattempt.AddAttemptDialog.PARAM_SELECTED_CB_POS;
+import static com.brookmanholmes.drilltracker.presentation.addattempt.AddAttemptDialog.PARAM_SELECTED_OB_POS;
+import static com.brookmanholmes.drilltracker.presentation.addattempt.AddAttemptDialog.PARAM_UNDER_CUTS;
+import static com.brookmanholmes.drilltracker.presentation.addattempt.AddAttemptDialog.PARAM_VALUE;
+
 /**
  * Created by Brookman Holmes on 7/28/2017.
  */
-public class AddAimAttemptDialog extends BaseDialogFragment<AddAimAttemptDialogPresenter> {
+public class AddAimAttemptDialog extends BaseDialogFragment<AddAimAttemptPresenter> {
     private static final String TAG = AddAimAttemptDialog.class.getName();
-
-    private static final String PARAM_DRILL_ID = "param_drill_id";
-    private static final String PARAM_VALUE = "param_value";
-    private static final String PARAM_OVER_CUTS = "param_over_cuts";
-    private static final String PARAM_UNDER_CUTS = "param_under_cuts";
-    private static final String PARAM_CB_POS = "param_cb_pos";
-    private static final String PARAM_OB_POS = "param_ob_pos";
-    private static final String PARAM_SELECTED_CB_POS = "param_selected_cb_pos";
-    private static final String PARAM_SELECTED_OB_POS = "param_selected_ob_pos";
-    private static final String PARAM_ENGLISH = "param_english";
 
     @BindView(R.id.number_picker)
     CustomNumberPickerV2 makesPicker;
@@ -50,10 +53,10 @@ public class AddAimAttemptDialog extends BaseDialogFragment<AddAimAttemptDialogP
     @BindView(R.id.cbPositionsSpinner)
     Spinner cbPositionsSpinner;
 
-    int overCuts = 0,
-            underCuts = 0,
-            ballsMade = 0,
-            english = 2;
+    private int overCuts = 0;
+    private int underCuts = 0;
+    private int ballsMade = 0;
+    private int english = 2;
 
     static AddAimAttemptDialog newInstance(String drillId, int cbPositions, int obPositions, int selectedCbPosition, int selectedObPosition) {
         AddAimAttemptDialog dialog = new AddAimAttemptDialog();
@@ -81,7 +84,7 @@ public class AddAimAttemptDialog extends BaseDialogFragment<AddAimAttemptDialogP
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(PARAM_VALUE, makesPicker.getValue());
         outState.putInt(PARAM_OVER_CUTS, overCutsPicker.getValue());
@@ -136,24 +139,24 @@ public class AddAimAttemptDialog extends BaseDialogFragment<AddAimAttemptDialogP
     }
 
     @Override
-    protected AddAimAttemptDialogPresenter getPresenter() {
-        return new AddAimAttemptDialogPresenter();
+    protected AddAimAttemptPresenter getPresenter() {
+        return new AddAimAttemptPresenter();
     }
 
     private String getDrillId() {
-        return getArguments().getString(PARAM_DRILL_ID);
+        return Objects.requireNonNull(getArguments()).getString(PARAM_DRILL_ID);
     }
 
     private int getCueBallPositions() {
-        return getArguments().getInt(PARAM_CB_POS, 1);
+        return Objects.requireNonNull(getArguments()).getInt(PARAM_CB_POS, 1);
     }
 
     private int getObBallPositions() {
-        return getArguments().getInt(PARAM_OB_POS, 1);
+        return Objects.requireNonNull(getArguments()).getInt(PARAM_OB_POS, 1);
     }
 
     private int getDefaultSelectedObBallPosition() {
-        int selection = getArguments().getInt(PARAM_SELECTED_OB_POS, 0);
+        int selection = Objects.requireNonNull(getArguments()).getInt(PARAM_SELECTED_OB_POS, 0);
         if (selection > 0)
             return selection - 1;
         else return selection;
@@ -177,7 +180,7 @@ public class AddAimAttemptDialog extends BaseDialogFragment<AddAimAttemptDialogP
     }
 
     private int getDefaultSelectedCbBallPosition() {
-        int selection = getArguments().getInt(PARAM_SELECTED_CB_POS, 0);
+        int selection = Objects.requireNonNull(getArguments()).getInt(PARAM_SELECTED_CB_POS, 0);
         if (selection > 0)
             return selection - 1;
         else return selection;

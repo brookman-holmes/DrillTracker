@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingStart="8dp"
+    android:paddingTop="4dp"
+    android:paddingEnd="8dp"
+    android:paddingBottom="4dp">
+
+    <ImageView
+        android:id="@+id/position1"
+        style="@style/spinner_pattern_ball_image_view"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/position2"
+        style="@style/spinner_pattern_ball_image_view"
+        app:layout_constraintStart_toEndOf="@id/position1" />
+
+    <ImageView
+        android:id="@+id/position3"
+        style="@style/spinner_pattern_ball_image_view"
+        app:layout_constraintStart_toEndOf="@id/position2" />
+
+    <ImageView
+        android:id="@+id/position4"
+        style="@style/spinner_pattern_ball_image_view"
+        app:layout_constraintStart_toEndOf="@id/position3" />
+
+    <ImageView
+        android:id="@+id/position5"
+        style="@style/spinner_pattern_ball_image_view"
+        app:layout_constraintStart_toEndOf="@id/position4" />
+
+    <ImageView
+        android:id="@+id/position6"
+        style="@style/spinner_pattern_ball_image_view"
+        app:layout_constraintStart_toEndOf="@id/position5" />
+
+    <ImageView
+        android:id="@+id/position7"
+        style="@style/spinner_pattern_ball_image_view"
+        app:layout_constraintStart_toEndOf="@id/position6" />
+
+    <ImageView
+        android:id="@+id/position8"
+        style="@style/spinner_pattern_ball_image_view"
+        app:layout_constraintStart_toEndOf="@id/position7" />
+
+    <ImageView
+        android:id="@+id/position9"
+        style="@style/spinner_pattern_ball_image_view"
+        app:layout_constraintStart_toEndOf="@id/position8" />
+
+    <ImageView
+        android:id="@+id/position10"
+        style="@style/spinner_pattern_ball_image_view"
+        app:layout_constraintStart_toEndOf="@id/position9" />
+
+    <ImageView
+        android:id="@+id/position11"
+        style="@style/spinner_pattern_ball_image_view"
+        app:layout_constraintStart_toEndOf="@id/position10" />
+
+    <ImageView
+        android:id="@+id/position12"
+        style="@style/spinner_pattern_ball_image_view"
+        app:layout_constraintStart_toEndOf="@id/position11" />
+
+    <ImageView
+        android:id="@+id/position13"
+        style="@style/spinner_pattern_ball_image_view"
+        app:layout_constraintStart_toEndOf="@id/position12" />
+
+    <ImageView
+        android:id="@+id/position14"
+        style="@style/spinner_pattern_ball_image_view"
+        app:layout_constraintStart_toEndOf="@id/position13" />
+
+    <ImageView
+        android:id="@+id/position15"
+        style="@style/spinner_pattern_ball_image_view"
+        app:layout_constraintStart_toEndOf="@id/position14" />
+</androidx.constraintlayout.widget.ConstraintLayout>

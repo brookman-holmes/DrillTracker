@@ -1,7 +1,8 @@
 package com.brookmanholmes.drilltracker.presentation.addattempt;
 
 import android.content.DialogInterface;
-import android.support.v7.app.AlertDialog;
+
+import androidx.appcompat.app.AlertDialog;
 
 import com.brookmanholmes.drilltracker.presentation.base.BaseDialogFragment;
 

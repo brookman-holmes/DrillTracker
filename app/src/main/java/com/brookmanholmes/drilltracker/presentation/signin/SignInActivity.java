@@ -2,10 +2,11 @@ package com.brookmanholmes.drilltracker.presentation.signin;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.brookmanholmes.drilltracker.R;
 import com.brookmanholmes.drilltracker.presentation.drills.DrillsListActivity;
@@ -15,12 +16,11 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
+
+import java.util.Objects;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -30,7 +30,7 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
     private static final int RC_SIGN_IN = 1122;
 
     private GoogleApiClient googleApiClient;
-    private SignInPresenter presenter = new SignInPresenter();
+    private final SignInPresenter presenter = new SignInPresenter();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +49,7 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
 
-        presenter.attachView(this);
+        presenter.attachView();
     }
 
     @Override
@@ -58,7 +58,7 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
         presenter.destroy();
     }
 
-    protected void showToastMessage(String message) {
+    private void showToastMessage(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
@@ -78,9 +78,9 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
 
         if (requestCode == RC_SIGN_IN) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            if (result.isSuccess()) {
+            if (Objects.requireNonNull(result).isSuccess()) {
                 GoogleSignInAccount account = result.getSignInAccount();
-                firebaseAuthWithGoogle(account);
+                firebaseAuthWithGoogle(Objects.requireNonNull(account));
             } else {
                 showToastMessage("Google Sign In failed.");
                 Log.e(TAG, "onActivityResult: " + result.getStatus().getStatusCode());
@@ -92,15 +92,12 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
     private void firebaseAuthWithGoogle(GoogleSignInAccount account) {
         AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
         FirebaseAuth.getInstance().signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            startDrillsListActivity();
-                            finish();
-                        } else {
-                            showToastMessage("Authentication failed, try again later");
-                        }
+                .addOnCompleteListener(this, task -> {
+                    if (task.isSuccessful()) {
+                        startDrillsListActivity();
+                        finish();
+                    } else {
+                        showToastMessage("Authentication failed, try again later");
                     }
                 });
     }

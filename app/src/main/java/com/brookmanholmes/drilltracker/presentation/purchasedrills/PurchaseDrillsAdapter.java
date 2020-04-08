@@ -34,7 +34,7 @@ class PurchaseDrillsAdapter extends BaseRecyclerViewAdapter<DrillPackModel> {
     }
 
     @Override
-    protected BaseRecyclerViewAdapter.ViewHolder<DrillPackModel> getDefaultViewHolder(ViewGroup parent, int viewType) {
+    protected BaseRecyclerViewAdapter.ViewHolder<DrillPackModel> getDefaultViewHolder(ViewGroup parent) {
         final View view = inflater.inflate(R.layout.row_drill_pack, parent, false);
         return new DrillPackViewHolder(view);
     }

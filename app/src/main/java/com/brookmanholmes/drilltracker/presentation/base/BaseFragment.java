@@ -1,7 +1,8 @@
 package com.brookmanholmes.drilltracker.presentation.base;
 
-import android.support.v4.app.Fragment;
 import android.widget.Toast;
+
+import androidx.fragment.app.Fragment;
 
 import butterknife.Unbinder;
 

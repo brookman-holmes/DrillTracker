@@ -1,8 +1,9 @@
 package com.brookmanholmes.drilltracker.presentation.adapters;
 
 import android.content.Context;
-import android.support.annotation.ArrayRes;
 import android.widget.ArrayAdapter;
+
+import androidx.annotation.ArrayRes;
 
 import com.brookmanholmes.drilltracker.R;
 
@@ -52,12 +53,24 @@ public class SpinnerAdapterHelper {
             if (i == 0) {
                 list.add(prepend + "Any");
             } else {
-                list.add(prepend + Integer.toString(i));
+                list.add(prepend + i);
             }
         }
         ArrayAdapter<CharSequence> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, list);
 
         adapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item);
         return adapter;
+    }
+
+    public static List<String> createMaterialSpinnerItems(int from, int to) {
+        List<String> result = new ArrayList<>();
+
+        result.add("Any");
+
+        for (int i = from + 1; i < to; i++) {
+            result.add(String.valueOf(i));
+        }
+
+        return result;
     }
 }

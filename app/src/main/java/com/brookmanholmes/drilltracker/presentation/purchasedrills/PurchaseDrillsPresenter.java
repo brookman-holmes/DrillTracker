@@ -1,6 +1,6 @@
 package com.brookmanholmes.drilltracker.presentation.purchasedrills;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.brookmanholmes.drilltracker.data.repository.datasource.DataStoreFactory;
 import com.brookmanholmes.drilltracker.domain.Drill;
@@ -66,7 +66,7 @@ class PurchaseDrillsPresenter implements PurchaseDrillsContract {
     }
 
     @Override
-    public void loadDrillsList(DrillModel.Type typeSelection) {
+    public void loadDrillsList() {
         hideViewRetry();
         showViewLoading();
         getDrillPackList();
@@ -94,7 +94,7 @@ class PurchaseDrillsPresenter implements PurchaseDrillsContract {
     }
 
     private void showErrorMessage(ErrorBundle errorBundle) {
-        String errorMessage = ErrorMessageFactory.create(this.view.context(), errorBundle.getException());
+        String errorMessage = ErrorMessageFactory.create(errorBundle.getException());
         this.view.showError(errorMessage);
     }
 
@@ -115,7 +115,7 @@ class PurchaseDrillsPresenter implements PurchaseDrillsContract {
         public void onNext(List<Drill> drills) {
             for (Drill drill : drills) {
                 addDrill.execute(
-                        new DefaultObserver<Drill>(),
+                        new DefaultObserver<>(),
                         AddDrill.Params.create(
                                 drill.getId(),
                                 drill.getName(),

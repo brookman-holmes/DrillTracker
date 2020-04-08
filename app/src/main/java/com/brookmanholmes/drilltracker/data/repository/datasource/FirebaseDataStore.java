@@ -1,5 +1,9 @@
 package com.brookmanholmes.drilltracker.data.repository.datasource;
 
+import android.util.Log;
+
+import androidx.annotation.NonNull;
+
 import com.brookmanholmes.drilltracker.data.entity.DrillEntity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -10,18 +14,17 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 
 import durdinapps.rxfirebase2.DataSnapshotMapper;
 import durdinapps.rxfirebase2.RxFirebaseDatabase;
-import durdinapps.rxfirebase2.RxFirebaseStorage;
-import io.reactivex.Maybe;
 import io.reactivex.Observable;
-import io.reactivex.annotations.NonNull;
-import io.reactivex.functions.Consumer;
+import io.reactivex.Single;
 
 /**
  * Created by Brookman Holmes on 7/14/2017.
@@ -35,11 +38,11 @@ class FirebaseDataStore implements DrillDataStore {
 
     FirebaseDataStore() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        init(user.getUid());
+        init(Objects.requireNonNull(user).getUid());
     }
 
     private void init(String userId) {
-        imagesRef = FirebaseStorage.getInstance().getReference().child(userId);
+        imagesRef = FirebaseStorage.getInstance().getReference().child("user").child(userId);
         userRef = FirebaseDatabase.getInstance().getReference().child("users").child(userId);
         drillsRef = userRef.child("drills");
         drillsRef.keepSynced(true);
@@ -49,15 +52,11 @@ class FirebaseDataStore implements DrillDataStore {
 
     @Override
     public Observable<DrillEntity> addDrill(DrillEntity entity) {
-        String key;
         if (entity.id == null) {
-            key = drillsRef.push().getKey();
-            entity.id = key;
-        } else {
-            key = entity.id;
+            entity.id = drillsRef.push().getKey();
         }
-        drillsRef.child(key).updateChildren(DrillEntity.toMap(entity));
-        return RxFirebaseDatabase.observeValueEvent(drillsRef.child(key), DrillEntity.class).toObservable();
+        drillsRef.child(Objects.requireNonNull(entity.id)).updateChildren(DrillEntity.toMap(entity));
+        return RxFirebaseDatabase.observeValueEvent(drillsRef.child(entity.id), DrillEntity.class).toObservable();
     }
 
     @Override
@@ -73,7 +72,7 @@ class FirebaseDataStore implements DrillDataStore {
     @Override
     public Observable<DrillEntity> addAttempt(String id, DrillEntity.AttemptEntity attempt) {
         String attemptId = drillsRef.child(id).child("attempts").push().getKey();
-        drillsRef.child(id).child("attempts").child(attemptId).setValue(attempt);
+        drillsRef.child(id).child("attempts").child(Objects.requireNonNull(attemptId)).setValue(attempt);
         return drillEntity(id);
     }
 
@@ -81,7 +80,7 @@ class FirebaseDataStore implements DrillDataStore {
     public void removeLastAttempt(String id) {
         drillsRef.child(id).child("attempts").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getChildrenCount() > 0) { // iterate through list of children
                     Iterator<DataSnapshot> children = dataSnapshot.getChildren().iterator();
                     while (children.hasNext()) {
@@ -96,16 +95,25 @@ class FirebaseDataStore implements DrillDataStore {
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
         });
     }
 
     @Override
-    public Maybe<UploadTask.TaskSnapshot> uploadImage(String drillId, byte[] image) {
-        StorageReference storageRef = imagesRef.child(drillId + ".jpg");
-        return RxFirebaseStorage.putBytes(storageRef, image);
+    public Single<UploadTask.TaskSnapshot> uploadImage(final String drillId, final byte[] image) {
+        final StorageTask<UploadTask.TaskSnapshot> task = imagesRef.child(drillId + ".jpg").putBytes(image);
+
+        return Single.create(emitter -> task
+                .addOnSuccessListener(taskSnapshot -> {
+                    Log.i(TAG, "uploadImage: onSuccess");
+                    emitter.onSuccess(taskSnapshot);
+                }).addOnFailureListener(e -> {
+                    Log.i(TAG, "uploadImage: onFailure" + e);
+                    if (!emitter.isDisposed())
+                        emitter.onError(e);
+                }).addOnCanceledListener(() -> Log.i(TAG, "onCanceled: ")));
     }
 
     @Override
@@ -125,35 +133,29 @@ class FirebaseDataStore implements DrillDataStore {
 
         userRef.child("purchased_drill_packs").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     drillPacks.drillPackEntity(snapshot.getKey())
-                            .subscribe(new Consumer<List<DrillEntity>>() {
-                                @Override
-                                public void accept(@NonNull List<DrillEntity> drillEntities) throws Exception {
-                                    for (DrillEntity entity : drillEntities) {
-                                        updateDrill(entity);
-                                    }
+                            .subscribe(drillEntities -> {
+                                for (DrillEntity entity : drillEntities) {
+                                    updateDrill(entity);
                                 }
                             });
                 }
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
         });
         userRef.child("lastLogin").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 drillPacks.drillPackEntity("drill_pack_3")
-                        .subscribe(new Consumer<List<DrillEntity>>() {
-                            @Override
-                            public void accept(@NonNull List<DrillEntity> drillEntities) throws Exception {
-                                for (DrillEntity entity : drillEntities) {
-                                    addDrill(entity);
-                                }
+                        .subscribe(drillEntities -> {
+                            for (DrillEntity entity : drillEntities) {
+                                addDrill(entity);
                             }
                         });
 
@@ -161,7 +163,7 @@ class FirebaseDataStore implements DrillDataStore {
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
         });

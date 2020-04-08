@@ -28,12 +28,9 @@
     <string name="type_banking">Banking</string>
     <string name="type_speed">Speed</string>
     <string name="title_edit_drill">Edit drill</string>
-    <string name="title_create_drill">Create drill</string>
     <string name="drill_name">Drill name</string>
     <string name="description">Description</string>
     <string name="type_of_drill">Type of drill:</string>
-    <string name="maximum_score">Maximum score</string>
-    <string name="target_score">Target score</string>
     <string name="undo_attempt">Undo attempt</string>
     <string name="edit">Edit</string>
     <string name="purchased">Purchased</string>
@@ -57,32 +54,6 @@
         <item>@string/type_speed</item>
     </string-array>
 
-    <string-array name="position_ratings">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5</item>
-    </string-array>
-
-    <string-array name="ball_positions">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5</item>
-        <item>6</item>
-        <item>7</item>
-        <item>8</item>
-        <item>9</item>
-        <item>10</item>
-        <item>11</item>
-        <item>12</item>
-        <item>13</item>
-        <item>14</item>
-        <item>15</item>
-    </string-array>
-
     <string-array name="history_items">
         <item>All time</item>
         <item>Last 6 Months</item>
@@ -100,15 +71,4 @@
         <item>Full Outside English</item>
     </string-array>
 
-    <string-array name="speed_items">
-        <item>2 diamonds soft</item>
-        <item>1 diamond soft</item>
-        <item><![CDATA[&#189; diamond soft]]></item>
-        <item><![CDATA[&#188; diamond soft]]></item>
-        <item>Correct speed</item>
-        <item><![CDATA[&#188; diamond hard]]></item>
-        <item><![CDATA[&#189; diamond hard]]></item>
-        <item>1 diamond hard</item>
-        <item>2 diamonds hard</item>
-    </string-array>
 </resources>

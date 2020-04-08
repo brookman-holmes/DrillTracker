@@ -1,10 +1,13 @@
 package com.brookmanholmes.drilltracker.domain;
 
+import androidx.annotation.NonNull;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * A class that represents a Drill in the domain layer
@@ -12,18 +15,19 @@ import java.util.Map;
 public class Drill {
     private final boolean purchased;
     private String id;
-    private String name;
-    private String imageUrl;
-    private String description;
-    private Type type;
-    private int maxScore;
-    private int defaultTargetScore;
-    private int cbPositions;
-    private int obPositions;
-    private int targetPositions;
+    private final String name;
+    private final String imageUrl;
+    private final String description;
+    private final Type type;
+    private final int maxScore;
+    private final int defaultTargetScore;
+    private final int cbPositions;
+    private final int obPositions;
+    private final int targetPositions;
     private List<Attempt> attempts = new ArrayList<>();
+    private List<List<Integer>> patterns = new ArrayList<>();
 
-    public Drill(String name, String description, String imageUrl, Type type, int maxScore, int defaultTargetScore, int obPositions, int cbPositions, int targetPositions, boolean purchased) {
+    private Drill(String name, String description, String imageUrl, Type type, int maxScore, int defaultTargetScore, int obPositions, int cbPositions, int targetPositions, boolean purchased, List<List<Integer>> patterns) {
         this.name = name;
         this.imageUrl = imageUrl;
         this.description = description;
@@ -34,10 +38,11 @@ public class Drill {
         this.obPositions = obPositions;
         this.cbPositions = cbPositions;
         this.targetPositions = targetPositions;
+        this.patterns = patterns;
     }
 
-    public Drill(String id, String name, String description, String imageUrl, Type type, int maxScore, int defaultTargetScore, int obPositions, int cbPositions, int targetPositions, boolean purchased) {
-        this(name, description, imageUrl, type, maxScore, defaultTargetScore, obPositions, cbPositions, targetPositions, purchased);
+    public Drill(String id, String name, String description, String imageUrl, Type type, int maxScore, int defaultTargetScore, int obPositions, int cbPositions, int targetPositions, boolean purchased, List<List<Integer>> patterns) {
+        this(name, description, imageUrl, type, maxScore, defaultTargetScore, obPositions, cbPositions, targetPositions, purchased, patterns);
         this.id = id;
     }
 
@@ -93,6 +98,11 @@ public class Drill {
         return type;
     }
 
+    public List<List<Integer>> getPatterns() {
+        return patterns;
+    }
+
+    @NonNull
     @Override
     public String toString() {
         return "Drill{" +
@@ -122,7 +132,7 @@ public class Drill {
         if (defaultTargetScore != drill.defaultTargetScore) return false;
         if (cbPositions != drill.cbPositions) return false;
         if (obPositions != drill.obPositions) return false;
-        if (id != null ? !id.equals(drill.id) : drill.id != null) return false;
+        if (!Objects.equals(id, drill.id)) return false;
         if (!name.equals(drill.name)) return false;
         if (!imageUrl.equals(drill.imageUrl)) return false;
         if (!description.equals(drill.description)) return false;
@@ -162,12 +172,12 @@ public class Drill {
     }
 
     public static class Attempt {
-        private int score;
-        private int target;
-        private Date date;
-        private int obPosition;
-        private int cbPosition;
-        private Map<String, Integer> extras;
+        private final int score;
+        private final int target;
+        private final Date date;
+        private final int obPosition;
+        private final int cbPosition;
+        private final Map<String, Integer> extras;
 
         public Attempt(int score, int target, Date date, int obPosition, int cbPosition, Map<String, Integer> extras) {
             this.score = score;
@@ -202,6 +212,7 @@ public class Drill {
             return extras;
         }
 
+        @NonNull
         @Override
         public String toString() {
             return "Attempt{" +

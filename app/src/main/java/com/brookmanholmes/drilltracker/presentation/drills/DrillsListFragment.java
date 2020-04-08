@@ -2,13 +2,14 @@ package com.brookmanholmes.drilltracker.presentation.drills;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.IdRes;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.IdRes;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.brookmanholmes.drilltracker.R;
 import com.brookmanholmes.drilltracker.presentation.base.BaseFragment;
@@ -17,6 +18,7 @@ import com.brookmanholmes.drilltracker.presentation.drilldetail.DrillDetailsActi
 import com.brookmanholmes.drilltracker.presentation.model.DrillModel;
 
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -171,7 +173,7 @@ public class DrillsListFragment extends BaseFragment<DrillsListContract> impleme
     public void onItemLongClicked(DrillModel drillModel) {
         if (!drillModel.purchased) {
             DeleteDrillDialog dialog = DeleteDrillDialog.newInstance(drillModel.id);
-            dialog.show(getFragmentManager(), DeleteDrillDialog.class.getName());
+            dialog.show(Objects.requireNonNull(getFragmentManager()), DeleteDrillDialog.class.getName());
         }
     }
 }

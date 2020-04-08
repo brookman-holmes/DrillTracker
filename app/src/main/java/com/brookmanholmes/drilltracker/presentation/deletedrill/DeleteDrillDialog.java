@@ -2,10 +2,13 @@ package com.brookmanholmes.drilltracker.presentation.deletedrill;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
+
+import androidx.appcompat.app.AlertDialog;
 
 import com.brookmanholmes.drilltracker.R;
 import com.brookmanholmes.drilltracker.presentation.base.BaseDialogFragment;
+
+import java.util.Objects;
 
 /**
  * Created by Brookman Holmes on 7/28/2017.
@@ -39,7 +42,7 @@ public class DeleteDrillDialog extends BaseDialogFragment<DeleteDrillDialogPrese
     }
 
     private String getDrillId() {
-        return getArguments().getString(PARAM_DRILL_ID);
+        return Objects.requireNonNull(getArguments()).getString(PARAM_DRILL_ID);
     }
 
     @Override

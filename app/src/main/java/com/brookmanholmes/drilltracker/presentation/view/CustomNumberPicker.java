@@ -2,14 +2,15 @@ package com.brookmanholmes.drilltracker.presentation.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.support.annotation.Nullable;
-import android.support.transition.TransitionManager;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.annotation.Nullable;
+import androidx.transition.TransitionManager;
 
 import com.brookmanholmes.drilltracker.R;
 
@@ -29,7 +30,6 @@ public class CustomNumberPicker extends LinearLayout implements View.OnClickList
     private int value = 7;
     private String stringTitle;
 
-    private TextView title;
     private TextView textValue, textPrevValue, textNextValue;
     private ImageButton minus, plus;
 
@@ -68,7 +68,7 @@ public class CustomNumberPicker extends LinearLayout implements View.OnClickList
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        title = findViewById(R.id.title);
+        TextView title = findViewById(R.id.title);
         textValue = findViewById(R.id.value);
         textPrevValue = findViewById(R.id.prevValue);
         textNextValue = findViewById(R.id.nextValue);
@@ -211,7 +211,7 @@ public class CustomNumberPicker extends LinearLayout implements View.OnClickList
         }
     }
 
-    public interface OnValueChangeListener {
+    interface OnValueChangeListener {
         void onValueChange(CustomNumberPicker picker, int oldVal, int newVal);
     }
 }

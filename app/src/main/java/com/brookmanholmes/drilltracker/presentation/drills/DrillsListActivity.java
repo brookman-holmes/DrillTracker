@@ -2,11 +2,6 @@ package com.brookmanholmes.drilltracker.presentation.drills;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,6 +9,13 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 import com.brookmanholmes.drilltracker.R;
 import com.brookmanholmes.drilltracker.presentation.addeditdrill.AddEditDrillActivity;
@@ -23,6 +25,7 @@ import com.brookmanholmes.drilltracker.presentation.purchasedrills.PurchaseDrill
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -41,8 +44,8 @@ public class DrillsListActivity extends BaseViewPagerActivity implements Adapter
     @BindView(R.id.bt_retry)
     Button bt_retry;
 
-    Spinner spinner;
-    List<ActivityCallback> callbacks = new ArrayList<>();
+    private final List<ActivityCallback> callbacks = new ArrayList<>();
+    private Spinner spinner;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -72,7 +75,7 @@ public class DrillsListActivity extends BaseViewPagerActivity implements Adapter
     private ArrayAdapter<CharSequence> createAdapter() {
         ArrayAdapter<CharSequence> spinnerAdapter
                 = ArrayAdapter.createFromResource(
-                getSupportActionBar().getThemedContext(),
+                Objects.requireNonNull(getSupportActionBar()).getThemedContext(),
                 R.array.drill_types,
                 android.R.layout.simple_spinner_item);
 
@@ -190,6 +193,7 @@ public class DrillsListActivity extends BaseViewPagerActivity implements Adapter
             super(fm);
         }
 
+        @NonNull
         @Override
         public Fragment getItem(int position) {
             switch (position) {

@@ -7,6 +7,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
+import java.util.Objects;
 
 import durdinapps.rxfirebase2.DataSnapshotMapper;
 import durdinapps.rxfirebase2.RxFirebaseDatabase;
@@ -38,7 +39,7 @@ class FirebaseDrillPackDataStore implements DrillPackDataStore {
         DatabaseReference userRef = FirebaseDatabase.getInstance()
                 .getReference()
                 .child("users")
-                .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                .child(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid());
 
         userRef.child("purchased_drill_packs")
                 .child(sku)

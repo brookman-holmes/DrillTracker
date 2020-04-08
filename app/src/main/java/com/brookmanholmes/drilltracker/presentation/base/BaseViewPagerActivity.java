@@ -2,15 +2,16 @@ package com.brookmanholmes.drilltracker.presentation.base;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 import com.brookmanholmes.drilltracker.R;
 import com.brookmanholmes.drilltracker.presentation.signin.SignInActivity;
+import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 
 import butterknife.BindView;
@@ -22,8 +23,6 @@ import butterknife.ButterKnife;
 
 public abstract class BaseViewPagerActivity extends AppCompatActivity {
     private static final String TAG = BaseActivity.class.getName();
-
-    protected FragmentPagerAdapter adapter;
 
     @BindView(R.id.pager)
     protected ViewPager pager;
@@ -42,7 +41,7 @@ public abstract class BaseViewPagerActivity extends AppCompatActivity {
         } else {
             ButterKnife.bind(this);
             setSupportActionBar(toolbar);
-            adapter = getAdapter();
+            FragmentPagerAdapter adapter = getAdapter();
             pager.setAdapter(adapter);
             tabs.setupWithViewPager(pager);
         }

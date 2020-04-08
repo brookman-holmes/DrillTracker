@@ -2,11 +2,13 @@ package com.brookmanholmes.drilltracker.presentation.addattempt;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Spinner;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 
 import com.brookmanholmes.drilltracker.R;
 import com.brookmanholmes.drilltracker.presentation.adapters.SpinnerAdapterHelper;
@@ -17,22 +19,22 @@ import com.goodiebag.horizontalpicker.HorizontalPicker;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class AddPositionalAttemptDialog extends BaseDialogFragment<AddPositionalAttemptDialogPresenter> {
+import static com.brookmanholmes.drilltracker.presentation.addattempt.AddAttemptDialog.PARAM_CB_POS;
+import static com.brookmanholmes.drilltracker.presentation.addattempt.AddAttemptDialog.PARAM_DRILL_ID;
+import static com.brookmanholmes.drilltracker.presentation.addattempt.AddAttemptDialog.PARAM_SELECTED_CB_POS;
+import static com.brookmanholmes.drilltracker.presentation.addattempt.AddAttemptDialog.PARAM_SELECTED_TARGET_POS;
+import static com.brookmanholmes.drilltracker.presentation.addattempt.AddAttemptDialog.PARAM_SPEED_VALUE;
+import static com.brookmanholmes.drilltracker.presentation.addattempt.AddAttemptDialog.PARAM_SPIN_VALUE;
+import static com.brookmanholmes.drilltracker.presentation.addattempt.AddAttemptDialog.PARAM_TARGET_DISTANCE;
+import static com.brookmanholmes.drilltracker.presentation.addattempt.AddAttemptDialog.PARAM_TARGET_POS;
+import static com.brookmanholmes.drilltracker.presentation.addattempt.AddAttemptDialog.PARAM_THICKNESS_VALUE;
 
-    private static final String PARAM_DRILL_ID = "param_drill_id";
-    private static final String PARAM_SPIN_VALUE = "param_spin_value";
-    private static final String PARAM_THICKNESS_VALUE = "param_thickness_value";
-    private static final String PARAM_SPEED_VALUE = "param_speed_value";
-    private static final String PARAM_TARGET_DISTANCE = "param_target_distance";
-    private static final String PARAM_CB_POS = "param_cb_pos";
-    private static final String PARAM_TARGET_POS = "param_ob_pos";
-    private static final String PARAM_SELECTED_TARGET_POS = "param_selected_cb_pos";
-    private static final String PARAM_SELECTED_CB_POS = "param_selected_ob_pos";
-
+public class AddPositionalAttemptDialog extends BaseDialogFragment<AddPositionalAttemptPresenter> {
     @BindView(R.id.hSpinPicker)
     HorizontalPicker hSpinPicker;
     @BindView(R.id.speedPicker)
@@ -77,7 +79,7 @@ public class AddPositionalAttemptDialog extends BaseDialogFragment<AddPositional
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putSerializable(PARAM_SPEED_VALUE, getSpeedValue());
         outState.putSerializable(PARAM_SPIN_VALUE, getVSpinValue());
@@ -121,8 +123,8 @@ public class AddPositionalAttemptDialog extends BaseDialogFragment<AddPositional
     }
 
     @Override
-    protected AddPositionalAttemptDialogPresenter getPresenter() {
-        return new AddPositionalAttemptDialogPresenter();
+    protected AddPositionalAttemptPresenter getPresenter() {
+        return new AddPositionalAttemptPresenter();
     }
 
     @Override
@@ -135,26 +137,26 @@ public class AddPositionalAttemptDialog extends BaseDialogFragment<AddPositional
     }
 
     private String getDrillId() {
-        return getArguments().getString(PARAM_DRILL_ID);
+        return Objects.requireNonNull(getArguments()).getString(PARAM_DRILL_ID);
     }
 
     private int getCueBallPositions() {
-        return getArguments().getInt(PARAM_CB_POS, 1);
+        return Objects.requireNonNull(getArguments()).getInt(PARAM_CB_POS, 1);
     }
 
     private int getTargetPositions() {
-        return getArguments().getInt(PARAM_TARGET_POS, 1);
+        return Objects.requireNonNull(getArguments()).getInt(PARAM_TARGET_POS, 1);
     }
 
     private int getDefaultSelectedCbBallPosition() {
-        int selection = getArguments().getInt(PARAM_SELECTED_CB_POS, 0);
+        int selection = Objects.requireNonNull(getArguments()).getInt(PARAM_SELECTED_CB_POS, 0);
         if (selection > 0)
             return selection - 1;
         else return selection;
     }
 
     private int getDefaultSelectedTargetPosition() {
-        int selection = getArguments().getInt(PARAM_SELECTED_TARGET_POS, 0);
+        int selection = Objects.requireNonNull(getArguments()).getInt(PARAM_SELECTED_TARGET_POS, 0);
         if (selection > 0)
             return selection - 1;
         else return selection;

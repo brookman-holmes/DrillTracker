@@ -1,6 +1,6 @@
 package com.brookmanholmes.drilltracker.data.entity;
 
-import android.support.annotation.Keep;
+import androidx.annotation.Keep;
 
 /**
  * Drill Pack Entity used in the data layer

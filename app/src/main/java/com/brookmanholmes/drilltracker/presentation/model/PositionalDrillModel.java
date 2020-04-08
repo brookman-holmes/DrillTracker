@@ -12,13 +12,13 @@ public class PositionalDrillModel {
     private static final String POSITIONAL_TYPES = "positionalTypes";
     private static final String TARGET_POSITION = "targetPosition";
 
-    private int attempts;
+    private final int attempts;
     private int speedHard, speedSoft, speedCorrect;
     private int vSpinMore, vSpinLess, vSpinCorrect;
     private int hSpinMore, hSpinLess, hSpinCorrect;
     private int distanceZero, distanceSix, distanceTwelve, distanceEighteen, distanceTwentyFour;
 
-    public PositionalDrillModel(Collection<DrillModel.AttemptModel> attemptModels) {
+    private PositionalDrillModel(Collection<DrillModel.AttemptModel> attemptModels) {
         attempts = attemptModels.size();
 
         for (DrillModel.AttemptModel attemptModel : attemptModels) {

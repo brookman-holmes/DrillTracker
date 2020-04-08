@@ -1,11 +1,12 @@
 package com.brookmanholmes.drilltracker.domain.interactor;
 
-import android.util.Log;
-
 import com.brookmanholmes.drilltracker.data.entity.mapper.DrillEntityDataMapper;
 import com.brookmanholmes.drilltracker.domain.Drill;
 import com.brookmanholmes.drilltracker.domain.repository.DrillRepository;
 import com.brookmanholmes.drilltracker.presentation.model.DrillModel;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import io.reactivex.Observable;
 
@@ -25,11 +26,10 @@ public class UpdateDrill extends UseCase<Drill, UpdateDrill.Params> {
 
     @Override
     Observable<Drill> buildUseCaseObservable(Params params) {
-        Log.i(TAG, "buildUseCaseObservable: CB: " + params.cbPositions);
-        Log.i(TAG, "buildUseCaseObservable: OB: " + params.obPositions);
-        if (params.image != null)
+        if (params.image != null) {
             return drillRepository.updateDrill(
                     new Drill(
+                            params.id,
                             params.name,
                             params.description,
                             null,
@@ -39,11 +39,12 @@ public class UpdateDrill extends UseCase<Drill, UpdateDrill.Params> {
                             params.obPositions,
                             params.cbPositions,
                             params.targetPositions,
-                            false
+                            false,
+                            params.patterns
                     ),
                     params.image
             );
-        else if (params.imageUrl != null)
+        } else if (params.imageUrl != null) {
             return drillRepository.updateDrill(
                     new Drill(
                             params.id,
@@ -56,24 +57,27 @@ public class UpdateDrill extends UseCase<Drill, UpdateDrill.Params> {
                             params.obPositions,
                             params.cbPositions,
                             params.targetPositions,
-                            false
+                            false,
+                            params.patterns
                     )
             );
+        }
         else throw new IllegalStateException("Both image and imageUrl are null");
     }
 
     public static class Params {
-        String name;
-        String id;
-        String description;
-        int maxScore;
+        final String name;
+        final String id;
+        final String description;
+        final int maxScore;
         int defaultTargetScore;
-        int obPositions;
-        int cbPositions;
-        int targetPositions;
-        String type;
-        byte[] image;
+        final int obPositions;
+        final int cbPositions;
+        final int targetPositions;
+        final String type;
+        final byte[] image;
         String imageUrl;
+        final List<List<Integer>> patterns = new ArrayList<>();
 
         private Params(String name, String description, String id, byte[] image, DrillModel.Type type, int maxScore, int targetScore, int obPositions, int cbPositions, int targetPositions) {
             DrillEntityDataMapper mapper = new DrillEntityDataMapper();

@@ -39,7 +39,8 @@ public class DrillModelDataMapper {
                 model.obPositions,
                 model.cbPositions,
                 model.targetPositions,
-                model.purchased
+                model.purchased,
+                model.patterns
         );
     }
 
@@ -56,7 +57,8 @@ public class DrillModelDataMapper {
                 drill.getTargetPositions(),
                 DrillModel.Type.values()[drill.getType().ordinal()],
                 drill.isPurchased(),
-                transformAttempts(drill.getAttempts())
+                transformAttempts(drill.getAttempts()),
+                drill.getPatterns()
         );
     }
 

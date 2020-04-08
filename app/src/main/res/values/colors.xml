@@ -1,22 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimaryLight">#6ec6ff</color>
-    <color name="colorPrimary">#2196F3</color>
-    <color name="colorPrimaryDark">#1976D2</color>
-    <color name="colorAccentLight">#ffa06d</color>
-    <color name="colorAccent">#FF6E40</color>
-    <color name="colorAccentDark">#c53d13</color>
+    <color name="colorPrimaryLight">#5abaf2</color>
+    <color name="colorPrimary">#048abf</color>
+    <color name="colorPrimaryDark">#005d8e</color>
+
+    <color name="colorAccent">@color/colorAnalogousGreen</color>
 
     <color name="primary_text">#de000000</color>
     <color name="secondary_text">#8a000000</color>
 
-    <color name="chart_redder">#ff5252</color>
-    <color name="chart_red">#FF6E40</color>
-    <color name="chart_purple">#536DFE</color>
-    <color name="chart_blue">#448AFF</color>
-    <color name="chart_cyan">#18FFFF</color>
-    <color name="chart_green">#69F0AE</color>
-    <color name="chart_yellow">#FFFF00</color>
-    <color name="chart_orange">#FFAB40</color>
+    <color name="colorAnalogousGreen">#04bf96</color>
+
+    <color name="colorAnalogousPurple">#042dbf</color>
+
+    <color name="chart_excellent">#46a35e</color>
+    <color name="chart_good">#fffe51</color>
+    <color name="chart_fair">#ffb258</color>
+    <color name="chart_poor">#ff6a69</color>
+    <color name="chart_really_poor">#de574d</color>
+
+    <color name="chart_speed_correct">@color/colorPrimary</color>
+    <color name="chart_speed_little">@color/colorPrimaryLight</color>
+    <color name="chart_speed_much">@color/colorPrimaryDark</color>
+
+    <color name="chart_spin_correct">@color/colorPrimary</color>
+    <color name="chart_spin_little">@color/colorPrimaryLight</color>
+    <color name="chart_spin_much">@color/colorPrimaryDark</color>
+    0
+    <color name="chart_pattern_miss">@color/colorPrimaryLight</color>
+    <color name="chart_pattern_make">@color/colorPrimary</color>
+
+    <color name="chart_target_line">@color/colorPrimaryLight</color>
+    <color name="chart_line_color">@color/colorPrimary</color>
+
+    <color name="shape_rating_zero">@color/ball_three</color>
+    <color name="shape_rating_one">@color/ball_five</color>
+    <color name="shape_rating_two">@color/ball_one</color>
+    <color name="shape_rating_three">@color/ball_six</color>
+
+    <color name="text_ball_made">@color/ball_six</color>
+    <color name="text_ball_missed">@color/ball_three</color>
+
+    <color name="ball_one">#f2cb05</color>
+    <color name="ball_two">#048abf</color>
+    <color name="ball_six">#027333</color>
+    <color name="ball_three">#f22e3e</color>
+    <color name="ball_four">#8451a6</color>
+    <color name="ball_five">#f28127</color>
+    <color name="ball_seven">#a62424</color>
+    <color name="ball_eight">#000000</color>
 
 </resources>
