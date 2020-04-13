@@ -164,7 +164,6 @@ public class DrillDataRepository implements DrillRepository {
                     .subscribe(new SingleObserver<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSubscribe(Disposable d) {
-                            Log.i(TAG, "onSubscribe: ");
                         }
 
                         @Override

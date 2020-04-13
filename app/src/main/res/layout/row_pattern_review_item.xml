@@ -14,7 +14,7 @@
         android:layout_marginTop="8dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_eight_ball" />
+        app:srcCompat="@drawable/ball_eight" />
 
     <TextView
         android:id="@+id/text13"
@@ -52,7 +52,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/textView9"
         app:layout_constraintStart_toEndOf="@+id/textView9"
         app:layout_constraintTop_toTopOf="@+id/textView9"
-        app:srcCompat="@drawable/ic_nine_ball" />
+        app:srcCompat="@drawable/ball_nine" />
 
     <TextView
         android:id="@+id/text14"

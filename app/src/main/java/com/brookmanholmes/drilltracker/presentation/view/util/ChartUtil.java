@@ -523,11 +523,11 @@ public class ChartUtil {
 
     private static @ColorRes
     int getColumnColor(float average) {
-        if (average < .5f)
+        if (average < 1.5f)
             return R.color.chart_poor;
-        else if (average < 1.5f)
-            return R.color.chart_fair;
         else if (average < 2.5f)
+            return R.color.chart_fair;
+        else if (average < 3.5f)
             return R.color.chart_good;
         else
             return R.color.chart_excellent;
@@ -537,10 +537,10 @@ public class ChartUtil {
         List<Column> columns = new ArrayList<>();
         for (int i = 0; i + 1 < model.getMaxScore(); i++) {
             List<SubcolumnValue> subcolumnValues = new ArrayList<>();
-            subcolumnValues.add(createSubColumnValue(model.getTransitionalCount(i, 3), getColor(chart.getContext(), R.color.chart_excellent)));
-            subcolumnValues.add(createSubColumnValue(model.getTransitionalCount(i, 2), getColor(chart.getContext(), R.color.chart_good)));
-            subcolumnValues.add(createSubColumnValue(model.getTransitionalCount(i, 1), getColor(chart.getContext(), R.color.chart_fair)));
-            subcolumnValues.add(createSubColumnValue(model.getTransitionalCount(i, 0), getColor(chart.getContext(), R.color.chart_poor)));
+            subcolumnValues.add(createSubColumnValue(model.getTransitionalCount(i, 4), getColor(chart.getContext(), R.color.chart_excellent)));
+            subcolumnValues.add(createSubColumnValue(model.getTransitionalCount(i, 3), getColor(chart.getContext(), R.color.chart_good)));
+            subcolumnValues.add(createSubColumnValue(model.getTransitionalCount(i, 2), getColor(chart.getContext(), R.color.chart_fair)));
+            subcolumnValues.add(createSubColumnValue(model.getTransitionalCount(i, 1), getColor(chart.getContext(), R.color.chart_poor)));
             columns.add(new Column(subcolumnValues).setHasLabels(true));
         }
 

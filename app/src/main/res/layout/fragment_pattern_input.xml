@@ -24,7 +24,7 @@
         android:layout_marginTop="8dp"
         app:layout_constraintStart_toEndOf="@+id/title"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_one_ball" />
+        app:srcCompat="@drawable/ball_one" />
 
     <Switch
         android:id="@+id/switch1"
@@ -56,7 +56,7 @@
         android:layout_marginTop="24dp"
         app:layout_constraintStart_toEndOf="@+id/textView8"
         app:layout_constraintTop_toBottomOf="@+id/switch1"
-        app:srcCompat="@drawable/ic_two_ball" />
+        app:srcCompat="@drawable/ball_two" />
 
     <RadioGroup
         android:id="@+id/radioGroup"

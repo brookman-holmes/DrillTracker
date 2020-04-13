@@ -119,23 +119,23 @@ public class PatternInputFragment extends Fragment {
     @OnClick({R.id.radioButtonExcellent, R.id.radioButtonGood, R.id.radioButtonPoor, R.id.radioButtonFair})
     void onRadioButtonClicked(RadioButton radioButton) {
         boolean checked = radioButton.isChecked();
-        int selected = 0;
+        int selected = 1;
         switch (radioButton.getId()) {
             case R.id.radioButtonExcellent:
                 if (checked)
-                    selected = 3;
+                    selected = 4;
                 break;
             case R.id.radioButtonGood:
                 if (checked)
-                    selected = 2;
+                    selected = 3;
                 break;
             case R.id.radioButtonFair:
                 if (checked)
-                    selected = 1;
+                    selected = 2;
                 break;
             case R.id.radioButtonPoor:
                 if (checked)
-                    selected = 0;
+                    selected = 1;
                 break;
         }
 
@@ -151,52 +151,52 @@ public class PatternInputFragment extends Fragment {
         int res;
         switch (ball) {
             case 1:
-                res = R.drawable.ic_one_ball;
+                res = R.drawable.ball_one;
                 break;
             case 2:
-                res = R.drawable.ic_two_ball;
+                res = R.drawable.ball_two;
                 break;
             case 3:
-                res = R.drawable.ic_three_ball;
+                res = R.drawable.ball_three;
                 break;
             case 4:
-                res = R.drawable.ic_four_ball;
+                res = R.drawable.ball_four;
                 break;
             case 5:
-                res = R.drawable.ic_five_ball;
+                res = R.drawable.ball_five;
                 break;
             case 6:
-                res = R.drawable.ic_six_ball;
+                res = R.drawable.ball_six;
                 break;
             case 7:
-                res = R.drawable.ic_seven_ball;
+                res = R.drawable.ball_seven;
                 break;
             case 8:
-                res = R.drawable.ic_eight_ball;
+                res = R.drawable.ball_eight;
                 break;
             case 9:
-                res = R.drawable.ic_nine_ball;
+                res = R.drawable.ball_nine;
                 break;
             case 10:
-                res = R.drawable.ic_ten_ball;
+                res = R.drawable.ball_ten;
                 break;
             case 11:
-                res = R.drawable.ic_eleven_ball;
+                res = R.drawable.ball_eleven;
                 break;
             case 12:
-                res = R.drawable.ic_twelve_ball;
+                res = R.drawable.ball_twelve;
                 break;
             case 13:
-                res = R.drawable.ic_thirteen_ball;
+                res = R.drawable.ball_thirteen;
                 break;
             case 14:
-                res = R.drawable.ic_fourteen_ball;
+                res = R.drawable.ball_fourteen;
                 break;
             case 15:
-                res = R.drawable.ic_fifteen_ball;
+                res = R.drawable.ball_fifteen;
                 break;
             default:
-                res = R.drawable.ic_one_ball;
+                res = R.drawable.ball_one;
         }
         image.setImageResource(res);
     }

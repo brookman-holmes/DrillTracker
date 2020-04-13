@@ -1,34 +1,339 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
+
+    <ImageView
+        android:id="@+id/one_ball"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="16dp"
+        android:background="?android:attr/selectableItemBackground"
+        app:layout_constraintEnd_toStartOf="@+id/two_ball"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/six_ball"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/textView7"
+        app:srcCompat="@drawable/ball_one" />
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="1,2,3,4,5,6,7,8,9"
-            android:inputType="numberDecimal" />
-    </com.google.android.material.textfield.TextInputLayout>
+    <ImageView
+        android:id="@+id/two_ball"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        app:layout_constraintEnd_toStartOf="@+id/three_ball"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/one_ball"
+        app:layout_constraintTop_toTopOf="@id/one_ball"
+        app:srcCompat="@drawable/ball_two" />
 
-    <TextView
-        style="@android:style/TextAppearance.Material.Caption"
+    <ImageView
+        android:id="@+id/three_ball"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        app:layout_constraintEnd_toStartOf="@+id/four_ball"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/two_ball"
+        app:layout_constraintTop_toTopOf="@id/one_ball"
+        app:srcCompat="@drawable/ball_three" />
+
+    <ImageView
+        android:id="@+id/four_ball"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        app:layout_constraintEnd_toStartOf="@+id/five_ball"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/three_ball"
+        app:layout_constraintTop_toTopOf="@id/one_ball"
+        app:srcCompat="@drawable/ball_four" />
+
+    <ImageView
+        android:id="@+id/five_ball"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/four_ball"
+        app:layout_constraintTop_toTopOf="@id/one_ball"
+        app:srcCompat="@drawable/ball_five" />
+
+    <ImageView
+        android:id="@+id/six_ball"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toStartOf="@+id/seven_ball"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/one_ball"
+        app:srcCompat="@drawable/ball_six" />
+
+    <ImageView
+        android:id="@+id/seven_ball"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        app:layout_constraintEnd_toStartOf="@+id/eight_ball"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/six_ball"
+        app:layout_constraintTop_toTopOf="@id/six_ball"
+        app:srcCompat="@drawable/ball_seven" />
+
+    <ImageView
+        android:id="@+id/eight_ball"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        app:layout_constraintEnd_toStartOf="@+id/nine_ball"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/seven_ball"
+        app:layout_constraintTop_toTopOf="@id/six_ball"
+        app:srcCompat="@drawable/ball_eight" />
+
+    <ImageView
+        android:id="@+id/nine_ball"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        app:layout_constraintEnd_toStartOf="@+id/ten_ball"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/eight_ball"
+        app:layout_constraintTop_toTopOf="@id/six_ball"
+        app:srcCompat="@drawable/ball_nine" />
+
+    <ImageView
+        android:id="@+id/ten_ball"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/nine_ball"
+        app:layout_constraintTop_toTopOf="@id/six_ball"
+        app:srcCompat="@drawable/ball_ten" />
+
+    <ImageView
+        android:id="@+id/eleven_ball"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toStartOf="@+id/twelve_ball"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/six_ball"
+        app:srcCompat="@drawable/ball_eleven" />
+
+    <ImageView
+        android:id="@+id/twelve_ball"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        app:layout_constraintEnd_toStartOf="@+id/thirteen_ball"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/eleven_ball"
+        app:layout_constraintTop_toTopOf="@id/eleven_ball"
+        app:srcCompat="@drawable/ball_twelve" />
+
+    <ImageView
+        android:id="@+id/thirteen_ball"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        app:layout_constraintEnd_toStartOf="@+id/fourteen_ball"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/twelve_ball"
+        app:layout_constraintTop_toTopOf="@id/eleven_ball"
+        app:srcCompat="@drawable/ball_thirteen" />
+
+    <ImageView
+        android:id="@+id/fourteen_ball"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        app:layout_constraintEnd_toStartOf="@+id/fifteen_ball"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/thirteen_ball"
+        app:layout_constraintTop_toTopOf="@id/eleven_ball"
+        app:srcCompat="@drawable/ball_fourteen" />
+
+    <ImageView
+        android:id="@+id/fifteen_ball"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/fourteen_ball"
+        app:layout_constraintTop_toTopOf="@id/eleven_ball"
+        app:srcCompat="@drawable/ball_fifteen" />
+
+    <ImageView
+        android:id="@+id/pattern_ball_one"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:text="Add a new pattern separating each ball number with a comma"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toStartOf="@+id/pattern_ball_two"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/textView6"
+        tools:srcCompat="@drawable/ball_one" />
+
+    <ImageView
+        android:id="@+id/pattern_ball_two"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toStartOf="@+id/pattern_ball_three"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/pattern_ball_one"
+        app:layout_constraintTop_toTopOf="@+id/pattern_ball_one"
+        tools:srcCompat="@drawable/ball_two" />
+
+    <ImageView
+        android:id="@+id/pattern_ball_three"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toStartOf="@+id/pattern_ball_four"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/pattern_ball_two"
+        app:layout_constraintTop_toTopOf="@+id/pattern_ball_one"
+        tools:srcCompat="@drawable/ball_three" />
+
+    <ImageView
+        android:id="@+id/pattern_ball_four"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toStartOf="@+id/pattern_ball_five"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/pattern_ball_three"
+        app:layout_constraintTop_toTopOf="@+id/pattern_ball_one"
+        tools:srcCompat="@drawable/ball_four" />
+
+    <ImageView
+        android:id="@+id/pattern_ball_five"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toStartOf="@+id/pattern_ball_six"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/pattern_ball_four"
+        app:layout_constraintTop_toTopOf="@+id/pattern_ball_one"
+        tools:srcCompat="@drawable/ball_five" />
+
+    <ImageView
+        android:id="@+id/pattern_ball_six"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toStartOf="@+id/pattern_ball_seven"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/pattern_ball_five"
+        app:layout_constraintTop_toTopOf="@+id/pattern_ball_one"
+        tools:srcCompat="@drawable/ball_six" />
+
+    <ImageView
+        android:id="@+id/pattern_ball_seven"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toStartOf="@+id/pattern_ball_eight"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/pattern_ball_six"
+        app:layout_constraintTop_toTopOf="@+id/pattern_ball_one"
+        tools:srcCompat="@drawable/ball_seven" />
+
+    <ImageView
+        android:id="@+id/pattern_ball_eight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/pattern_ball_seven"
+        app:layout_constraintTop_toTopOf="@+id/pattern_ball_one"
+        tools:srcCompat="@drawable/ball_eight" />
+
+    <ImageView
+        android:id="@+id/pattern_ball_nine"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toStartOf="@+id/pattern_ball_ten"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pattern_ball_one"
+        tools:srcCompat="@drawable/ball_nine" />
+
+    <ImageView
+        android:id="@+id/pattern_ball_ten"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toStartOf="@+id/pattern_ball_eleven"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toEndOf="@+id/pattern_ball_nine"
+        app:layout_constraintTop_toTopOf="@+id/pattern_ball_nine"
+        tools:srcCompat="@drawable/ball_ten" />
+
+    <ImageView
+        android:id="@+id/pattern_ball_eleven"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toStartOf="@+id/pattern_ball_twelve"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/pattern_ball_ten"
+        app:layout_constraintTop_toTopOf="@+id/pattern_ball_nine"
+        tools:srcCompat="@drawable/ball_eleven" />
+
+    <ImageView
+        android:id="@+id/pattern_ball_twelve"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toStartOf="@+id/pattern_ball_thirteen"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/pattern_ball_eleven"
+        app:layout_constraintTop_toTopOf="@+id/pattern_ball_nine"
+        tools:srcCompat="@drawable/ball_twelve" />
+
+    <ImageView
+        android:id="@+id/pattern_ball_thirteen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toStartOf="@+id/pattern_ball_fourteen"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/pattern_ball_twelve"
+        app:layout_constraintTop_toTopOf="@+id/pattern_ball_nine"
+        tools:srcCompat="@drawable/ball_thirteen" />
+
+    <ImageView
+        android:id="@+id/pattern_ball_fourteen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toStartOf="@+id/pattern_ball_fifteen"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/pattern_ball_thirteen"
+        app:layout_constraintTop_toTopOf="@+id/pattern_ball_nine"
+        tools:srcCompat="@drawable/ball_fourteen" />
+
+    <ImageView
+        android:id="@+id/pattern_ball_fifteen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/pattern_ball_fourteen"
+        app:layout_constraintTop_toTopOf="@+id/pattern_ball_nine"
+        tools:srcCompat="@drawable/ball_fifteen" />
+
+    <TextView
+        android:id="@+id/textView6"
+        style="@android:style/TextAppearance.Material.Title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
+        android:text="New Pattern"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView7"
+        style="@android:style/TextAppearance.Material.Title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:text="Select the next ball in the pattern"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pattern_ball_nine" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

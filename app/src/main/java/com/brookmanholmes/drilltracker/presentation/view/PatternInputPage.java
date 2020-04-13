@@ -22,7 +22,7 @@ public class PatternInputPage extends BranchPage {
         this.positionInPattern = positionInPattern;
         this.currentBall = currentBall;
         this.nextBall = nextBall;
-        getData().putInt(SHAPE_KEY, 0);
+        getData().putInt(SHAPE_KEY, 1);
     }
 
     @Override

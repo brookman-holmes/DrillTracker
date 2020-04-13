@@ -1,7 +1,5 @@
 package com.brookmanholmes.drilltracker.data.repository.datasource;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 
 import com.brookmanholmes.drilltracker.data.entity.DrillEntity;
@@ -106,14 +104,10 @@ class FirebaseDataStore implements DrillDataStore {
         final StorageTask<UploadTask.TaskSnapshot> task = imagesRef.child(drillId + ".jpg").putBytes(image);
 
         return Single.create(emitter -> task
-                .addOnSuccessListener(taskSnapshot -> {
-                    Log.i(TAG, "uploadImage: onSuccess");
-                    emitter.onSuccess(taskSnapshot);
-                }).addOnFailureListener(e -> {
-                    Log.i(TAG, "uploadImage: onFailure" + e);
+                .addOnSuccessListener(emitter::onSuccess).addOnFailureListener(e -> {
                     if (!emitter.isDisposed())
                         emitter.onError(e);
-                }).addOnCanceledListener(() -> Log.i(TAG, "onCanceled: ")));
+                }));
     }
 
     @Override
