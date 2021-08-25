@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AutoCompleteTextView
 import androidx.fragment.app.Fragment
+import com.brookmanholmes.drilltracker.R
 import com.brookmanholmes.drilltracker.databinding.FragmentDrillDetailsBinding
 import com.brookmanholmes.drilltracker.presentation.addattempt.AddAttemptDialog
 import com.brookmanholmes.drilltracker.presentation.addattempt.AddAttemptDialog.Companion.PARAM_DRILL
@@ -17,6 +18,7 @@ import com.brookmanholmes.drilltracker.presentation.addattempt.AddAttemptDialog.
 import com.brookmanholmes.drilltracker.presentation.addattempt.AddAttemptDialog.Companion.PARAM_SELECTED_SPEED
 import com.brookmanholmes.drilltracker.presentation.addattempt.AddAttemptDialog.Companion.PARAM_SELECTED_TARGET_POS
 import com.brookmanholmes.drilltracker.presentation.addattempt.AddAttemptDialog.Companion.PARAM_SELECTED_V_SPIN
+import com.brookmanholmes.drilltracker.presentation.addeditdrill.AddEditDrillActivity
 import com.brookmanholmes.drilltracker.presentation.model.*
 import com.brookmanholmes.drilltracker.presentation.view.setDistanceChart
 import com.brookmanholmes.drilltracker.presentation.view.setDistanceChartWithSpeed
@@ -109,6 +111,29 @@ class DrillDetailsFragment : Fragment(), DrillDetailsView {
         }
 
         return binding.root
+    }
+
+    private fun setupToolbar() {
+        binding.toolbar.let { it ->
+            it.inflateMenu(R.menu.fragment_drill_details_menu)
+            it.setNavigationIcon(R.drawable.ic_arrow_back)
+            it.setNavigationOnClickListener {
+                requireActivity().finish()
+            }
+            it.setOnMenuItemClickListener { that ->
+                if (that.itemId == R.id.ic_edit) {
+                    startActivity(
+                        AddEditDrillActivity.newInstance(
+                            requireContext(),
+                            requireArguments().getString(PARAM_DRILL_ID)
+                        )
+                    )
+                } else if (that.itemId == R.id.ic_undo_attempt) {
+                    presenter.onUndoClicked()
+                }
+                true
+            }
+        }
     }
 
     override fun showLoading() {
@@ -258,8 +283,6 @@ class DrillDetailsFragment : Fragment(), DrillDetailsView {
     override fun setDescription(description: String) {
         _binding?.description?.text = description
     }
-
-
 
     override fun setPositionSpinners(cbPositions: Int, obPositions: Int, targetPositions: Int) {
         setupSpinner(_binding?.targetPositionsSpinner, targetPositions)
