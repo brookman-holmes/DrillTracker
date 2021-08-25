@@ -49,27 +49,31 @@
         app:layout_collapseMode="pin"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end">
-
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
         <Spinner
             android:id="@+id/cbPositionsSpinner"
             android:layout_width="wrap_content"
             android:layout_height="48dp"
-            android:layout_gravity="center" />
-
+            android:layout_gravity="center"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
         <Spinner
             android:id="@+id/obPositionsSpinner"
             android:layout_width="wrap_content"
             android:layout_height="48dp"
-            android:layout_gravity="center" />
+            android:layout_gravity="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <Spinner
             android:id="@+id/targetPositionsSpinner"
             android:layout_width="wrap_content"
             android:layout_height="48dp"
-            android:layout_gravity="center" />
-    </LinearLayout>
+            android:layout_gravity="center"
+            app:layout_constraintTop_toBottomOf="@id/cbPositionsSpinner"
+            app:layout_constraintEnd_toEndOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 </com.google.android.material.appbar.AppBarLayout>

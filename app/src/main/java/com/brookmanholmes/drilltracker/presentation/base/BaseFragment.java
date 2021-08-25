@@ -15,7 +15,7 @@ public abstract class BaseFragment<T extends Presenter> extends Fragment {
     protected Unbinder unbinder;
 
 
-    public BaseFragment() {
+    public  BaseFragment() {
         setRetainInstance(true);
     }
 

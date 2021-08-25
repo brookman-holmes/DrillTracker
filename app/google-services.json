@@ -23,6 +23,14 @@
           }
         },
         {
+          "client_id": "630526958550-skdim8n67uvc3bib7b8j0ckc1vfe47o2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.brookmanholmes.drilltracker",
+            "certificate_hash": "a7157c7f1eba6cfb3de61a5db05fb2009ab68d00"
+          }
+        },
+        {
           "client_id": "630526958550-k7a5bj5ahoils13lsdus1k74c17hdrhc.apps.googleusercontent.com",
           "client_type": 3
         }

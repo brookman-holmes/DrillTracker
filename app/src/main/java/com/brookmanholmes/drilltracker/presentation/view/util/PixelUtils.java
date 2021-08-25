@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.util.DisplayMetrics;
 
-class PixelUtils {
+public class PixelUtils {
     /**
      * This method converts dp unit to equivalent pixels, depending on device density.
      *

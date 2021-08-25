@@ -2,7 +2,7 @@ package com.brookmanholmes.drilltracker.domain.interactor;
 
 import com.brookmanholmes.drilltracker.domain.Drill;
 import com.brookmanholmes.drilltracker.domain.repository.DrillRepository;
-import com.brookmanholmes.drilltracker.presentation.model.DrillModel;
+import com.brookmanholmes.drilltracker.presentation.model.Type;
 
 import java.util.List;
 
@@ -27,13 +27,13 @@ public class GetDrillList extends UseCase<List<Drill>, GetDrillList.Params>{
     }
 
     public static class Params {
-        private final DrillModel.Type filter;
+        private final Type filter;
 
-        private Params(DrillModel.Type filter) {
+        private Params(Type filter) {
             this.filter = filter;
         }
 
-        public static Params newInstance(DrillModel.Type filter) {
+        public static Params newInstance(Type filter) {
             return new Params(filter);
         }
     }

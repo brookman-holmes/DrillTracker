@@ -1,20 +1,20 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar" />
 
     <style name="AlertDialogTheme.Fullscreen" parent="AppTheme">
         <item name="android:windowIsFloating">false</item>
     </style>
 
-    <style name="AlertDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+    <style name="AlertDialogTheme" parent="Theme.MaterialComponents.Dialog.Alert">
         <item name="colorAccent">@color/colorAccent</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -41,7 +41,7 @@
         <item name="android:layout_gravity">center</item>
     </style>
 
-    <style name="player_stats" parent="Base.TextAppearance.AppCompat.Body1">
+    <style name="player_stats" parent="TextAppearance.AppCompat.Body1">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="layout_gravity">center</item>
@@ -69,13 +69,12 @@
     </style>
 
     <style name="horizontal_picker_style">
-        <item name="android:layout_margin">8dp</item>
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">48dp</item>
+        <item name="android:layout_height">36dp</item>
         <item name="itemMargin">8dp</item>
-        <item name="textSize">16sp</item>
-        <item name="itemHeight">48dp</item>
-        <item name="itemWidth">96dp</item>
+        <item name="textSize">14sp</item>
+        <item name="itemHeight">36dp</item>
+        <item name="itemWidth">84dp</item>
         <item name="textColorSelector">@color/add_attempt_text_color_selector</item>
         <item name="backgroundSelector">@drawable/add_attempt_background_selector</item>
     </style>
@@ -102,7 +101,23 @@
         <item name="android:layout_width">24dp</item>
         <item name="android:layout_height">24dp</item>
         <item name="android:src">@drawable/ball_one</item>
-        <item name="layout_constraintTop_toTopOf">parent</item>
-        <item name="layout_constraintBottom_toBottomOf">parent</item>
+    </style>
+
+    <style name="BallInPatternImageView">
+        <item name="android:layout_width">32dp</item>
+        <item name="android:layout_height">32dp</item>
+        <item name="android:background">?android:attr/selectableItemBackgroundBorderless</item>
+    </style>
+
+    <style name="BallInPatternListImageView">
+        <item name="android:layout_width">32dp</item>
+        <item name="android:layout_height">32dp</item>
+        <item name="android:background">?android:attr/selectableItemBackgroundBorderless</item>
+    </style>
+
+    <style name="textInputLayoutDefault" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColorHint">@color/colorPrimary</item>
     </style>
 </resources>

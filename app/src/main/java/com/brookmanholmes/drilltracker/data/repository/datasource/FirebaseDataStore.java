@@ -2,7 +2,9 @@ package com.brookmanholmes.drilltracker.data.repository.datasource;
 
 import androidx.annotation.NonNull;
 
+import com.brookmanholmes.drilltracker.data.entity.AttemptEntity;
 import com.brookmanholmes.drilltracker.data.entity.DrillEntity;
+import com.brookmanholmes.drilltracker.data.entity.mapper.DrillEntityDataMapper;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -23,6 +25,7 @@ import durdinapps.rxfirebase2.DataSnapshotMapper;
 import durdinapps.rxfirebase2.RxFirebaseDatabase;
 import io.reactivex.Observable;
 import io.reactivex.Single;
+import timber.log.Timber;
 
 /**
  * Created by Brookman Holmes on 7/14/2017.
@@ -32,7 +35,9 @@ class FirebaseDataStore implements DrillDataStore {
 
     private StorageReference imagesRef = FirebaseStorage.getInstance().getReference();
     private DatabaseReference drillsRef = FirebaseDatabase.getInstance().getReference();
+    private DatabaseReference attemptsRef = FirebaseDatabase.getInstance().getReference();
     private DatabaseReference userRef = FirebaseDatabase.getInstance().getReference();
+    private final DrillEntityDataMapper drillEntityDataMapper= new DrillEntityDataMapper();
 
     FirebaseDataStore() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -43,6 +48,7 @@ class FirebaseDataStore implements DrillDataStore {
         imagesRef = FirebaseStorage.getInstance().getReference().child("user").child(userId);
         userRef = FirebaseDatabase.getInstance().getReference().child("users").child(userId);
         drillsRef = userRef.child("drills");
+        attemptsRef = userRef.child("attempts");
         drillsRef.keepSynced(true);
         userRef.keepSynced(true);
         onLogin();
@@ -50,9 +56,8 @@ class FirebaseDataStore implements DrillDataStore {
 
     @Override
     public Observable<DrillEntity> addDrill(DrillEntity entity) {
-        if (entity.id == null) {
+        if (entity.id == null)
             entity.id = drillsRef.push().getKey();
-        }
         drillsRef.child(Objects.requireNonNull(entity.id)).updateChildren(DrillEntity.toMap(entity));
         return RxFirebaseDatabase.observeValueEvent(drillsRef.child(entity.id), DrillEntity.class).toObservable();
     }
@@ -63,14 +68,19 @@ class FirebaseDataStore implements DrillDataStore {
     }
 
     @Override
+    public Observable<List<AttemptEntity>> getAttempts(final String id) {
+        return RxFirebaseDatabase.observeValueEvent(attemptsRef.child(id), DataSnapshotMapper.listOf(AttemptEntity.class)).toObservable();
+    }
+
+    @Override
     public Observable<DrillEntity> drillEntity(String id) {
         return RxFirebaseDatabase.observeValueEvent(drillsRef.child(id), DrillEntity.class).toObservable();
     }
 
     @Override
-    public Observable<DrillEntity> addAttempt(String id, DrillEntity.AttemptEntity attempt) {
-        String attemptId = drillsRef.child(id).child("attempts").push().getKey();
-        drillsRef.child(id).child("attempts").child(Objects.requireNonNull(attemptId)).setValue(attempt);
+    public Observable<DrillEntity> addAttempt(@NonNull String id, AttemptEntity attempt) {
+        String attemptId = attemptsRef.child(id).push().getKey();
+        attemptsRef.child(id).child(attemptId).setValue(attempt);
         return drillEntity(id);
     }
 
@@ -104,7 +114,8 @@ class FirebaseDataStore implements DrillDataStore {
         final StorageTask<UploadTask.TaskSnapshot> task = imagesRef.child(drillId + ".jpg").putBytes(image);
 
         return Single.create(emitter -> task
-                .addOnSuccessListener(emitter::onSuccess).addOnFailureListener(e -> {
+                .addOnSuccessListener(emitter::onSuccess)
+                .addOnFailureListener(e -> {
                     if (!emitter.isDisposed())
                         emitter.onError(e);
                 }));
@@ -122,6 +133,11 @@ class FirebaseDataStore implements DrillDataStore {
         drillsRef.child(drillId).setValue(null);
     }
 
+    @Override
+    public void addPattern(String drillId, List<Integer> pattern) {
+        Timber.i("FirebaseDataStore.addPattern() called");
+    }
+
     private void onLogin() {
         final FirebaseDrillPackDataStore drillPacks = new FirebaseDrillPackDataStore();
 
@@ -134,7 +150,7 @@ class FirebaseDataStore implements DrillDataStore {
                                 for (DrillEntity entity : drillEntities) {
                                     updateDrill(entity);
                                 }
-                            });
+                            }).dispose();
                 }
             }
 

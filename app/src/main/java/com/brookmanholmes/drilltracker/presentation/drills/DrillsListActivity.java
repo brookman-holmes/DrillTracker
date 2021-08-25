@@ -20,7 +20,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.brookmanholmes.drilltracker.R;
 import com.brookmanholmes.drilltracker.presentation.addeditdrill.AddEditDrillActivity;
 import com.brookmanholmes.drilltracker.presentation.base.BaseViewPagerActivity;
-import com.brookmanholmes.drilltracker.presentation.model.DrillModel;
+import com.brookmanholmes.drilltracker.presentation.model.Type;
 import com.brookmanholmes.drilltracker.presentation.purchasedrills.PurchaseDrillsFragment;
 
 import java.util.ArrayList;
@@ -96,31 +96,31 @@ public class DrillsListActivity extends BaseViewPagerActivity implements Adapter
 
     }
 
-    private DrillModel.Type transformSelectionToModel(int selection) {
+    private Type transformSelectionToModel(int selection) {
         switch (selection) {
             case 0:
-                return DrillModel.Type.ANY;
+                return Type.ANY;
             case 1:
-                return DrillModel.Type.AIMING;
+                return Type.AIMING;
             case 2:
-                return DrillModel.Type.BANKING;
+                return Type.BANKING;
             case 3:
-                return DrillModel.Type.KICKING;
+                return Type.KICKING;
             case 4:
-                return DrillModel.Type.PATTERN;
+                return Type.PATTERN;
             case 5:
-                return DrillModel.Type.POSITIONAL;
+                return Type.POSITIONAL;
             case 6:
-                return DrillModel.Type.SAFETY;
+                return Type.SAFETY;
             case 7:
-                return DrillModel.Type.SPEED;
+                return Type.SPEED;
             default:
                 throw new IllegalArgumentException("No such selection possible: " + selection);
         }
     }
 
     @Override
-    public DrillModel.Type onSelected() {
+    public Type onSelected() {
         return null;
     }
 
@@ -150,16 +150,16 @@ public class DrillsListActivity extends BaseViewPagerActivity implements Adapter
     }
 
     @Override
-    public DrillModel.Type getTypeSelection() {
+    public Type getTypeSelection() {
         return getFilterSelection();
     }
 
     @Override
-    public DrillModel.Type getFilterSelection() {
+    public Type getFilterSelection() {
         if (spinner != null)
             return transformSelectionToModel(spinner.getSelectedItemPosition());
         else
-            return DrillModel.Type.ANY;
+            return Type.ANY;
     }
 
     @Override

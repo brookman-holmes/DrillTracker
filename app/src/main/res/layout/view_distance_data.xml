@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:orientation="vertical">
+
+    <com.google.android.material.textview.MaterialTextView
+        style="@style/TextAppearance.MaterialComponents.Subtitle1"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:gravity="center_vertical"
+        android:text="Distance from Target Data" />
+
+    <com.google.android.material.card.MaterialCardView
+        app:strokeWidth="1dp"
+        app:strokeColor="@color/colorPrimary"
+        app:cardElevation="0dp"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <lecho.lib.hellocharts.view.ColumnChartView
+            android:layout_margin="8dp"
+            android:id="@+id/targetDataChart"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            tools:showIn="@layout/fragment_drill_details" />
+        <androidx.gridlayout.widget.GridLayout
+            style="@style/match_info_grid"
+            android:padding="16dp">
+
+            <TextView
+                style="@style/player_stats"
+                android:text="@string/this_session"
+                app:layout_column="1" />
+
+            <TextView
+                style="@style/player_stats"
+                android:text="@string/lifetime"
+                app:layout_column="2" />
+
+            <TextView
+                style="@style/player_stats"
+                android:gravity="start"
+                android:text="Average ♢ error"
+                app:layout_columnWeight="0"
+                app:layout_gravity="start" />
+
+            <TextView
+                android:id="@+id/sessionError"
+                style="@style/player_stats"
+                android:text="0" />
+
+            <TextView
+                android:id="@+id/lifetimeError"
+                style="@style/player_stats"
+                android:text="0"
+                app:layout_column="2" />
+
+        </androidx.gridlayout.widget.GridLayout>
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+</LinearLayout>

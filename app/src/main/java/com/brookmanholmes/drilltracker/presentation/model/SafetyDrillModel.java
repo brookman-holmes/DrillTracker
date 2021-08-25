@@ -1,87 +1,67 @@
 package com.brookmanholmes.drilltracker.presentation.model;
 
-import android.util.Pair;
-
-import java.util.Collection;
-import java.util.Date;
-import java.util.EnumSet;
-
 /**
  * Created by brookman on 1/6/18.
  */
 
 public class SafetyDrillModel {
-    private static final String SAFETY_TYPES = "safetyTypes";
+    // thickness is vertical spin for safeties
     private final int attempts;
     private int speedHard, speedSoft, speedCorrect;
     private int spinLess, spinMore, spinCorrect;
     private int thicknessThin, thicknessThick, thicknessCorrect;
 
-    public SafetyDrillModel(Collection<DrillModel.AttemptModel> attemptModels) {
-        attempts = attemptModels.size();
-        for (DrillModel.AttemptModel attemptModel : attemptModels) {
-            Integer code = attemptModel.extras.get(SAFETY_TYPES);
-            EnumSet<SafetyTypes> safetyTypes = decode(code == null ? 0 : code);
-            for (SafetyTypes type : safetyTypes) {
-                addSafetyAttempt(type);
-            }
-        }
-    }
-
-    private static int encode(EnumSet<SafetyTypes> set) {
-        int result = 0;
-
-        for (SafetyTypes val : set) {
-            result |= 1 << val.ordinal();
+    public SafetyDrillModel(DrillModel drillModel) {
+        /*
+        attempts = drillModel.getAttemptModels().size();
+        for (AttemptModel attemptModel : drillModel.getAttemptModels()) {
+            addHSpinResult(attemptModel.englishResult);
+            addSpeedResult(attemptModel.speedResult);
+            addThicknessResult(attemptModel.spinResult);
         }
 
-        return result;
+         */
+        attempts = 0;
     }
 
-    private static EnumSet<SafetyTypes> decode(int code) {
-        EnumSet<SafetyTypes> result = EnumSet.noneOf(SafetyTypes.class);
-        while (code != 0) {
-            int ordinal = Integer.numberOfTrailingZeros(code);
-            code ^= Integer.lowestOneBit(code);
-            result.add(SafetyTypes.values()[ordinal]);
-        }
-
-        return result;
-    }
-
-    public static DrillModel.AttemptModel createAttempt(int obPosition, int cbPosition, EnumSet<SafetyTypes> safetyTypes) {
-        return new DrillModel.AttemptModel(0, 0, new Date(), obPosition, cbPosition,
-                new Pair<>(SAFETY_TYPES, encode(safetyTypes)));
-    }
-
-    private void addSafetyAttempt(SafetyTypes type) {
-        switch (type) {
-            case SPEED_HARD:
-                speedHard++;
-                break;
-            case SPEED_SOFT:
+    private void addSpeedResult(SpinResult spinResult) {
+        switch (spinResult) {
+            case TOO_LITTLE:
                 speedSoft++;
                 break;
-            case SPEED_CORRECT:
+            case CORRECT:
                 speedCorrect++;
                 break;
-            case SPIN_LESS:
-                spinLess++;
+            case TOO_MUCH:
+                speedHard++;
                 break;
-            case SPIN_MORE:
-                spinMore++;
-                break;
-            case SPIN_CORRECT:
-                spinCorrect++;
-                break;
-            case THICKNESS_THIN:
+        }
+    }
+
+    private void addThicknessResult(SpinResult spinResult) {
+        switch (spinResult) {
+            case TOO_LITTLE:
                 thicknessThin++;
                 break;
-            case THICKNESS_THICK:
+            case CORRECT:
+                thicknessCorrect++;
+                break;
+            case TOO_MUCH:
                 thicknessThick++;
                 break;
-            case THICKNESS_CORRECT:
-                thicknessCorrect++;
+        }
+    }
+
+    private void addHSpinResult(SpinResult spinResult) {
+        switch (spinResult) {
+            case TOO_LITTLE:
+                spinLess++;
+                break;
+            case CORRECT:
+                spinCorrect++;
+                break;
+            case TOO_MUCH:
+                spinMore++;
                 break;
         }
     }
@@ -124,17 +104,5 @@ public class SafetyDrillModel {
 
     public int getThicknessCorrect() {
         return thicknessCorrect;
-    }
-
-    public enum SafetyTypes {
-        SPEED_HARD,
-        SPEED_SOFT,
-        SPEED_CORRECT,
-        SPIN_LESS,
-        SPIN_MORE,
-        SPIN_CORRECT,
-        THICKNESS_THIN,
-        THICKNESS_THICK,
-        THICKNESS_CORRECT
     }
 }

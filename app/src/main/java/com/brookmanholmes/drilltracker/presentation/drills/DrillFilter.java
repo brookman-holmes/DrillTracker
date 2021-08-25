@@ -1,13 +1,13 @@
 package com.brookmanholmes.drilltracker.presentation.drills;
 
-import com.brookmanholmes.drilltracker.presentation.model.DrillModel;
+import com.brookmanholmes.drilltracker.presentation.model.Type;
 
 /**
  * Created by Brookman Holmes on 8/9/2017.
  */
 
 interface DrillFilter {
-    DrillModel.Type getFilterSelection();
+    Type getFilterSelection();
 
-    DrillModel.Type onSelected();
+    Type onSelected();
 }

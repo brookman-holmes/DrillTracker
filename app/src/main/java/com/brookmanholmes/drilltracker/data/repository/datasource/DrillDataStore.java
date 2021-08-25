@@ -1,5 +1,6 @@
 package com.brookmanholmes.drilltracker.data.repository.datasource;
 
+import com.brookmanholmes.drilltracker.data.entity.AttemptEntity;
 import com.brookmanholmes.drilltracker.data.entity.DrillEntity;
 import com.google.firebase.storage.UploadTask;
 
@@ -25,6 +26,8 @@ public interface DrillDataStore {
      */
     Observable<List<DrillEntity>> drillEntityList();
 
+    Observable<List<AttemptEntity>> getAttempts(final String id);
+
     /**
      * Get an {@link Observable} which will emit a {@link DrillEntity} by its id.
      *
@@ -37,7 +40,7 @@ public interface DrillDataStore {
      * @param id The id of the drill to have the attempt added to
      * @param attempt The attempt to add to the drill
      */
-    Observable<DrillEntity> addAttempt(final String id, DrillEntity.AttemptEntity attempt);
+    Observable<DrillEntity> addAttempt(final String id, AttemptEntity attempt);
 
     /**
      * Removes the most recent attempt from a drill
@@ -58,6 +61,13 @@ public interface DrillDataStore {
      * @param entity The updated entity
      */
     Observable<DrillEntity> updateDrill(DrillEntity entity);
+
+    /**
+     * Adds a pattern to a drill
+     * @param drillId The id of the drill to add a pattern to
+     * @param pattern The pattern to add to the drill
+     */
+    void addPattern(String drillId, List<Integer> pattern);
 
     /**
      * Removes a drill from the data store

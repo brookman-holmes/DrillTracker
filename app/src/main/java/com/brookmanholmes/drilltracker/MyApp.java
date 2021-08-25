@@ -12,6 +12,8 @@ import org.solovyev.android.checkout.Billing;
 
 import javax.annotation.Nonnull;
 
+import timber.log.Timber;
+
 /**
  * Created by Brookman Holmes on 7/16/2017.
  */
@@ -37,6 +39,10 @@ public class MyApp extends Application implements FirebaseAuth.AuthStateListener
     @Override
     public void onCreate() {
         super.onCreate();
+
+        if (BuildConfig.DEBUG)
+            Timber.plant(new Timber.DebugTree());
+
         Billing.setLogger(Billing.newLogger());
         Picasso picasso = new Picasso.Builder(this).build();
         Picasso.setSingletonInstance(picasso);

@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:orientation="vertical">
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/title"
+        style="@style/TextAppearance.MaterialComponents.Subtitle1"
+        android:gravity="center_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"/>
+
+    <com.google.android.material.card.MaterialCardView
+        app:strokeWidth="1dp"
+        app:strokeColor="@color/colorPrimary"
+        app:cardElevation="0dp"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp">
+
+            <lecho.lib.hellocharts.view.PieChartView
+                android:id="@+id/spinChart"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintDimensionRatio="1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_default="percent"
+                app:layout_constraintWidth_percent=".37" />
+
+            <lecho.lib.hellocharts.view.PieChartView
+                android:id="@+id/spinHistoryChart"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintDimensionRatio="1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_default="percent"
+                app:layout_constraintWidth_percent=".37" />
+
+            <TextView
+                android:id="@+id/text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:drawableStart="@drawable/legend_correct"
+                android:drawablePadding="4dp"
+                android:text="Correct"
+                app:layout_constraintStart_toEndOf="@id/spinChart"
+                app:layout_constraintTop_toTopOf="@id/spinChart" />
+
+            <TextView
+                android:id="@+id/text2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:drawableStart="@drawable/legend_much"
+                android:drawablePadding="4dp"
+                android:text="Too much"
+                app:layout_constraintStart_toStartOf="@id/text"
+                app:layout_constraintTop_toBottomOf="@id/text1" />
+
+            <TextView
+                android:id="@+id/text1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:drawableStart="@drawable/legend_little"
+                android:drawablePadding="4dp"
+                android:text="Too little"
+                app:layout_constraintStart_toStartOf="@id/text"
+                app:layout_constraintTop_toBottomOf="@id/text" />
+
+            <androidx.gridlayout.widget.GridLayout
+                android:id="@+id/grid"
+                style="@style/match_info_grid"
+                android:padding="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/spinChart">
+
+                <TextView
+                    style="@style/player_stats"
+                    android:text="@string/this_session"
+                    app:layout_column="0" />
+
+                <TextView
+                    style="@style/player_stats"
+                    android:text="@string/lifetime"
+                    app:layout_column="2" />
+
+                <TextView
+                    android:id="@+id/sessionAttempts"
+                    style="@style/player_stats"
+                    android:text="0"
+                    android:textColor="@color/primary_text" />
+
+                <TextView
+                    style="@style/player_stats"
+                    android:gravity="start"
+                    android:text="@string/attempts"
+                    android:textColor="@color/primary_text"
+                    app:layout_columnWeight="0"
+                    app:layout_gravity="start" />
+
+                <TextView
+                    android:id="@+id/lifetimeAttempts"
+                    style="@style/player_stats"
+                    android:text="0"
+                    android:textColor="@color/primary_text"
+                    app:layout_column="2" />
+
+                <TextView
+                    android:id="@+id/sessionMakes"
+                    style="@style/player_stats"
+                    android:text="0"
+                    android:textColor="@color/secondary_text" />
+                <TextView
+                    style="@style/player_stats"
+                    android:gravity="start"
+                    android:text="Correct"
+                    android:textColor="@color/secondary_text"
+                    app:layout_columnWeight="0"
+                    app:layout_gravity="start" />
+
+                <TextView
+                    android:id="@+id/lifetimeMakes"
+                    style="@style/player_stats"
+                    android:text="0"
+                    android:textColor="@color/secondary_text"
+                    app:layout_column="2" />
+
+                <TextView
+                    android:id="@+id/sessionHard"
+                    style="@style/player_stats"
+                    android:text="0"
+                    android:textColor="@color/primary_text" />
+                <TextView
+                    style="@style/player_stats"
+                    android:gravity="start"
+                    android:text="Too much"
+                    android:textColor="@color/primary_text"
+                    app:layout_columnWeight="0"
+                    app:layout_gravity="start" />
+
+                <TextView
+                    android:id="@+id/lifetimeHard"
+                    style="@style/player_stats"
+                    android:text="0"
+                    android:textColor="@color/primary_text"
+                    app:layout_column="2" />
+
+                <TextView
+                    android:id="@+id/sessionSoft"
+                    style="@style/player_stats"
+                    android:text="0"
+                    android:textColor="@color/secondary_text" />
+
+                <TextView
+                    style="@style/player_stats"
+                    android:gravity="start"
+                    android:text="Too little"
+                    android:textColor="@color/secondary_text"
+                    app:layout_columnWeight="0"
+                    app:layout_gravity="start" />
+
+                <TextView
+                    android:id="@+id/lifetimeSoft"
+                    style="@style/player_stats"
+                    android:text="0"
+                    android:textColor="@color/secondary_text"
+                    app:layout_column="2" />
+
+                <TextView
+                    android:id="@+id/sessionAvg"
+                    style="@style/player_stats"
+                    android:text="0"
+                    android:textColor="@color/primary_text" />
+                <TextView
+                    style="@style/player_stats"
+                    android:gravity="start"
+                    android:text="Success rate"
+                    android:textColor="@color/primary_text"
+                    app:layout_columnWeight="0"
+                    app:layout_gravity="start" />
+
+                <TextView
+                    android:id="@+id/lifetimeAvg"
+                    style="@style/player_stats"
+                    android:text="0"
+                    android:textColor="@color/primary_text"
+                    app:layout_column="2" />
+
+            </androidx.gridlayout.widget.GridLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+</LinearLayout>

@@ -1,9 +1,11 @@
 package com.brookmanholmes.drilltracker.domain.repository;
 
+import com.brookmanholmes.drilltracker.domain.Attempt;
 import com.brookmanholmes.drilltracker.domain.Drill;
-import com.brookmanholmes.drilltracker.presentation.model.DrillModel;
+import com.brookmanholmes.drilltracker.presentation.model.Type;
 import com.google.firebase.storage.UploadTask;
 
+import java.util.Collection;
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -32,7 +34,7 @@ public interface DrillRepository {
      * Get a {@link Observable} which will emit a list of {@link Drill}
      * @param filter The filter used to remove unwanted drills from the list
      */
-    Observable<List<Drill>> observeDrills(DrillModel.Type filter);
+    Observable<List<Drill>> observeDrills(Type filter);
 
     /**
      * Get a {@link Observable} which will emit a {@link Drill}
@@ -45,7 +47,14 @@ public interface DrillRepository {
      * @param id The id of the drill to add an attempt to
      * @param attempt The attempt to be added
      */
-    Observable<Drill> addAttempt(final String id, Drill.Attempt attempt);
+    Observable<Drill> addAttempt(final String id, Attempt attempt);
+
+    /**
+     * Get a {@link Observable}
+     * @param id The id of the drill to get the attempts from
+     * @return a list of attempts for that drill
+     */
+    Observable<Collection<Attempt>> getAttempts(final String id);
 
     /**
      * Removes the last attempt from a drill

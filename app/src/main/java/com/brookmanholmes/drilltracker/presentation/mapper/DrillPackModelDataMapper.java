@@ -16,13 +16,16 @@ public class DrillPackModelDataMapper {
     }
 
     private DrillPackModel transform(DrillPack drillPack) {
-        DrillPackModel model = new DrillPackModel();
-        model.name = drillPack.name;
-        model.price = drillPack.price;
-        model.description = drillPack.description;
-        model.sku = drillPack.sku;
-        model.url = drillPack.url;
-        model.id = drillPack.sku;
+        DrillPackModel model = new DrillPackModel(
+                drillPack.sku,
+                drillPack.name,
+                drillPack.price,
+                drillPack.description,
+                drillPack.sku,
+                null,
+                false,
+                ""
+        );
 
         return model;
     }
@@ -47,7 +50,7 @@ public class DrillPackModelDataMapper {
         if (models != null && !models.isEmpty()) {
             result = new ArrayList<>();
             for (DrillPackModel model : models) {
-                result.add(model.sku);
+                result.add(model.getSku());
             }
         } else {
             result = Collections.emptyList();

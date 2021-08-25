@@ -2,9 +2,7 @@ package com.brookmanholmes.drilltracker.presentation.addattempt;
 
 import com.brookmanholmes.drilltracker.data.repository.datasource.DataStoreFactory;
 import com.brookmanholmes.drilltracker.domain.interactor.AddAttempt;
-import com.brookmanholmes.drilltracker.domain.interactor.DefaultObserver;
 import com.brookmanholmes.drilltracker.presentation.base.Presenter;
-import com.brookmanholmes.drilltracker.presentation.model.PatternDrillModel;
 import com.brookmanholmes.drilltracker.presentation.model.PatternEntry;
 
 import java.util.List;
@@ -32,9 +30,5 @@ public class AddPatternPresenter implements Presenter {
     }
 
     public void addAttempt(String drillId, int targetScore, List<PatternEntry> entries) {
-        addAttempt.execute(
-                new DefaultObserver<>(),
-                AddAttempt.Params.create(drillId, PatternDrillModel.createAttempt(targetScore, entries))
-        );
     }
 }

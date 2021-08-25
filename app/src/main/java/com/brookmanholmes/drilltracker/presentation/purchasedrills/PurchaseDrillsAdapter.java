@@ -41,16 +41,16 @@ class PurchaseDrillsAdapter extends BaseRecyclerViewAdapter<DrillPackModel> {
 
     void updatePurchases(Inventory.Product product) {
         for (DrillPackModel model : data) {
-            Sku sku = product.getSku(model.sku);
+            Sku sku = product.getSku(model.getSku());
             if (sku != null) {
-                model.purchased = product.isPurchased(sku);
-                //model.price = sku.price;
+                model.setPurchased(product.isPurchased(sku));
+                model.setPrice(sku.price);
                 for (Purchase purchase : product.getPurchases()) {
-                    if (purchase.sku.equals(model.sku))
-                        model.token = purchase.token;
+                    if (purchase.sku.equals(model.getSku()))
+                        model.setToken(purchase.token);
                 }
             } else {
-                FirebaseDatabase.getInstance().getReference().child("log").child(model.sku).setValue("sku for " + model.sku + " is null");
+                FirebaseDatabase.getInstance().getReference().child("log").child(model.getSku()).setValue("sku for " + model.getSku() + " is null");
             }
         }
 
@@ -59,9 +59,9 @@ class PurchaseDrillsAdapter extends BaseRecyclerViewAdapter<DrillPackModel> {
 
     public void consumePurchase(String sku) {
         for (DrillPackModel model : data) {
-            if (model.sku.equals(sku)) {
-                model.purchased = false;
-                model.token = null;
+            if (model.getSku().equals(sku)) {
+                model.setPurchased(false);
+                model.setToken(null);
                 notifyItemRangeChanged(0, data.size());
             }
         }
@@ -87,16 +87,16 @@ class PurchaseDrillsAdapter extends BaseRecyclerViewAdapter<DrillPackModel> {
         public void bind(DrillPackModel model, OnItemClickListener<DrillPackModel> onItemClickListener) {
             super.bind(model, onItemClickListener);
             this.onItemClickListener = onItemClickListener;
-            name.setText(model.name);
-            description.setText(model.description);
-            if (model.purchased) {
+            name.setText(model.getName());
+            description.setText(model.getDescription());
+            if (model.getPurchased()) {
                 price.setText(R.string.purchased);
                 price.setEnabled(false);
             } else {
-                price.setText(String.format("Buy for %s", model.price));
+                price.setText(String.format("Buy for %s", model.getPrice()));
                 price.setEnabled(true);
             }
-            ImageHandler.loadImage(image, model.url);
+            ImageHandler.loadImage(image, model.getUrl());
 
             itemView.setOnLongClickListener(this);
         }

@@ -3,7 +3,10 @@ package com.brookmanholmes.drilltracker.presentation.drilldetail;
 import androidx.annotation.NonNull;
 
 import com.brookmanholmes.drilltracker.presentation.base.Presenter;
-import com.brookmanholmes.drilltracker.presentation.model.DrillModel;
+import com.brookmanholmes.drilltracker.presentation.model.English;
+import com.brookmanholmes.drilltracker.presentation.model.ShotResult;
+import com.brookmanholmes.drilltracker.presentation.model.Speed;
+import com.brookmanholmes.drilltracker.presentation.model.VSpin;
 
 import java.util.List;
 
@@ -26,7 +29,7 @@ interface DrillDetailsContract extends Presenter {
      *
      * @param drillId The ID of the drill that this presenter will use
      */
-    void initialize(String drillId);
+    void initialize(@NonNull String drillId);
 
     /**
      * Removes the last attempt that the user entered
@@ -35,20 +38,16 @@ interface DrillDetailsContract extends Presenter {
 
     /**
      * Displays the dialog for adding an attempt to a drill
-     *
-     * @param drillId                The ID of the drill
-     * @param type                   The type of drill
-     * @param maxScore               the maximum score possible in the drill
-     * @param targetScore            The target score for the drill
-     * @param cbPositions            The number of possible cue ball positions
-     * @param obPositions            The number of possible object ball positions
-     * @param targetPositions        The number of possible target positions
-     * @param selectedCbPosition     The selected position for the cue ball
-     * @param selectedObPosition     The selected position of the object ball
-     * @param selectedTargetPosition The selected position of the target
-     * @param selectedPattern        The selected pattern of the attempt
      */
-    void onAddAttemptClicked(String drillId, DrillModel.Type type, int maxScore, int targetScore,
-                             int cbPositions, int obPositions, int targetPositions, int selectedCbPosition,
-                             int selectedObPosition, int selectedTargetPosition, List<Integer> selectedPattern);
+    void onAddAttemptClicked();
+
+    void setSelectedCbPosition(int position);
+    void setSelectedObPosition(int position);
+    void setSelectedTargetPosition(int position);
+    void setSelectedEnglish(English english);
+    void setSelectedPattern(List<Integer> pattern);
+    void setSelectedSpeed(Speed speed);
+    void setVSpinUsed(VSpin spin);
+    void setSelectedShotResult(ShotResult shotResult);
+
 }

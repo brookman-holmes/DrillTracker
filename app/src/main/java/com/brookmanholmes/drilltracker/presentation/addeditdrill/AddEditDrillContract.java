@@ -3,7 +3,7 @@ package com.brookmanholmes.drilltracker.presentation.addeditdrill;
 import androidx.annotation.NonNull;
 
 import com.brookmanholmes.drilltracker.presentation.base.Presenter;
-import com.brookmanholmes.drilltracker.presentation.model.DrillModel;
+import com.brookmanholmes.drilltracker.presentation.model.Type;
 
 /**
  * Created by Brookman Holmes on 8/11/2017.
@@ -76,7 +76,7 @@ interface AddEditDrillContract extends Presenter {
      *
      * @param type The type of the drill
      */
-    void setDrillType(DrillModel.Type type);
+    void setDrillType(Type type);
 
     /**
      * Sets the number of possible target positions

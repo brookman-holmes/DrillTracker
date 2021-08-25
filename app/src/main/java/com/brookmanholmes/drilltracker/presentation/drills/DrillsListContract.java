@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 
 import com.brookmanholmes.drilltracker.presentation.base.Presenter;
 import com.brookmanholmes.drilltracker.presentation.model.DrillModel;
+import com.brookmanholmes.drilltracker.presentation.model.Type;
 
 /**
  * Created by Brookman Holmes on 8/11/2017.
@@ -22,7 +23,7 @@ interface DrillsListContract extends Presenter {
      * Retrieves all the drills from the drill repository
      * @param filter The type of drill to filter for
      */
-    void initialize(DrillModel.Type filter);
+    void initialize(Type filter);
 
     /**
      * Tells the presenter that a drill has been clicked on

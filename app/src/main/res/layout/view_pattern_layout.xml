@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="8dp"
+    android:paddingTop="8dp">
+
+
+    <TextView
+        style="@android:style/TextAppearance.Material.Title"
+        android:text="Pattern:"
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/position1"
+        style="@style/spinner_pattern_ball_image_view"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/title" />
+
+    <ImageView
+        android:id="@+id/position2"
+        style="@style/spinner_pattern_ball_image_view"
+        app:layout_constraintStart_toEndOf="@id/position1"
+        app:layout_constraintTop_toTopOf="@id/position1" />
+
+    <ImageView
+        android:id="@+id/position3"
+        style="@style/spinner_pattern_ball_image_view"
+        app:layout_constraintStart_toEndOf="@id/position2"
+        app:layout_constraintTop_toTopOf="@id/position1" />
+
+    <ImageView
+        android:id="@+id/position4"
+        style="@style/spinner_pattern_ball_image_view"
+        app:layout_constraintStart_toEndOf="@id/position3"
+        app:layout_constraintTop_toTopOf="@id/position1" />
+
+    <ImageView
+        android:id="@+id/position5"
+        style="@style/spinner_pattern_ball_image_view"
+        app:layout_constraintStart_toEndOf="@id/position4"
+        app:layout_constraintTop_toTopOf="@id/position1" />
+
+    <ImageView
+        android:id="@+id/position6"
+        style="@style/spinner_pattern_ball_image_view"
+        app:layout_constraintStart_toEndOf="@id/position5"
+        app:layout_constraintTop_toTopOf="@id/position1" />
+
+    <ImageView
+        android:id="@+id/position7"
+        style="@style/spinner_pattern_ball_image_view"
+        app:layout_constraintStart_toEndOf="@id/position6"
+        app:layout_constraintTop_toTopOf="@id/position1" />
+
+    <ImageView
+        android:id="@+id/position8"
+        style="@style/spinner_pattern_ball_image_view"
+        app:layout_constraintStart_toEndOf="@+id/position7"
+        app:layout_constraintTop_toTopOf="@+id/position1" />
+
+    <ImageView
+        android:id="@+id/position9"
+        style="@style/spinner_pattern_ball_image_view"
+        app:layout_constraintStart_toEndOf="@id/position8"
+        app:layout_constraintTop_toTopOf="@id/position1" />
+
+    <ImageView
+        android:id="@+id/position10"
+        style="@style/spinner_pattern_ball_image_view"
+        app:layout_constraintStart_toEndOf="@id/position9"
+        app:layout_constraintTop_toTopOf="@id/position1" />
+
+    <ImageView
+        android:id="@+id/position11"
+        style="@style/spinner_pattern_ball_image_view"
+        app:layout_constraintStart_toEndOf="@id/position10"
+        app:layout_constraintTop_toTopOf="@id/position1" />
+
+    <ImageView
+        android:id="@+id/position12"
+        style="@style/spinner_pattern_ball_image_view"
+        app:layout_constraintStart_toEndOf="@id/position11"
+        app:layout_constraintTop_toTopOf="@id/position1" />
+
+    <ImageView
+        android:id="@+id/position13"
+        style="@style/spinner_pattern_ball_image_view"
+        app:layout_constraintStart_toEndOf="@id/position12"
+        app:layout_constraintTop_toTopOf="@id/position1" />
+
+    <ImageView
+        android:id="@+id/position14"
+        style="@style/spinner_pattern_ball_image_view"
+        app:layout_constraintStart_toEndOf="@id/position13"
+        app:layout_constraintTop_toTopOf="@id/position1" />
+
+    <ImageView
+        android:id="@+id/position15"
+        style="@style/spinner_pattern_ball_image_view"
+        app:layout_constraintStart_toEndOf="@id/position14"
+        app:layout_constraintTop_toTopOf="@id/position1" />
+
+    <ImageButton
+        android:id="@+id/remove_pattern"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:background="?android:attr/selectableItemBackground"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_remove" />
+</androidx.constraintlayout.widget.ConstraintLayout>

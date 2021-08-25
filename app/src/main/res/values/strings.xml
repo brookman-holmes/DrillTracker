@@ -36,6 +36,9 @@
     <string name="purchased">Purchased</string>
     <string name="drills_included_in">Drills included in %1$s</string>
     <string name="dialog_add_safety_attempt_title">Add Safety Attempt</string>
+    <string name="too_little">Too little</string>
+    <string name="correct">Correct</string>
+    <string name="too_much">Too much</string>
 
 
     <string-array name="create_drill_array">
@@ -69,6 +72,35 @@
         <item>No English</item>
         <item>Outside English</item>
         <item>Full Outside English</item>
+    </string-array>
+
+    <string-array name="speed_items">
+        <item>Any</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
+
+    <string-array name="spin_result_items">
+        <item>@string/too_little</item>
+        <item>@string/correct</item>
+        <item>@string/too_much</item>
+    </string-array>
+
+    <string-array name="v_spin_result_items">
+        <item>Too low</item>
+        <item>@string/correct</item>
+        <item>Too high</item>
+    </string-array>
+
+    <string-array name="make_result_items">
+        <item>Miss over cut</item>
+        <item>Make over cut</item>
+        <item>Make</item>
+        <item>Make under cut</item>
+        <item>Miss under cut</item>
     </string-array>
 
 </resources>

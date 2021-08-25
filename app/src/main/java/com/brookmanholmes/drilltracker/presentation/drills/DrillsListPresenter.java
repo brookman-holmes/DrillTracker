@@ -11,6 +11,7 @@ import com.brookmanholmes.drilltracker.domain.interactor.GetDrillList;
 import com.brookmanholmes.drilltracker.presentation.exception.ErrorMessageFactory;
 import com.brookmanholmes.drilltracker.presentation.mapper.DrillModelDataMapper;
 import com.brookmanholmes.drilltracker.presentation.model.DrillModel;
+import com.brookmanholmes.drilltracker.presentation.model.Type;
 
 import java.util.List;
 
@@ -52,11 +53,11 @@ class DrillsListPresenter implements DrillsListContract {
     }
 
     @Override
-    public void initialize(DrillModel.Type filter) {
+    public void initialize(Type filter) {
         this.loadDrillsList(filter);
     }
 
-    private void loadDrillsList(DrillModel.Type filter) {
+    private void loadDrillsList(Type filter) {
         this.hideViewRetry();
         this.showViewLoading();
         this.getDrillsList(filter);
@@ -93,7 +94,7 @@ class DrillsListPresenter implements DrillsListContract {
         this.view.renderDrillList(drillModelCollection);
     }
 
-    private void getDrillsList(DrillModel.Type filter) {
+    private void getDrillsList(Type filter) {
         this.getDrillListUseCase.execute(new DrillListObserver(), GetDrillList.Params.newInstance(filter));
     }
 

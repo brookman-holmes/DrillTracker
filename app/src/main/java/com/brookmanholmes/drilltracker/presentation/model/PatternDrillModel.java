@@ -5,58 +5,59 @@ import androidx.annotation.NonNull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.brookmanholmes.drilltracker.presentation.model.DrillModel.Dates.LAST_MONTH;
-import static com.brookmanholmes.drilltracker.presentation.model.DrillModel.Dates.LAST_SIX_MONTHS;
-import static com.brookmanholmes.drilltracker.presentation.model.DrillModel.Dates.LAST_THREE_MONTHS;
-import static com.brookmanholmes.drilltracker.presentation.model.DrillModel.Dates.LAST_WEEK;
-import static com.brookmanholmes.drilltracker.presentation.model.DrillModel.Dates.TODAY;
+import timber.log.Timber;
 
 public class PatternDrillModel {
-    public final int allTimeAverageAttempts;
-    public final int sixMonthAverageAttempts;
-    public final int threeMonthAverageAttempts;
-    public final int oneMonthAverageAttempts;
-    public final int weekAverageAttempts;
-    public final int sessionAverageAttempts;
-    public final float allTimeAverage;
-    public final float sixMonthAverage;
-    public final float threeMonthAverage;
-    public final float oneMonthAverage;
-    public final float weekAverage;
-    public final float sessionAverage;
-    public final int thisPatternAttempts;
-    public final double thisPatternCompPct;
-    public final double thisPatternRunLength;
-    public final int allPatternAttempts;
-    public final double allPatternCompPct;
-    public final double allPatternRunLength;
+    public  int allTimeAverageAttempts;
+    public  int sixMonthAverageAttempts;
+    public  int threeMonthAverageAttempts;
+    public  int oneMonthAverageAttempts;
+    public  int weekAverageAttempts;
+    public  int sessionAverageAttempts;
+    public  float allTimeAverage;
+    public  float sixMonthAverage;
+    public  float threeMonthAverage;
+    public  float oneMonthAverage;
+    public  float weekAverage;
+    public  float sessionAverage;
+    public  int thisPatternAttempts;
+    public  double thisPatternCompPct;
+    public  double thisPatternRunLength;
+    public  int allPatternAttempts;
+    public  double allPatternCompPct;
+    public  double allPatternRunLength;
     private final int maxScore;
     private final TransitionalModel transitionalModel;
     private final PatternMakesMissesModel patternMakesMissesModel;
 
     public PatternDrillModel(DrillModel model, List<Integer> pattern) {
-        this.maxScore = model.maxScore;
-        transitionalModel = new TransitionalModel(model.maxScore);
-        patternMakesMissesModel = new PatternMakesMissesModel(model.maxScore);
+        this.maxScore = model.getMaxScore();
+        transitionalModel = new TransitionalModel(model.getMaxScore());
+        patternMakesMissesModel = new PatternMakesMissesModel(model.getMaxScore());
 
-        allTimeAverage = getAverage(model.attemptModels);
-        sixMonthAverage = getAverage(DrillModel.getAttemptsBetween(model.attemptModels, LAST_SIX_MONTHS, LAST_THREE_MONTHS));
-        threeMonthAverage = getAverage(DrillModel.getAttemptsBetween(model.attemptModels, LAST_THREE_MONTHS, LAST_MONTH));
-        oneMonthAverage = getAverage(DrillModel.getAttemptsBetween(model.attemptModels, LAST_MONTH, LAST_WEEK));
-        weekAverage = getAverage(DrillModel.getAttemptsBetween(model.attemptModels, LAST_WEEK, TODAY));
-        sessionAverage = getAverage(DrillModel.getSessionAttempts(model.attemptModels));
+        /*
+        DrillModel sixMonthModel = model.filterByDate(LAST_SIX_MONTHS, LAST_THREE_MONTHS);
+        DrillModel threeMonthModel = model.filterByDate(LAST_THREE_MONTHS, LAST_MONTH);
+        DrillModel oneMonthModel = model.filterByDate(LAST_MONTH, LAST_WEEK);
+        DrillModel weekModel = model.filterByDate(LAST_WEEK, TODAY);
+        DrillModel sessionModel = model.filterBySession();
 
-        allTimeAverageAttempts = getAttempts(model.attemptModels);
-        sixMonthAverageAttempts = getAttempts(DrillModel.getAttemptsBetween(model.attemptModels, LAST_SIX_MONTHS, LAST_THREE_MONTHS));
-        threeMonthAverageAttempts = getAttempts(DrillModel.getAttemptsBetween(model.attemptModels, LAST_THREE_MONTHS, LAST_MONTH));
-        oneMonthAverageAttempts = getAttempts(DrillModel.getAttemptsBetween(model.attemptModels, LAST_MONTH, LAST_WEEK));
-        weekAverageAttempts = getAttempts(DrillModel.getAttemptsBetween(model.attemptModels, LAST_WEEK, TODAY));
-        sessionAverageAttempts = getAttempts(DrillModel.getSessionAttempts(model.attemptModels));
+        allTimeAverage = getAverage(model.getAttemptModels());
+        sixMonthAverage = getAverage(sixMonthModel.getAttemptModels());
+        threeMonthAverage = getAverage(threeMonthModel.getAttemptModels());
+        oneMonthAverage = getAverage(oneMonthModel.getAttemptModels());
+        weekAverage = getAverage(weekModel.getAttemptModels());
+        sessionAverage = getAverage(sessionModel.getAttemptModels());
+
+        allTimeAverageAttempts = getAttempts(model.getAttemptModels());
+        sixMonthAverageAttempts = getAttempts(sixMonthModel.getAttemptModels());
+        threeMonthAverageAttempts = getAttempts(threeMonthModel.getAttemptModels());
+        oneMonthAverageAttempts = getAttempts(oneMonthModel.getAttemptModels());
+        weekAverageAttempts = getAttempts(weekModel.getAttemptModels());
+        sessionAverageAttempts = getAttempts(sessionModel.getAttemptModels());
 
         int thisPatternAttempts = 0;
         int allPatternAttempts = 0;
@@ -65,18 +66,18 @@ public class PatternDrillModel {
         int thisPatternTotalBallsMade = 0;
         int allPatternTotalBallsMade = 0;
 
-        for (DrillModel.AttemptModel attemptModel : model.attemptModels) {
+        for (AttemptModel attemptModel : model.getAttemptModels()) {
             allPatternAttempts++;
             if (attemptModel.score == maxScore)
                 allPatternSuccesses++;
             allPatternTotalBallsMade += attemptModel.score;
-            if (attemptMatchesPattern(attemptModel, pattern)) {
+            if (true) { //attemptMatchesPattern(attemptModel, pattern)) {
                 thisPatternAttempts++;
                 if (attemptModel.score == maxScore)
                     thisPatternSuccesses++;
                 thisPatternTotalBallsMade += attemptModel.score;
 
-                List<PatternEntry> patternEntries = createPatternEntryListFromExtras(attemptModel.extras);
+                List<PatternEntry> patternEntries = new ArrayList<>(); //createPatternEntryListFromExtras(attemptModel.extras);
                 for (int positionInPattern = 0; positionInPattern < patternEntries.size(); positionInPattern++) {
                     PatternEntry patternEntry = patternEntries.get(positionInPattern);
                     patternEntry.setMade(positionInPattern < attemptModel.score);
@@ -95,47 +96,12 @@ public class PatternDrillModel {
         this.allPatternAttempts = allPatternAttempts;
         this.allPatternCompPct = getAverage(allPatternSuccesses, allPatternAttempts);
         this.allPatternRunLength = getAverage(allPatternTotalBallsMade, allPatternAttempts);
+
+         */
     }
 
     public PatternDrillModel(DrillModel model) {
         this(model, new ArrayList<>());
-    }
-
-    public static DrillModel.AttemptModel createAttempt(int targetScore, List<PatternEntry> patternEntryList) {
-        int score = 0;
-        Map<String, Integer> extras = new HashMap<>();
-
-        for (int i = 0; i < patternEntryList.size(); i++) {
-            PatternEntry patternEntry = patternEntryList.get(i);
-
-            if (patternEntry.isMade()) score++;
-
-            // setting the pattern rating to 0 if the ball is not made because the recyclerview sets them to
-            // 1 automatically =[[[
-            extras.put(getExtraKey(i, patternEntry.getBall()), patternEntry.isMade() ? patternEntry.getRating() : 0);
-        }
-
-        return new DrillModel.AttemptModel(score, targetScore, new Date(), 0, 0, extras);
-    }
-
-    public static Collection<DrillModel.AttemptModel> getAttemptsWithPattern(Collection<DrillModel.AttemptModel> attempts, List<Integer> pattern) {
-        Collection<DrillModel.AttemptModel> result = new ArrayList<>();
-        for (DrillModel.AttemptModel attempt : attempts) {
-            if (attemptMatchesPattern(attempt, pattern)) {
-                result.add(attempt);
-            }
-        }
-
-        return result;
-    }
-
-    private static boolean attemptMatchesPattern(DrillModel.AttemptModel attempt, List<Integer> pattern) {
-        for (int i = 0; i < pattern.size(); i++) {
-            if (!attempt.extras.containsKey(getExtraKey(i, pattern.get(i))))
-                return false;
-        }
-
-        return true;
     }
 
     private static String getExtraKey(int patternPosition, int ballNumber) {
@@ -159,7 +125,7 @@ public class PatternDrillModel {
         return maxScore;
     }
 
-    private float getAverage(Collection<DrillModel.AttemptModel> attempts) {
+    private float getAverage(Collection<AttemptModel> attempts) {
         if (getAttempts(attempts) == 0)
             return 0;
         else {
@@ -174,16 +140,16 @@ public class PatternDrillModel {
             return top / bottom;
     }
 
-    private int getMakes(Collection<DrillModel.AttemptModel> attempts) {
+    private int getMakes(Collection<AttemptModel> attempts) {
         int result = 0;
-        for (DrillModel.AttemptModel attempt : attempts) {
-            result += attempt.score;
+        for (AttemptModel attempt : attempts) {
+            result += attempt.getScore();
         }
 
         return result;
     }
 
-    private int getAttempts(Collection<DrillModel.AttemptModel> attemptModels) {
+    private int getAttempts(Collection<AttemptModel> attemptModels) {
         return attemptModels.size();
     }
 
@@ -227,20 +193,38 @@ public class PatternDrillModel {
         }
 
         void addTransitionalRating(int positionInPattern, int rating) {
-            transitionalRatings.get(positionInPattern).get(rating - 1).count += 1;
+            if (transitionalRatings.size() > positionInPattern) {
+                if (transitionalRatings.get(positionInPattern).size() > rating - 1) {
+                    transitionalRatings.get(positionInPattern).get(rating - 1).count += 1;
+                } else {
+                    Timber.i("transitionalRatings.get(positionInPattern).size() = %s and rating - 1 = %s", transitionalRatings.get(positionInPattern).size(), rating - 1);
+                }
+            } else {
+                Timber.i("transitionalRatings.size() = %s and positionInPattern = %s", transitionalRatings.size(), positionInPattern);
+            }
         }
 
         int getTransitionalCount(int positionInPattern, int rating) {
-            return transitionalRatings.get(positionInPattern).get(rating - 1).count;
+            if (transitionalRatings.size() > positionInPattern) {
+                if (transitionalRatings.get(positionInPattern).size() > rating - 1) {
+                    return transitionalRatings.get(positionInPattern).get(rating - 1).count;
+                } else {
+                    return 0;
+                }
+            } else {
+                return 0;
+            }
         }
 
         float getAverageRating(int positionInPattern) {
             float count = 0;
             float sum = 0;
             for (int rating = 0; rating < 4; rating++) {
-                sum += transitionalRatings.get(positionInPattern).get(rating).count *
-                        transitionalRatings.get(positionInPattern).get(rating).rating;
-                count += transitionalRatings.get(positionInPattern).get(rating).count;
+                if (transitionalRatings.size() > positionInPattern) {
+                    sum += transitionalRatings.get(positionInPattern).get(rating).count *
+                            transitionalRatings.get(positionInPattern).get(rating).rating;
+                    count += transitionalRatings.get(positionInPattern).get(rating).count;
+                }
             }
 
             if (count == 0)
@@ -269,7 +253,9 @@ public class PatternDrillModel {
         }
 
         PatternPlayEntryModel getPatternPlayEntry(int positionInPattern) {
-            return pattern.get(positionInPattern);
+            if (pattern.size() > positionInPattern)
+                return pattern.get(positionInPattern);
+            else return new PatternPlayEntryModel();
         }
     }
 

@@ -19,16 +19,16 @@
     <color name="chart_poor">#ff6a69</color>
     <color name="chart_really_poor">#de574d</color>
 
-    <color name="chart_speed_correct">@color/colorPrimary</color>
-    <color name="chart_speed_little">@color/colorPrimaryLight</color>
-    <color name="chart_speed_much">@color/colorPrimaryDark</color>
+    <color name="chart_speed_correct">@color/chart_excellent</color>
+    <color name="chart_speed_little">@color/chart_fair</color>
+    <color name="chart_speed_much">@color/chart_really_poor</color>
 
-    <color name="chart_spin_correct">@color/colorPrimary</color>
-    <color name="chart_spin_little">@color/colorPrimaryLight</color>
-    <color name="chart_spin_much">@color/colorPrimaryDark</color>
+    <color name="chart_spin_correct">@color/chart_excellent</color>
+    <color name="chart_spin_little">@color/chart_fair</color>
+    <color name="chart_spin_much">@color/chart_really_poor</color>
     0
-    <color name="chart_pattern_miss">@color/colorPrimaryLight</color>
-    <color name="chart_pattern_make">@color/colorPrimary</color>
+    <color name="chart_pattern_miss">@color/chart_really_poor</color>
+    <color name="chart_pattern_make">@color/chart_excellent</color>
 
     <color name="chart_target_line">@color/colorPrimaryLight</color>
     <color name="chart_line_color">@color/colorPrimary</color>

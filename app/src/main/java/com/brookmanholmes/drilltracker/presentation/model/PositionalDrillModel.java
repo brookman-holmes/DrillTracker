@@ -1,120 +1,148 @@
 package com.brookmanholmes.drilltracker.presentation.model;
 
-import android.util.Pair;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.EnumSet;
-import java.util.List;
-
 public class PositionalDrillModel {
-    private static final String POSITIONAL_TYPES = "positionalTypes";
-    private static final String TARGET_POSITION = "targetPosition";
-
-    private final int attempts;
+    private int attempts;
+    private int missOverCut, makeOverCut, make, makeUnderCut, missUnderCut;
     private int speedHard, speedSoft, speedCorrect;
     private int vSpinMore, vSpinLess, vSpinCorrect;
     private int hSpinMore, hSpinLess, hSpinCorrect;
     private int distanceZero, distanceSix, distanceTwelve, distanceEighteen, distanceTwentyFour;
+    private int totalSuccessfulShots = 0; // includes distance and potting the ball
 
-    private PositionalDrillModel(Collection<DrillModel.AttemptModel> attemptModels) {
-        attempts = attemptModels.size();
+    public PositionalDrillModel(DrillModel drillModel) {
+        /*
+        attempts = drillModel.getAttemptModels().size();
 
-        for (DrillModel.AttemptModel attemptModel : attemptModels) {
-            Integer code = attemptModel.extras.get(POSITIONAL_TYPES);
-            EnumSet<PositionalTypes> positionalTypes = decode(code == null ? 0 : code);
-            for (PositionalTypes type : positionalTypes) {
-                addPositionalAttempt(type);
-            }
-        }
-    }
+        for (AttemptModel attempt : drillModel.getAttemptModels()) {
+            if (isBallMade(attempt.shotResult)) {
+                addSpeedSpinResult(attempt.speedResult);
+                addHSpinResult(attempt.englishResult);
+                addVSpinResult(attempt.spinResult);
+                addDistanceResult(attempt.distanceResult);
+                addShotResult(attempt.shotResult);
 
-    private static int encode(EnumSet<PositionalTypes> set) {
-        int result = 0;
-
-        for (PositionalTypes val : set) {
-            result |= 1 << val.ordinal();
-        }
-
-        return result;
-    }
-
-    private static EnumSet<PositionalTypes> decode(int code) {
-        EnumSet<PositionalTypes> result = EnumSet.noneOf(PositionalTypes.class);
-        while (code != 0) {
-            int ordinal = Integer.numberOfTrailingZeros(code);
-            code ^= Integer.lowestOneBit(code);
-            result.add(PositionalTypes.values()[ordinal]);
-        }
-
-        return result;
-    }
-
-    public static DrillModel.AttemptModel createAttempt(int cbPosition, int targetPosition, EnumSet<PositionalTypes> positionalTypes) {
-        return new DrillModel.AttemptModel(0, 0, new Date(), 0, cbPosition,
-                new Pair<>(POSITIONAL_TYPES, encode(positionalTypes)),
-                new Pair<>(TARGET_POSITION, targetPosition));
-    }
-
-    public static PositionalDrillModel filterByTargetPosition(Collection<DrillModel.AttemptModel> attemptModels, int targetPosition) {
-        List<DrillModel.AttemptModel> filteredAttempts = new ArrayList<>();
-        for (DrillModel.AttemptModel attempt : attemptModels) {
-            if (attempt.extras.containsKey(TARGET_POSITION)) {
-                if (targetPosition == 0 || attempt.extras.get(TARGET_POSITION) == targetPosition) {
-                    filteredAttempts.add(attempt);
-                }
+                if (attempt.distanceResult.equals(DistanceResult.ZERO))
+                    totalSuccessfulShots++;
             }
         }
 
-        return new PositionalDrillModel(filteredAttempts);
+         */
     }
 
-    private void addPositionalAttempt(PositionalTypes type) {
-        switch (type) {
-            case SPEED_HARD:
-                speedHard++;
+    private void addShotResult(ShotResult shotResult) {
+        switch (shotResult) {
+            case MISS_OVER_CUT:
+                missOverCut++;
                 break;
-            case SPEED_SOFT:
+            case MAKE_OVER_CUT:
+                makeOverCut++;
+                break;
+            case MAKE_CENTER:
+                make++;
+                break;
+            case MAKE_UNDER_CUT:
+                makeUnderCut++;
+                break;
+            case MISS_UNDER_CUT:
+                missUnderCut++;
+                break;
+        }
+    }
+
+    private void addSpeedSpinResult(SpinResult spinResult) {
+        switch (spinResult) {
+            case TOO_LITTLE:
                 speedSoft++;
                 break;
-            case SPEED_CORRECT:
+            case CORRECT:
                 speedCorrect++;
                 break;
-            case V_SPIN_LESS:
+            case TOO_MUCH:
+                speedHard++;
+                break;
+        }
+    }
+
+    private void addVSpinResult(SpinResult spinResult) {
+        switch (spinResult) {
+            case TOO_LITTLE:
                 vSpinLess++;
                 break;
-            case V_SPIN_MORE:
-                vSpinMore++;
-                break;
-            case V_SPIN_CORRECT:
+            case CORRECT:
                 vSpinCorrect++;
                 break;
-            case H_SPIN_LESS:
+            case TOO_MUCH:
+                vSpinMore++;
+                break;
+        }
+    }
+
+    private void addHSpinResult(SpinResult spinResult) {
+        switch (spinResult) {
+            case TOO_LITTLE:
                 hSpinLess++;
                 break;
-            case H_SPIN_MORE:
-                hSpinMore++;
-                break;
-            case H_SPIN_CORRECT:
+            case CORRECT:
                 hSpinCorrect++;
                 break;
-            case ZERO_INCHES:
+            case TOO_MUCH:
+                hSpinMore++;
+                break;
+        }
+    }
+
+    private void addDistanceResult(DistanceResult distanceResult) {
+        switch (distanceResult) {
+            case ZERO:
                 distanceZero++;
                 break;
-            case SIX_INCHES:
+            case ONE_HALF:
                 distanceSix++;
                 break;
-            case TWELVE_INCHES:
+            case ONE:
                 distanceTwelve++;
                 break;
-            case EIGHTEEN_INCHES:
+            case ONE_AND_HALF:
                 distanceEighteen++;
                 break;
-            case TWENTY_FOUR_INCHES:
+            case OVER_ONE_AND_HALF:
                 distanceTwentyFour++;
                 break;
         }
+    }
+
+    public float getPottingAverage() {
+        if (getAttempts() == 0) {
+            return 0;
+        } else {
+            return (float) (getMake() + getMakeOverCut() + getMakeUnderCut()) / (float) getAttempts();
+        }
+    }
+
+    public float getTotalSuccessAverage() {
+        if (getAttempts() == 0)
+            return 0;
+        else return (float) totalSuccessfulShots / (float) getAttempts();
+    }
+
+    public int getMissOverCut() {
+        return missOverCut;
+    }
+
+    public int getMakeOverCut() {
+        return makeOverCut;
+    }
+
+    public int getMake() {
+        return make;
+    }
+
+    public int getMakeUnderCut() {
+        return makeUnderCut;
+    }
+
+    public int getMissUnderCut() {
+        return missUnderCut;
     }
 
     public int getAttempts() {
@@ -177,20 +205,9 @@ public class PositionalDrillModel {
         return distanceTwentyFour;
     }
 
-    public enum PositionalTypes {
-        SPEED_HARD,
-        SPEED_SOFT,
-        SPEED_CORRECT,
-        V_SPIN_LESS,
-        V_SPIN_MORE,
-        V_SPIN_CORRECT,
-        H_SPIN_LESS,
-        H_SPIN_MORE,
-        H_SPIN_CORRECT,
-        ZERO_INCHES,
-        SIX_INCHES,
-        TWELVE_INCHES,
-        EIGHTEEN_INCHES,
-        TWENTY_FOUR_INCHES
+    private boolean isBallMade(ShotResult shotResult) {
+        return (shotResult.equals(ShotResult.MAKE_CENTER)
+                || shotResult.equals(ShotResult.MAKE_OVER_CUT)
+                || shotResult.equals(ShotResult.MAKE_UNDER_CUT));
     }
 }

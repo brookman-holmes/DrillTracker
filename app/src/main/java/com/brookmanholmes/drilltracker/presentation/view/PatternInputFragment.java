@@ -1,5 +1,7 @@
 package com.brookmanholmes.drilltracker.presentation.view;
 
+import static com.brookmanholmes.drilltracker.presentation.view.PatternInputPage.SHAPE_KEY;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,6 +16,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.brookmanholmes.drilltracker.R;
+import com.brookmanholmes.drilltracker.presentation.view.util.BallImageUtil;
 import com.tech.freak.wizardpager.model.Page;
 import com.tech.freak.wizardpager.ui.PageFragmentCallbacks;
 
@@ -23,8 +26,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
-
-import static com.brookmanholmes.drilltracker.presentation.view.PatternInputPage.SHAPE_KEY;
 
 public class PatternInputFragment extends Fragment {
     private final static String ARG_POSITION_IN_PATTERN = "position_in_pattern";
@@ -87,12 +88,13 @@ public class PatternInputFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_pattern_input, container, false);
         ButterKnife.bind(this, view);
         setBallImage(currentBall, currentBallImage);
-        setBallImage(nextBall, nextBallImage);
 
         if (nextBall == 0) {
             view.findViewById(R.id.radioGroup).setVisibility(View.GONE);
             view.findViewById(R.id.textView8).setVisibility(View.GONE);
             nextBallImage.setVisibility(View.GONE);
+        } else {
+            setBallImage(nextBall, nextBallImage);
         }
         return view;
     }
@@ -104,7 +106,7 @@ public class PatternInputFragment extends Fragment {
     }
 
     @OnCheckedChanged(R.id.switch1)
-    public void onCheckChanged(boolean checked) {
+    void onCheckChanged(boolean checked) {
         boolean isAlreadyChecked = "true".equals(page.getData().getString(Page.SIMPLE_DATA_KEY));
 
         if (checked) {
@@ -148,56 +150,6 @@ public class PatternInputFragment extends Fragment {
     }
 
     private void setBallImage(int ball, ImageView image) {
-        int res;
-        switch (ball) {
-            case 1:
-                res = R.drawable.ball_one;
-                break;
-            case 2:
-                res = R.drawable.ball_two;
-                break;
-            case 3:
-                res = R.drawable.ball_three;
-                break;
-            case 4:
-                res = R.drawable.ball_four;
-                break;
-            case 5:
-                res = R.drawable.ball_five;
-                break;
-            case 6:
-                res = R.drawable.ball_six;
-                break;
-            case 7:
-                res = R.drawable.ball_seven;
-                break;
-            case 8:
-                res = R.drawable.ball_eight;
-                break;
-            case 9:
-                res = R.drawable.ball_nine;
-                break;
-            case 10:
-                res = R.drawable.ball_ten;
-                break;
-            case 11:
-                res = R.drawable.ball_eleven;
-                break;
-            case 12:
-                res = R.drawable.ball_twelve;
-                break;
-            case 13:
-                res = R.drawable.ball_thirteen;
-                break;
-            case 14:
-                res = R.drawable.ball_fourteen;
-                break;
-            case 15:
-                res = R.drawable.ball_fifteen;
-                break;
-            default:
-                res = R.drawable.ball_one;
-        }
-        image.setImageResource(res);
+        image.setImageResource(BallImageUtil.getBallResIdFromBallNumber(ball));
     }
 }

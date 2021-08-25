@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/card_view_style"
+    android:layout_marginEnd="4dp"
+    android:layout_marginStart="4dp">
+
+        <androidx.gridlayout.widget.GridLayout
+            style="@style/match_info_grid"
+            android:padding="16dp">
+
+            <TextView
+                style="@style/player_stats"
+                android:text="@string/this_session"
+                app:layout_column="1" />
+
+            <TextView
+                style="@style/player_stats"
+                android:text="@string/lifetime"
+                app:layout_column="2" />
+
+            <TextView
+                style="@style/player_stats"
+                android:gravity="start"
+                android:text="@string/attempts"
+                android:textColor="@color/primary_text"
+                app:layout_columnWeight="0"
+                app:layout_gravity="start" />
+
+            <TextView
+                android:id="@+id/sessionAttempts"
+                style="@style/player_stats"
+                android:text="0"
+                android:textColor="@color/primary_text" />
+
+            <TextView
+                android:id="@+id/lifetimeAttempts"
+                style="@style/player_stats"
+                android:text="0"
+                android:textColor="@color/primary_text"
+                app:layout_column="2" />
+
+            <TextView
+                style="@style/player_stats"
+                android:gravity="start"
+                android:text="Makes (total)"
+                android:textColor="@color/secondary_text"
+                app:layout_columnWeight="0"
+                app:layout_gravity="start" />
+
+            <TextView
+                android:id="@+id/sessionMakes"
+                style="@style/player_stats"
+                android:text="0"
+                android:textColor="@color/secondary_text" />
+
+            <TextView
+                android:id="@+id/lifetimeMakes"
+                style="@style/player_stats"
+                android:text="0"
+                android:textColor="@color/secondary_text"
+                app:layout_column="2" />
+
+            <TextView
+                style="@style/player_stats"
+                android:gravity="start"
+                android:text="Over cuts (made)"
+                android:textColor="@color/primary_text"
+                app:layout_columnWeight="0"
+                app:layout_gravity="start" />
+
+            <TextView
+                android:id="@+id/sessionMakesOverCuts"
+                style="@style/player_stats"
+                android:text="0"
+                android:textColor="@color/primary_text" />
+
+            <TextView
+                android:id="@+id/lifetimeMakesOverCuts"
+                style="@style/player_stats"
+                android:text="0"
+                android:textColor="@color/primary_text"
+                app:layout_column="2" />
+
+            <TextView
+                style="@style/player_stats"
+                android:gravity="start"
+                android:text="Under cuts (made)"
+                android:textColor="@color/secondary_text"
+                app:layout_columnWeight="0"
+                app:layout_gravity="start" />
+
+            <TextView
+                android:id="@+id/sessionMakesUnderCuts"
+                style="@style/player_stats"
+                android:text="0"
+                android:textColor="@color/secondary_text" />
+
+            <TextView
+                android:id="@+id/lifetimeMakesUnderCuts"
+                style="@style/player_stats"
+                android:text="0"
+                android:textColor="@color/secondary_text"
+                app:layout_column="2" />
+
+            <TextView
+                style="@style/player_stats"
+                android:gravity="start"
+                android:text="Over cuts"
+                android:textColor="@color/primary_text"
+                app:layout_columnWeight="0"
+                app:layout_gravity="start" />
+
+            <TextView
+                android:id="@+id/sessionOverCuts"
+                style="@style/player_stats"
+                android:text="0"
+                android:textColor="@color/primary_text" />
+
+            <TextView
+                android:id="@+id/lifetimeOverCuts"
+                style="@style/player_stats"
+                android:text="0"
+                android:textColor="@color/primary_text"
+                app:layout_column="2" />
+
+            <TextView
+                style="@style/player_stats"
+                android:gravity="start"
+                android:text="Under cuts"
+                android:textColor="@color/secondary_text"
+                app:layout_columnWeight="0"
+                app:layout_gravity="start" />
+
+            <TextView
+                android:id="@+id/sessionUnderCuts"
+                style="@style/player_stats"
+                android:text="0"
+                android:textColor="@color/secondary_text" />
+
+            <TextView
+                android:id="@+id/lifetimeUnderCuts"
+                style="@style/player_stats"
+                android:text="0"
+                android:textColor="@color/secondary_text"
+                app:layout_column="2" />
+
+            <TextView
+                style="@style/player_stats"
+                android:gravity="start"
+                android:text="Made ball score"
+                android:textColor="@color/primary_text"
+                app:layout_columnWeight="0"
+                app:layout_gravity="start" />
+
+            <TextView
+                android:id="@+id/sessionPotAvg"
+                style="@style/player_stats"
+                android:text="0"
+                android:textColor="@color/primary_text" />
+
+            <TextView
+                android:id="@+id/lifetimePotAvg"
+                style="@style/player_stats"
+                android:text="0"
+                android:textColor="@color/primary_text"
+                app:layout_column="2" />
+
+            <TextView
+                style="@style/player_stats"
+                android:gravity="start"
+                android:text="Success rate\n(made ball + on target)"
+                android:textColor="@color/primary_text"
+                app:layout_columnWeight="0"
+                app:layout_gravity="start" />
+
+            <TextView
+                android:id="@+id/sessionAvg"
+                style="@style/player_stats"
+                android:text="0"
+                android:textColor="@color/primary_text" />
+
+            <TextView
+                android:id="@+id/lifetimeAvg"
+                style="@style/player_stats"
+                android:text="0"
+                android:textColor="@color/primary_text"
+                app:layout_column="2" />
+
+        </androidx.gridlayout.widget.GridLayout>
+</androidx.cardview.widget.CardView>

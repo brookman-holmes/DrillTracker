@@ -16,12 +16,13 @@ import com.brookmanholmes.drilltracker.presentation.base.BaseFragment;
 import com.brookmanholmes.drilltracker.presentation.deletedrill.DeleteDrillDialog;
 import com.brookmanholmes.drilltracker.presentation.drilldetail.DrillDetailsActivity;
 import com.brookmanholmes.drilltracker.presentation.model.DrillModel;
+import com.brookmanholmes.drilltracker.presentation.model.Type;
 
 import java.util.List;
-import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import timber.log.Timber;
 
 /**
  * Created by Brookman Holmes on 7/7/2017.
@@ -142,22 +143,16 @@ public class DrillsListFragment extends BaseFragment<DrillsListContract> impleme
     }
 
     @Override
-    public void setFilterSelection(DrillModel.Type type) {
+    public void setFilterSelection(Type type) {
         presenter.initialize(type);
     }
 
     @Override
     public void viewDrill(DrillModel drillModel) {
+        Timber.i(drillModel.toString());
         startActivity(DrillDetailsActivity.getIntent(
                 getContext(),
-                drillModel.id,
-                drillModel.drillType,
-                drillModel.imageUrl,
-                drillModel.maxScore,
-                drillModel.defaultTargetScore,
-                drillModel.obPositions,
-                drillModel.cbPositions,
-                drillModel.targetPositions));
+                drillModel.getId()));
     }
 
     /**
@@ -171,9 +166,9 @@ public class DrillsListFragment extends BaseFragment<DrillsListContract> impleme
 
     @Override
     public void onItemLongClicked(DrillModel drillModel) {
-        if (!drillModel.purchased) {
-            DeleteDrillDialog dialog = DeleteDrillDialog.newInstance(drillModel.id);
-            dialog.show(Objects.requireNonNull(getFragmentManager()), DeleteDrillDialog.class.getName());
+        if (!drillModel.getPurchased()) {
+            DeleteDrillDialog dialog = DeleteDrillDialog.newInstance(drillModel.getId());
+            dialog.show(requireFragmentManager(), DeleteDrillDialog.class.getName());
         }
     }
 }

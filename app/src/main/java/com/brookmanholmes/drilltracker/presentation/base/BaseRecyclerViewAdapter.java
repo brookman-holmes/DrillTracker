@@ -143,7 +143,7 @@ public abstract class BaseRecyclerViewAdapter<T extends Model> extends RecyclerV
 
         @Override
         public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
-            return oldData.get(oldItemPosition).id.equals(newData.get(newItemPosition).id);
+            return oldData.get(oldItemPosition).getModelId().equals(newData.get(newItemPosition).getModelId());
         }
 
         @Override

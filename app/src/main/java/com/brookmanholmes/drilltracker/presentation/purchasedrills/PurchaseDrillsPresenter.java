@@ -9,11 +9,12 @@ import com.brookmanholmes.drilltracker.domain.exception.DefaultErrorBundle;
 import com.brookmanholmes.drilltracker.domain.exception.ErrorBundle;
 import com.brookmanholmes.drilltracker.domain.interactor.AddDrill;
 import com.brookmanholmes.drilltracker.domain.interactor.DefaultObserver;
+import com.brookmanholmes.drilltracker.domain.interactor.DrillParams;
 import com.brookmanholmes.drilltracker.domain.interactor.GetDrillPackList;
 import com.brookmanholmes.drilltracker.domain.interactor.PurchaseDrillPack;
 import com.brookmanholmes.drilltracker.presentation.exception.ErrorMessageFactory;
+import com.brookmanholmes.drilltracker.presentation.mapper.DrillModelDataMapper;
 import com.brookmanholmes.drilltracker.presentation.mapper.DrillPackModelDataMapper;
-import com.brookmanholmes.drilltracker.presentation.model.DrillModel;
 import com.brookmanholmes.drilltracker.presentation.model.DrillPackModel;
 
 import java.util.List;
@@ -116,19 +117,20 @@ class PurchaseDrillsPresenter implements PurchaseDrillsContract {
             for (Drill drill : drills) {
                 addDrill.execute(
                         new DefaultObserver<>(),
-                        AddDrill.Params.create(
-                                drill.getId(),
+                        new DrillParams(
                                 drill.getName(),
+                                drill.getId(),
                                 drill.getDescription(),
-                                drill.getImageUrl(),
-                                DrillModel.Type.values()[drill.getType().ordinal()],
                                 drill.getMaxScore(),
+                                DrillModelDataMapper.decode(drill.getDataToCollect()),
                                 drill.getDefaultTargetScore(),
                                 drill.getObPositions(),
                                 drill.getCbPositions(),
                                 drill.getTargetPositions(),
-                                true
-                        )
+                                drill.getType().ordinal(),
+                                null,
+                                drill.isPurchased(),
+                                drill.getImageUrl())
                 );
             }
             onComplete();

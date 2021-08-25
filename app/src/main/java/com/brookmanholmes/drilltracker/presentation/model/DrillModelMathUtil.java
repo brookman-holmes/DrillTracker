@@ -14,7 +14,7 @@ public class DrillModelMathUtil {
     private float average = 0;
     private float median = 0;
 
-    public DrillModelMathUtil(Collection<DrillModel.AttemptModel> attempts) {
+    public DrillModelMathUtil(Collection<AttemptModel> attempts) {
         this.max = getMax(attempts);
         this.attempts = getAttempts(attempts);
         this.average = getAverage(attempts);
@@ -38,38 +38,38 @@ public class DrillModelMathUtil {
         return median;
     }
 
-    private int getMax(Collection<DrillModel.AttemptModel> attempts) {
+    private int getMax(Collection<AttemptModel> attempts) {
         int max = 0;
-        for (DrillModel.AttemptModel attempt : attempts)
-            if (attempt.score > max)
-                max = attempt.score;
+        for (AttemptModel attempt : attempts)
+            if (attempt.getScore() > max)
+                max = attempt.getScore();
 
         return max;
     }
 
-    private int getAttempts(Collection<DrillModel.AttemptModel> attempts) {
+    private int getAttempts(Collection<AttemptModel> attempts) {
         return attempts.size();
     }
 
-    private float getAverage(Collection<DrillModel.AttemptModel> attempts) {
+    private float getAverage(Collection<AttemptModel> attempts) {
         float count = attempts.size();
         float sum = 0;
 
-        for (DrillModel.AttemptModel attempt : attempts) {
-            sum += attempt.score;
+        for (AttemptModel attempt : attempts) {
+            sum += attempt.getScore();
         }
 
         return count > 0 ? sum / count : 0;
     }
 
-    private float getMedian(Collection<DrillModel.AttemptModel> attempts) {
+    private float getMedian(Collection<AttemptModel> attempts) {
         if (attempts.size() == 0)
             return 0;
 
         int[] array = new int[attempts.size()];
         int count = 0;
-        for (DrillModel.AttemptModel attempt : attempts) {
-            array[count] = attempt.score;
+        for (AttemptModel attempt : attempts) {
+            array[count] = attempt.getScore();
             count++;
         }
         Arrays.sort(array);

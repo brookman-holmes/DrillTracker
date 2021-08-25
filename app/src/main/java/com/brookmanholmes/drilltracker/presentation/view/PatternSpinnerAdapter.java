@@ -7,11 +7,11 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 
-import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.brookmanholmes.drilltracker.R;
+import com.brookmanholmes.drilltracker.presentation.view.util.BallImageUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -88,47 +88,9 @@ public class PatternSpinnerAdapter extends ArrayAdapter<List<Integer>> {
     private void setImageViewDrawable(ImageView imageView, int positionInPattern, List<Integer> pattern) {
         if (positionInPattern < pattern.size()) {
             imageView.setVisibility(View.VISIBLE);
-            imageView.setImageResource(getDrawableRes(pattern.get(positionInPattern)));
+            imageView.setImageResource(BallImageUtil.getBallResIdFromBallNumber(pattern.get(positionInPattern)));
         } else {
             imageView.setVisibility(View.GONE);
-        }
-    }
-
-    private @DrawableRes
-    int getDrawableRes(int ball) {
-        switch (ball) {
-            case 1:
-                return R.drawable.ball_one;
-            case 2:
-                return R.drawable.ball_two;
-            case 3:
-                return R.drawable.ball_three;
-            case 4:
-                return R.drawable.ball_four;
-            case 5:
-                return R.drawable.ball_five;
-            case 6:
-                return R.drawable.ball_six;
-            case 7:
-                return R.drawable.ball_seven;
-            case 8:
-                return R.drawable.ball_eight;
-            case 9:
-                return R.drawable.ball_nine;
-            case 10:
-                return R.drawable.ball_ten;
-            case 11:
-                return R.drawable.ball_eleven;
-            case 12:
-                return R.drawable.ball_twelve;
-            case 13:
-                return R.drawable.ball_thirteen;
-            case 14:
-                return R.drawable.ball_fourteen;
-            case 15:
-                return R.drawable.ball_fifteen;
-            default:
-                return R.drawable.ball_one;
         }
     }
 }

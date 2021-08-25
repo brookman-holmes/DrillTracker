@@ -47,8 +47,8 @@ class DrillsListAdapter extends BaseRecyclerViewAdapter<DrillModel> {
         @Override
         public void bind(DrillModel model, OnItemClickListener<DrillModel> onItemClickListener) {
             super.bind(model, onItemClickListener);
-            name.setText(model.name);
-            ImageHandler.loadImage(image, model.imageUrl);
+            name.setText(model.getName());
+            ImageHandler.loadImage(image, model.getImageUrl());
             itemView.setOnClickListener(this);
             itemView.setOnLongClickListener(this);
         }

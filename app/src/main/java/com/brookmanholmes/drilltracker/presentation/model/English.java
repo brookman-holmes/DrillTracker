@@ -10,5 +10,6 @@ public enum English {
     INSIDE,
     NONE,
     OUTSIDE,
-    FULL_OUTSIDE
+    FULL_OUTSIDE,
+    NO_DATA
 }

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <TextView
+        style="@android:style/TextAppearance.Material.Subhead"
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:text="Distance from target (in diamonds)" />
+
+    <com.goodiebag.horizontalpicker.HorizontalPicker
+        android:id="@+id/picker"
+        style="@style/horizontal_picker_style"
+        app:itemWidth="62dp"/>
+</androidx.appcompat.widget.LinearLayoutCompat>

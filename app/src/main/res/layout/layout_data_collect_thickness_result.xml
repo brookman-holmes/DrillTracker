@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TextView
+        android:id="@+id/textView2"
+        style="@android:style/TextAppearance.Material.Subhead"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:text="Thickness of hit result"/>
+
+    <com.goodiebag.horizontalpicker.HorizontalPicker
+        android:id="@+id/thicknessResultPicker"
+        style="@style/horizontal_picker_style" />
+</androidx.appcompat.widget.LinearLayoutCompat>

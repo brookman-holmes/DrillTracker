@@ -55,10 +55,10 @@ class DrillsListAdapter extends BaseRecyclerViewAdapter<DrillModel> {
         @Override
         public void bind(DrillModel model, OnItemClickListener<DrillModel> onItemClickListener) {
             super.bind(model, onItemClickListener);
-            name.setText(model.name);
-            description.setText(model.description);
+            name.setText(model.getName());
+            description.setText(model.getDescription());
             Picasso.with(image.getContext())
-                    .load(model.imageUrl)
+                    .load(model.getImageUrl())
                     .fit()
                     .placeholder(R.drawable.pool_table)
                     .error(R.drawable.pool_table_error)

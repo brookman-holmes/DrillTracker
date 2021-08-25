@@ -1,6 +1,10 @@
 package com.brookmanholmes.drilltracker.presentation.addattempt;
 
 
+import static com.brookmanholmes.drilltracker.presentation.addattempt.BaseAddAttemptDialog.PARAM_DRILL_ID;
+import static com.brookmanholmes.drilltracker.presentation.addattempt.BaseAddAttemptDialog.PARAM_PATTERN;
+import static com.brookmanholmes.drilltracker.presentation.addattempt.BaseAddAttemptDialog.PARAM_TARGET_SCORE;
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,17 +26,12 @@ import com.tech.freak.wizardpager.model.ModelCallbacks;
 import com.tech.freak.wizardpager.model.Page;
 import com.tech.freak.wizardpager.ui.PageFragmentCallbacks;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
-import static com.brookmanholmes.drilltracker.presentation.addattempt.AddAttemptDialog.PARAM_DRILL_ID;
-import static com.brookmanholmes.drilltracker.presentation.addattempt.AddAttemptDialog.PARAM_PATTERN;
-import static com.brookmanholmes.drilltracker.presentation.addattempt.AddAttemptDialog.PARAM_TARGET_SCORE;
 
 /*
  * Copyright 2012 Roman Nurik
@@ -68,23 +67,12 @@ public class AddPatternAttemptDialog extends DialogFragment implements
     private boolean editingAfterReview;
     private boolean consumePageSelectedEvent;
 
-    static AddPatternAttemptDialog newInstance(String drillId, int targetScore, List<Integer> pattern) {
-        AddPatternAttemptDialog dialog = new AddPatternAttemptDialog();
-        Bundle args = new Bundle();
-        args.putString(PARAM_DRILL_ID, drillId);
-        args.putInt(PARAM_TARGET_SCORE, targetScore);
-        args.putIntegerArrayList(PARAM_PATTERN, new ArrayList<>(pattern));
-        dialog.setArguments(args);
-
-        return dialog;
-    }
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         setRetainInstance(true);
         super.onCreate(savedInstanceState);
         if (wizardModel == null) {
-            wizardModel = new PatternAttemptModel(Objects.requireNonNull(getArguments()).getIntegerArrayList(PARAM_PATTERN));
+            wizardModel = new PatternAttemptModel(requireArguments().getIntegerArrayList(PARAM_PATTERN));
         }
         if (savedInstanceState != null)
             wizardModel.load(Objects.requireNonNull(savedInstanceState.getBundle("model")));
@@ -234,11 +222,11 @@ public class AddPatternAttemptDialog extends DialogFragment implements
     }
 
     private String getDrillId() {
-        return Objects.requireNonNull(getArguments()).getString(PARAM_DRILL_ID);
+        return requireArguments().getString(PARAM_DRILL_ID);
     }
 
     private int getTargetScore() {
-        return Objects.requireNonNull(getArguments()).getInt(PARAM_TARGET_SCORE);
+        return requireArguments().getInt(PARAM_TARGET_SCORE);
     }
 
     class MyPagerAdapter extends FragmentStatePagerAdapter {

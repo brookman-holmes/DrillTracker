@@ -9,10 +9,19 @@ import com.brookmanholmes.drilltracker.data.repository.datasource.DataStoreFacto
 import com.brookmanholmes.drilltracker.domain.Drill;
 import com.brookmanholmes.drilltracker.domain.interactor.AddDrill;
 import com.brookmanholmes.drilltracker.domain.interactor.DefaultObserver;
+import com.brookmanholmes.drilltracker.domain.interactor.DrillParams;
 import com.brookmanholmes.drilltracker.domain.interactor.GetDrillDetails;
 import com.brookmanholmes.drilltracker.domain.interactor.UpdateDrill;
 import com.brookmanholmes.drilltracker.presentation.mapper.DrillModelDataMapper;
+import com.brookmanholmes.drilltracker.presentation.model.DataCollectionModel;
 import com.brookmanholmes.drilltracker.presentation.model.DrillModel;
+import com.brookmanholmes.drilltracker.presentation.model.Type;
+
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.List;
+
+import timber.log.Timber;
 
 /**
  * Created by Brookman Holmes on 7/23/2017.
@@ -32,8 +41,10 @@ class AddEditDrillPresenter implements AddEditDrillContract {
     private int cbPositions;
     private int targetPositions;
     private byte[] image;
-    private DrillModel.Type type;
+    private Type type;
     private boolean purchased;
+    private final List<DataCollectionModel> dataToCollect = new ArrayList<>();
+
 
     private final AddDrill addDrill;
     private final GetDrillDetails getDrillDetails;
@@ -76,6 +87,8 @@ class AddEditDrillPresenter implements AddEditDrillContract {
     public void destroy() {
         view = null;
         addDrill.dispose();
+        updateDrill.dispose();
+        getDrillDetails.dispose();
     }
 
     @Override
@@ -132,49 +145,31 @@ class AddEditDrillPresenter implements AddEditDrillContract {
 
     @Override
     public void saveDrill() {
+        DrillParams params = new DrillParams(
+                drillName,
+                drillId,
+                drillDescription,
+                maximumScore,
+                EnumSet.copyOf(dataToCollect),
+                targetScore,
+                obPositions,
+                cbPositions,
+                targetPositions,
+                type.ordinal(),
+                image,
+                purchased,
+                imageUrl
+        );
         if (drillId != null) {
-            if (imageUrl != null) {
-                updateDrill.execute(new EditDrillObserver(), UpdateDrill.Params.create(
-                        drillName,
-                        drillDescription,
-                        drillId,
-                        imageUrl,
-                        type,
-                        maximumScore,
-                        targetScore,
-                        obPositions,
-                        cbPositions,
-                        targetPositions));
-            } else {
-                updateDrill.execute(new EditDrillObserver(), UpdateDrill.Params.create(
-                        drillName,
-                        drillDescription,
-                        drillId,
-                        image,
-                        type,
-                        maximumScore,
-                        targetScore,
-                        obPositions,
-                        cbPositions,
-                        targetPositions));
-            }
+                updateDrill.execute(new EditDrillObserver(), params);
         } else {
-            addDrill.execute(new AddDrillObserver(), AddDrill.Params.create(
-                    drillName,
-                    drillDescription,
-                    image,
-                    type,
-                    maximumScore,
-                    targetScore,
-                    obPositions,
-                    cbPositions,
-                    targetPositions,
-                    purchased));
+            addDrill.execute(new AddDrillObserver(), params);
         }
     }
 
     @Override
-    public void setDrillType(DrillModel.Type type) {
+    public void setDrillType(Type type) {
+        Timber.i(type.name());
         this.type = type;
         view.isDrillComplete(isDrillComplete());
     }
@@ -183,12 +178,50 @@ class AddEditDrillPresenter implements AddEditDrillContract {
         view.loadDrillData(model);
     }
 
+    public void enableShotDataCollection(boolean enabled) {
+        if (enabled) {
+            dataToCollect.add(DataCollectionModel.COLLECT_SHOT_DATA);
+        } else {
+            dataToCollect.remove(DataCollectionModel.COLLECT_SHOT_DATA);
+        }
+    }
+
+    public void enableSpeedDataCollection(boolean enabled) {
+        if (enabled) {
+            dataToCollect.add(DataCollectionModel.COLLECT_SPEED_DATA);
+        } else {
+            dataToCollect.remove(DataCollectionModel.COLLECT_SPEED_DATA);
+        }
+    }
+
+    public void enableVSpinDataCollection(boolean enabled) {
+        if (enabled) {
+            dataToCollect.add(DataCollectionModel.COLLECT_SPIN_DATA);
+        } else {
+            dataToCollect.remove(DataCollectionModel.COLLECT_SPIN_DATA);
+        }
+    }
+
+    public void enableDistanceDataCollection(boolean enabled) {
+        if (enabled) {
+            dataToCollect.add(DataCollectionModel.COLLECT_TARGET_DATA);
+        } else {
+            dataToCollect.remove(DataCollectionModel.COLLECT_TARGET_DATA);
+        }
+    }
+
+    public void enableEnglishDataCollection(boolean enabled) {
+        if (enabled) {
+            dataToCollect.add(DataCollectionModel.COLLECT_ENGLISH_DATA);
+        } else {
+            dataToCollect.remove(DataCollectionModel.COLLECT_ENGLISH_DATA);
+        }
+    }
+
     private class EditDrillObserver extends DefaultObserver<Drill> {
         @Override
         public void onNext(Drill drill) {
             view.finish();
-            onComplete();
-            dispose();
         }
     }
 
@@ -196,8 +229,6 @@ class AddEditDrillPresenter implements AddEditDrillContract {
         @Override
         public void onNext(Drill drill) {
             view.showDrillDetailsView(DrillModelDataMapper.transform(drill));
-            onComplete();
-            dispose();
         }
     }
 
@@ -205,22 +236,20 @@ class AddEditDrillPresenter implements AddEditDrillContract {
         @Override
         public void onNext(Drill drill) {
             DrillModel model = DrillModelDataMapper.transform(drill);
-            purchased = model.purchased;
-            imageUrl = model.imageUrl;
-            cbPositions = model.cbPositions;
-            obPositions = model.obPositions;
-            targetPositions = model.targetPositions;
-            imageUrl = model.imageUrl;
-            drillName = model.name;
-            drillDescription = model.description;
-            targetScore = model.defaultTargetScore;
-            maximumScore = model.maxScore;
-            type = model.drillType;
+            purchased = model.getPurchased();
+            imageUrl = model.getImageUrl();
+            cbPositions = model.getCbPositions();
+            obPositions = model.getObPositions();
+            targetPositions = model.getTargetPositions();
+            imageUrl = model.getImageUrl();
+            drillName = model.getName();
+            drillDescription = model.getDescription();
+            targetScore = model.getDefaultTargetScore();
+            maximumScore = model.getMaxScore();
+            type = model.getDrillType();
 
             image = null;
             populateView(model);
-            onComplete();
-            dispose();
         }
     }
 }

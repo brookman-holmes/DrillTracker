@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CpuProfilingConfigService">
+    <option name="configurations">
+      <list>
+        <ProfilingConfiguration>
+          <option name="mode" value="SAMPLED" />
+          <option name="name" value="Sampled (Native)" />
+          <option name="profilerType" value="SIMPLEPERF" />
+        </ProfilingConfiguration>
+      </list>
+    </option>
+  </component>
+</project>

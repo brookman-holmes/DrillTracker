@@ -20,8 +20,8 @@ import com.brookmanholmes.drilltracker.presentation.base.BaseFragment;
 import com.brookmanholmes.drilltracker.presentation.drillpackdetail.DrillPackDetailDialog;
 import com.brookmanholmes.drilltracker.presentation.drills.ActivityCallback;
 import com.brookmanholmes.drilltracker.presentation.drills.FragmentCallback;
-import com.brookmanholmes.drilltracker.presentation.model.DrillModel;
 import com.brookmanholmes.drilltracker.presentation.model.DrillPackModel;
+import com.brookmanholmes.drilltracker.presentation.model.Type;
 import com.google.firebase.auth.FirebaseAuth;
 
 import org.solovyev.android.checkout.Checkout;
@@ -138,9 +138,9 @@ public class PurchaseDrillsFragment extends BaseFragment<PurchaseDrillsContract>
     @Override
     public void onItemClicked(DrillPackModel pack, @IdRes int id) {
         if (id == R.id.price) {
-            if (!pack.purchased) {
+            if (!pack.getPurchased()) {
                 //presenter.purchaseDrillPack(pack.sku);
-                checkout.startPurchaseFlow(ProductTypes.IN_APP, pack.sku, Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid(), new PurchaseListener(presenter));
+                checkout.startPurchaseFlow(ProductTypes.IN_APP, pack.getSku(), Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid(), new PurchaseListener(presenter));
             }
         } else if (id == R.id.cv_drill_pack) {
             viewDrillPack(pack);
@@ -163,8 +163,8 @@ public class PurchaseDrillsFragment extends BaseFragment<PurchaseDrillsContract>
 
     @Override
     public void viewDrillPack(DrillPackModel drillModel) {
-        DialogFragment dialog = DrillPackDetailDialog.newInstance(getString(R.string.drills_included_in, drillModel.name), drillModel.sku);
-        dialog.show(Objects.requireNonNull(getFragmentManager()), drillModel.name);
+        DialogFragment dialog = DrillPackDetailDialog.newInstance(getString(R.string.drills_included_in, drillModel.getName()), drillModel.getSku());
+        dialog.show(requireFragmentManager(), drillModel.getName());
     }
 
     /*
@@ -202,7 +202,7 @@ public class PurchaseDrillsFragment extends BaseFragment<PurchaseDrillsContract>
     }
 
     @Override
-    public void setFilterSelection(DrillModel.Type type) {
+    public void setFilterSelection(Type type) {
 
     }
 

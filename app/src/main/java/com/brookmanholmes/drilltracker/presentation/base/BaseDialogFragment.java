@@ -12,8 +12,6 @@ import androidx.fragment.app.DialogFragment;
 
 import com.brookmanholmes.drilltracker.R;
 
-import java.util.Objects;
-
 /**
  * Created by Brookman Holmes on 7/28/2017.
  */
@@ -32,7 +30,7 @@ public abstract class BaseDialogFragment<T extends Presenter> extends DialogFrag
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(Objects.requireNonNull(getContext()), getDialogTheme());
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(requireContext(), getDialogTheme());
 
         if (hasTitle())
             dialogBuilder.setTitle(getTitle());
