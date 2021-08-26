@@ -106,19 +106,18 @@ class AddEditDrillPresenter implements AddEditDrillContract {
     private boolean isDrillComplete() {
         return !TextUtils.isEmpty(drillName) &&
                 !TextUtils.isEmpty(drillDescription) &&
-                (image != null || imageUrl != null);
+                (image != null || imageUrl != null) &&
+                !dataToCollect.isEmpty();
     }
 
     @Override
     public void setMaximumScore(int maximumScore) {
         this.maximumScore = maximumScore;
-        this.view.isDrillComplete(isDrillComplete());
     }
 
     @Override
     public void setTargetScore(int targetScore) {
         this.targetScore = targetScore;
-        this.view.isDrillComplete(isDrillComplete());
     }
 
     @Override
@@ -184,6 +183,7 @@ class AddEditDrillPresenter implements AddEditDrillContract {
         } else {
             dataToCollect.remove(DataCollectionModel.COLLECT_SHOT_DATA);
         }
+        this.view.isDrillComplete(isDrillComplete());
     }
 
     public void enableSpeedDataCollection(boolean enabled) {
@@ -192,6 +192,7 @@ class AddEditDrillPresenter implements AddEditDrillContract {
         } else {
             dataToCollect.remove(DataCollectionModel.COLLECT_SPEED_DATA);
         }
+        this.view.isDrillComplete(isDrillComplete());
     }
 
     public void enableVSpinDataCollection(boolean enabled) {
@@ -200,6 +201,7 @@ class AddEditDrillPresenter implements AddEditDrillContract {
         } else {
             dataToCollect.remove(DataCollectionModel.COLLECT_SPIN_DATA);
         }
+        this.view.isDrillComplete(isDrillComplete());
     }
 
     public void enableDistanceDataCollection(boolean enabled) {
@@ -208,6 +210,7 @@ class AddEditDrillPresenter implements AddEditDrillContract {
         } else {
             dataToCollect.remove(DataCollectionModel.COLLECT_TARGET_DATA);
         }
+        this.view.isDrillComplete(isDrillComplete());
     }
 
     public void enableEnglishDataCollection(boolean enabled) {
@@ -216,6 +219,7 @@ class AddEditDrillPresenter implements AddEditDrillContract {
         } else {
             dataToCollect.remove(DataCollectionModel.COLLECT_ENGLISH_DATA);
         }
+        this.view.isDrillComplete(isDrillComplete());
     }
 
     private class EditDrillObserver extends DefaultObserver<Drill> {

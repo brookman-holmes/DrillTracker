@@ -51,15 +51,11 @@ class AddEditDrillFragment : Fragment(), AddEditDrillView {
 
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentCreateDrillBinding.inflate(inflater, container, false)
         binding.let {
             it.inputDrillName.doAfterTextChanged { text -> presenter.setDrillName(text.toString()) }
-            it.inputDrillDescription.doAfterTextChanged { text-> presenter.setDrillDescription(text.toString()) }
+            it.inputDrillDescription.doAfterTextChanged { text -> presenter.setDrillDescription(text.toString()) }
             it.image.setOnClickListener {
                 val intent = Intent(Intent.ACTION_GET_CONTENT)
                 intent.type = "image/*"
@@ -90,17 +86,20 @@ class AddEditDrillFragment : Fragment(), AddEditDrillView {
                 presenter.setCbPositions(value)
             }
             it.obPositionsPicker.setValueChangedListener { value: Int, action: ActionEnum? ->
-                presenter.setCbPositions(value)
+                presenter.setObPositions(value)
             }
 
             it.maxScorePicker.setValueChangedListener { value: Int, action: ActionEnum? ->
                 presenter.setMaximumScore(value)
-                binding.targetPositionsPicker.setMaxValue(value)
+                binding.targetScorePicker.setMaxValue(value)
             }
             it.targetPositionsPicker.setValueChangedListener { value: Int, action: ActionEnum? ->
                 presenter.setTargetPositions(value)
             }
-            it.targetPositionsPicker.setMaxValue(it.maxScorePicker.value)
+            it.targetScorePicker.setValueChangedListener { value: Int, action: ActionEnum? ->
+                presenter.setTargetScore(value)
+            }
+            it.targetScorePicker.setMaxValue(it.maxScorePicker.value)
 
             it.toolbar.setNavigationOnClickListener {
                 requireActivity().finish()

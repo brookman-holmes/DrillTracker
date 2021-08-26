@@ -44,6 +44,19 @@ fun setDistanceChart(chart: ColumnChartView, model: TargetDataModel) {
     chart.columnChartData = data
 }
 
+fun setEmptyChartWithSpeed(chart: ColumnChartView) {
+    val emptyModel = TargetDataModel(Collections.emptyList())
+    setDistanceChartWithSpeed(chart, emptyModel, emptyModel)
+}
+
+fun setEmptyDistanceChart(chart: ColumnChartView) {
+    setDistanceChart(chart, TargetDataModel(Collections.emptyList()))
+}
+
+fun setEmptySpinChart(chart: PieChartView) {
+    setSpinResultPieChart(chart, SpinResultModel(Collections.emptyList()))
+}
+
 fun setDistanceChartWithSpeed(chart: ColumnChartView, today: TargetDataModel, history: TargetDataModel) {
     val columns = ArrayList<Column>()
     for (i in 0..8) {
@@ -52,9 +65,19 @@ fun setDistanceChartWithSpeed(chart: ColumnChartView, today: TargetDataModel, hi
         val todayTriple = today.getDistanceValues()[i]
         val historyTriple = history.getDistanceValues()[i]
         subColumns.add(SubcolumnValue(todayTriple.third.toFloat(), getColor(chart.context, todayTriple.first)))
-        subColumns.add(SubcolumnValue(historyTriple.third.toFloat(), ChartUtils.darkenColor(ChartUtils.darkenColor(getColor(chart
-            .context,
-            historyTriple.first)))))
+        subColumns.add(
+            SubcolumnValue(
+                historyTriple.third.toFloat(), ChartUtils.darkenColor(
+                    ChartUtils.darkenColor(
+                        getColor(
+                            chart
+                                .context,
+                            historyTriple.first
+                        )
+                    )
+                )
+            )
+        )
         val column = Column(subColumns)
         column.setHasLabels(true)
         columns.add(column)

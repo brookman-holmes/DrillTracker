@@ -45,16 +45,6 @@
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_bias="0.0" />
-
-                <TextView
-                    android:id="@+id/description"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
-                    android:layout_margin="8dp"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/image" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -174,21 +164,49 @@
 
             <include
                 android:id="@+id/aim_data"
-                layout="@layout/view_attempts_aim"/>
+                layout="@layout/view_attempts_aim" />
 
             <include
                 android:id="@+id/distance_data"
                 layout="@layout/view_distance_data" />
 
             <include
+                android:id="@+id/speedData"
+                layout="@layout/view_spin_data" />
+
+            <include
                 android:id="@+id/spin_data"
-                layout="@layout/view_spin_data"/>
+                layout="@layout/view_spin_data" />
+
             <include
                 android:id="@+id/englishData"
-                layout="@layout/view_spin_data"/>
-            <include
-                android:id="@+id/speedData"
-                layout="@layout/view_spin_data"/>
+                layout="@layout/view_spin_data" />
+
+            <com.google.android.material.textview.MaterialTextView
+                style="@style/TextAppearance.MaterialComponents.Subtitle1"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:gravity="center_vertical"
+                android:text="Description" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardElevation="0dp"
+                app:strokeColor="@color/colorPrimary"
+                app:strokeWidth="1dp">
+
+                <TextView
+                    android:id="@+id/description"
+                    style="@style/TextAppearance.MaterialComponents.Body1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp" />
+            </com.google.android.material.card.MaterialCardView>
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="60dp" />
         </androidx.appcompat.widget.LinearLayoutCompat>
 
     </androidx.core.widget.NestedScrollView>

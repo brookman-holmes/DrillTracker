@@ -103,9 +103,7 @@ internal class DrillDetailsPresenter : DrillDetailsContract {
             it.setPositionSpinners(drill.cbPositions, drill.obPositions, drill.targetPositions)
             it.setShowEnglishData(drill.dataToCollect.contains(DataCollectionModel.COLLECT_ENGLISH_DATA))
             it.setShowShotData(drill.dataToCollect.contains(DataCollectionModel.COLLECT_SHOT_DATA))
-            it.setShowSpeedData(drill.dataToCollect.contains(DataCollectionModel.COLLECT_SPEED_DATA))
             it.setShowSpinData(drill.dataToCollect.contains(DataCollectionModel.COLLECT_SPIN_DATA))
-            it.setShowTargetDistanceData(drill.dataToCollect.contains(DataCollectionModel.COLLECT_TARGET_DATA))
         }
     }
 
@@ -120,20 +118,11 @@ internal class DrillDetailsPresenter : DrillDetailsContract {
                     && it.filterByShotResult(selectedShotResult)
         }
 
+        val todayModels = filteredModels.filter { it.filterByToday() }
 
+        val historyModels = filteredModels.filter { it.filterByHistory() }
 
-        val todayModels = filteredModels.filter {
-            it.filterByToday()
-        }
-
-
-        val historyModels = filteredModels.filter {
-            it.filterByHistory()
-        }
-
-        if (collectData(DataCollectionModel.COLLECT_TARGET_DATA) && collectData(DataCollectionModel.COLLECT_SPEED_DATA)) {
-            view?.setDistanceDataWithSpeed(todayModels.toTargetDataModel(), historyModels.toTargetDataModel())
-        } else if (collectData(DataCollectionModel.COLLECT_TARGET_DATA)){
+        if (collectData(DataCollectionModel.COLLECT_TARGET_DATA)) {
             view?.setDistanceData(todayModels.toTargetDataModel(), historyModels.toTargetDataModel())
         }
 

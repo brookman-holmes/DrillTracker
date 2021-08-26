@@ -1,5 +1,6 @@
 package com.brookmanholmes.drilltracker.presentation.model
 
+import timber.log.Timber
 import kotlin.math.pow
 
 class TargetDataModel(attempts: Collection<AttemptModel>) {
@@ -47,8 +48,15 @@ class TargetDataModel(attempts: Collection<AttemptModel>) {
     private val oneAndHalfDiamondNoSpeed: Int = attempts.count {
         it.hasDistanceResult(DistanceResult.ONE_AND_HALF)
     }
-    private val overOneAndHalfDiamondsNoSpeed:Int = attempts.count {
+    private val overOneAndHalfDiamondsNoSpeed: Int = attempts.count {
         it.hasDistanceResult(DistanceResult.OVER_ONE_AND_HALF)
+    }
+
+    init {
+        Timber.d(
+            "overOneAndHalfDiamonds fast={$overOneAndHalfDiamondsFast} and slow={$overOneAndHalfDiamondsSlow} " +
+                    "and no speed={$overOneAndHalfDiamondsNoSpeed}"
+        )
     }
 
     val averageError: Float = attempts.map {
@@ -69,10 +77,10 @@ class TargetDataModel(attempts: Collection<AttemptModel>) {
             Triple(DistanceResult.ONE, SpinResult.TOO_LITTLE, oneDiamondSlow),
             Triple(DistanceResult.ONE_HALF, SpinResult.TOO_LITTLE, halfDiamondSlow),
             Triple(DistanceResult.ZERO, SpinResult.NO_DATA, onTarget),
-            Triple(DistanceResult.ONE_HALF, SpinResult.TOO_LITTLE, halfDiamondFast),
-            Triple(DistanceResult.ONE, SpinResult.TOO_LITTLE, oneDiamondFast),
-            Triple(DistanceResult.ONE_AND_HALF, SpinResult.TOO_LITTLE, oneAndHalfDiamondFast),
-            Triple(DistanceResult.OVER_ONE_AND_HALF, SpinResult.TOO_LITTLE, overOneAndHalfDiamondsFast)
+            Triple(DistanceResult.ONE_HALF, SpinResult.TOO_MUCH, halfDiamondFast),
+            Triple(DistanceResult.ONE, SpinResult.TOO_MUCH, oneDiamondFast),
+            Triple(DistanceResult.ONE_AND_HALF, SpinResult.TOO_MUCH, oneAndHalfDiamondFast),
+            Triple(DistanceResult.OVER_ONE_AND_HALF, SpinResult.TOO_MUCH, overOneAndHalfDiamondsFast)
         )
     }
 

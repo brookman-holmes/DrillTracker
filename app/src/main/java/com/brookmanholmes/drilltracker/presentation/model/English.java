@@ -5,11 +5,11 @@ package com.brookmanholmes.drilltracker.presentation.model;
  */
 
 public enum English {
-    ANY,
     FULL_INSIDE,
     INSIDE,
     NONE,
     OUTSIDE,
     FULL_OUTSIDE,
+    ANY,
     NO_DATA
 }

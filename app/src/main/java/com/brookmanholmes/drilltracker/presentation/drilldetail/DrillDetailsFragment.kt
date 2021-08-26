@@ -21,7 +21,8 @@ import com.brookmanholmes.drilltracker.presentation.addattempt.AddAttemptDialog.
 import com.brookmanholmes.drilltracker.presentation.addeditdrill.AddEditDrillActivity
 import com.brookmanholmes.drilltracker.presentation.model.*
 import com.brookmanholmes.drilltracker.presentation.view.setDistanceChart
-import com.brookmanholmes.drilltracker.presentation.view.setDistanceChartWithSpeed
+import com.brookmanholmes.drilltracker.presentation.view.setEmptyDistanceChart
+import com.brookmanholmes.drilltracker.presentation.view.setEmptySpinChart
 import com.brookmanholmes.drilltracker.presentation.view.setSpinResultPieChart
 import com.brookmanholmes.drilltracker.presentation.view.util.ArrayAdapterNoFilter
 import com.brookmanholmes.drilltracker.presentation.view.util.ImageHandler
@@ -48,6 +49,7 @@ class DrillDetailsFragment : Fragment(), DrillDetailsView {
         binding.fab.setOnClickListener {
             presenter.onAddAttemptClicked()
         }
+        setupToolbar()
 
         binding.speedInputLayout.hint = "Speed used"
         binding.englishInputLayout.hint = "English used"
@@ -113,6 +115,11 @@ class DrillDetailsFragment : Fragment(), DrillDetailsView {
         return binding.root
     }
 
+    override fun onResume() {
+        super.onResume()
+        presenter.initialize(requireArguments().getString(PARAM_DRILL_ID, "error, no value for PARAM_DRILL_ID"))
+    }
+
     private fun setupToolbar() {
         binding.toolbar.let { it ->
             it.inflateMenu(R.menu.fragment_drill_details_menu)
@@ -169,25 +176,40 @@ class DrillDetailsFragment : Fragment(), DrillDetailsView {
     }
 
     override fun setShowEnglishData(visible: Boolean) {
+        _binding?.englishData?.let {
+            it.title.text = "English Data"
+            setEmptySpinChart(it.spinChart)
+            setEmptySpinChart(it.spinHistoryChart)
+            it.root.setVisibleOrGone(visible)
+        }
         _binding?.englishInputLayout?.setVisibleOrGone(visible)
-        _binding?.englishData?.root?.setVisibleOrGone(visible)
-        _binding?.englishData?.title?.text = "English Data"
     }
 
     override fun setShowSpeedData(visible: Boolean) {
         _binding?.speedInputLayout?.setVisibleOrGone(visible)
-        _binding?.speedData?.root?.setVisibleOrGone(visible)
-        _binding?.speedData?.title?.text = "Speed Data"
+        _binding?.speedData?.let {
+            it.title.text = "Speed Data"
+            setEmptySpinChart(it.spinChart)
+            setEmptySpinChart(it.spinHistoryChart)
+            it.root.setVisibleOrGone(visible)
+        }
     }
 
-    override fun setShowTargetDistanceData(visible: Boolean) {
-        _binding?.distanceData?.root?.setVisibleOrGone(visible)
+    override fun setShowDistanceData(visible: Boolean) {
+        _binding?.distanceData?.let {
+            setEmptyDistanceChart(it.targetDataChart)
+            it.root.setVisibleOrGone(visible)
+        }
     }
 
     override fun setShowSpinData(visible: Boolean) {
         _binding?.vSpinUsedInputLayout?.setVisibleOrGone(visible)
-        _binding?.spinData?.root?.setVisibleOrGone(visible)
-        _binding?.spinData?.title?.text = "Spin Data"
+        _binding?.spinData?.let {
+            it.title.text = "Spin Data"
+            setEmptySpinChart(it.spinChart)
+            setEmptySpinChart(it.spinHistoryChart)
+            it.root.setVisibleOrGone(visible)
+        }
     }
 
     override fun setShowShotData(visible: Boolean) {
@@ -262,14 +284,10 @@ class DrillDetailsFragment : Fragment(), DrillDetailsView {
         }
     }
 
-    override fun setDistanceDataWithSpeed(today: TargetDataModel, history: TargetDataModel) {
-        setDistanceChartWithSpeed(binding.distanceData.targetDataChart, today, history)
-        binding.distanceData.sessionError.text = "%.2f".format(today.averageError)
-        binding.distanceData.lifetimeError.text = "%.2f".format(history.averageError)
-    }
-
     override fun setDistanceData(today: TargetDataModel, history: TargetDataModel) {
         setDistanceChart(binding.distanceData.targetDataChart, today)
+        binding.distanceData.sessionError.text = "%.2f".format(today.averageError)
+        binding.distanceData.lifetimeError.text = "%.2f".format(history.averageError)
     }
 
     override fun setName(name: String) {

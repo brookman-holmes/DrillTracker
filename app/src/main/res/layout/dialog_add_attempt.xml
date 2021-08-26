@@ -61,23 +61,26 @@
             style="@style/TextAppearance.AppCompat.Title"
             android:text="Shot Result"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content" />
+
         <include
             layout="@layout/layout_data_collect_shot_result"
             android:id="@+id/layout_shot_result"
             android:layout_height="wrap_content"
-            android:layout_width="match_parent"/>
+            android:layout_width="match_parent" />
 
         <include
-            layout="@layout/layout_data_collect_speed_result"
-            android:id="@+id/layout_speed_result"
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"/>
-        <include
-            layout="@layout/layout_data_collect_english_result"
             android:id="@+id/layout_english_result"
+            layout="@layout/layout_data_collect_english_result"
             android:layout_height="wrap_content"
-            android:layout_width="match_parent"/>
+            android:layout_width="match_parent" />
+
+        <include
+            android:id="@+id/layout_speed_result"
+            layout="@layout/layout_data_collect_speed_result"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent" />
+
         <include
             layout="@layout/layout_data_collect_vertical_spin_result"
             android:id="@+id/layout_spin_result"

@@ -49,39 +49,39 @@ class AddAttemptPresenter implements Presenter {
         getDrillDetails.execute(new DrillDetailsObserver(), GetDrillDetails.Params.forDrill(view.getDrillId()));
     }
 
-    public void addAttempt(String drillId, int distanceResult, int speedRequired, int spinRequired,
-                           int spinResult, int englishResult, int speedResult, int thicknessResult,
-                           int englishRequired, int shotResult, int targetPosition, int score,
+    public void addAttempt(String drillId, DistanceResult distanceResult, Speed speedRequired, VSpin spinRequired,
+                           English englishRequired, SpinResult spinResult, SpinResult englishResult, SpinResult speedResult, SpinResult thicknessResult,
+                           ShotResult shotResult, int targetPosition, int score,
                            int target, int obPosition, int cbPosition, List<Integer> pattern) {
         // sanitize data based one what is being collected
         if (!drill.getDataToCollect().contains(DataCollectionModel.COLLECT_SHOT_DATA)) {
-            shotResult = ShotResult.NO_DATA.ordinal();
+            shotResult = ShotResult.NO_DATA;
         }
         if (!drill.getDataToCollect().contains(DataCollectionModel.COLLECT_SPEED_DATA)) {
-            speedResult = SpinResult.NO_DATA.ordinal();
-            speedRequired = Speed.NO_DATA.ordinal();
+            speedResult = SpinResult.NO_DATA;
+            speedRequired = Speed.NO_DATA;
         }
         if (!drill.getDataToCollect().contains(DataCollectionModel.COLLECT_ENGLISH_DATA)) {
-            englishResult = SpinResult.NO_DATA.ordinal();
-            englishRequired = English.NO_DATA.ordinal();
+            englishResult = SpinResult.NO_DATA;
+            englishRequired = English.NO_DATA;
         }
         if (!drill.getDataToCollect().contains(DataCollectionModel.COLLECT_SPIN_DATA)) {
-            spinResult = SpinResult.NO_DATA.ordinal();
-            spinRequired = VSpin.NO_DATA.ordinal();
+            spinResult = SpinResult.NO_DATA;
+            spinRequired = VSpin.NO_DATA;
         }
         if (!drill.getDataToCollect().contains(DataCollectionModel.COLLECT_TARGET_DATA)) {
-            distanceResult = DistanceResult.NO_DATA.ordinal();
+            distanceResult = DistanceResult.NO_DATA;
         }
         AttemptModel attempt = new AttemptModel(
-                Speed.values()[speedRequired],
-                English.values()[englishRequired],
-                VSpin.values()[spinRequired],
-                DistanceResult.values()[distanceResult],
-                SpinResult.values()[spinResult],
-                SpinResult.values()[englishResult],
-                SpinResult.values()[speedResult],
-                SpinResult.values()[thicknessResult],
-                ShotResult.values()[shotResult],
+                speedRequired,
+                englishRequired,
+                spinRequired,
+                distanceResult,
+                spinResult,
+                englishResult,
+                speedResult,
+                thicknessResult,
+                shotResult,
                 targetPosition,
                 score,
                 target,

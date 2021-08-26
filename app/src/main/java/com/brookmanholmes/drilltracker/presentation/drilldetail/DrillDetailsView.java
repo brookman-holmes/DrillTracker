@@ -30,22 +30,37 @@ interface DrillDetailsView extends LoadDataView {
 
 
     void setObPositionsSpinnerVisibility(boolean visible);
+
     void setCbPositionsSpinnerVisibility(boolean visible);
+
     void setTargetPositionsVisibility(boolean visible);
+
     void setName(@NonNull String name);
+
     void setImage(@NonNull String imageUrl);
+
     void setDescription(@NonNull String description);
+
     void setPositionSpinners(int cbPositions, int obPositions, int targetPositions);
+
     void setShowEnglishData(boolean visible);
+
     void setShowSpeedData(boolean visible);
-    void setShowTargetDistanceData(boolean visible);
+
+    void setShowDistanceData(boolean visible);
+
     void setShowSpinData(boolean visible);
+
     void setShowShotData(boolean visible);
-    void setDistanceDataWithSpeed(@NonNull TargetDataModel today, @NonNull TargetDataModel history);
+
     void setDistanceData(@NonNull TargetDataModel today, @NonNull TargetDataModel history);
+
     void setShotData(@NonNull ShotDataModel today, @NonNull ShotDataModel history);
+
     void setSpinData(@NonNull SpinDataModel today, @NonNull SpinDataModel history);
+
     void setEnglishData(@NonNull EnglishDataModel today, @NonNull EnglishDataModel history);
+
     void setSpeedData(@NonNull SpeedDataModel today, @NonNull SpeedDataModel history);
 
     /**

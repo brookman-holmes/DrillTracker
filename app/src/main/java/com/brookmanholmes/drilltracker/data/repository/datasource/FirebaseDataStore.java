@@ -86,7 +86,7 @@ class FirebaseDataStore implements DrillDataStore {
 
     @Override
     public void removeLastAttempt(String id) {
-        attemptsRef.child(id).child("attempts").addListenerForSingleValueEvent(new ValueEventListener() {
+        attemptsRef.child(id).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getChildrenCount() > 0) { // iterate through list of children

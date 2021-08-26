@@ -56,22 +56,24 @@ class AddAttemptDialog : DialogFragment(), AddAttemptView {
         with(dialogBuilder) {
             setTitle(R.string.dialog_add_attempt_title)
             setPositiveButton(android.R.string.ok) { _, _ ->
-                presenter.addAttempt(drillId,
-                    binding.layoutDistanceResult.picker.selectedIndex,
-                    binding.layoutSpeedRequired.picker.selectedIndex,
-                    binding.layoutSpinRequired.picker.selectedIndex,
-                    binding.layoutSpinResult.picker.selectedIndex,
-                    binding.layoutEnglishResult.picker.selectedIndex,
-                    binding.layoutSpeedResult.picker.selectedIndex,
-                    0,
-                    binding.layoutEnglishRequired.picker.selectedIndex,
-                    binding.layoutShotResult.picker.selectedIndex,
+                presenter.addAttempt(
+                    drillId,
+                    getDistanceResult(),
+                    getSpeedRequired(),
+                    getSpinRequired(),
+                    getEnglishRequired(),
+                    getSpinResult(binding.layoutSpinResult.picker.selectedIndex),
+                    getSpinResult(binding.layoutEnglishResult.picker.selectedIndex),
+                    getSpinResult(binding.layoutSpeedResult.picker.selectedIndex),
+                    SpinResult.NO_DATA,
+                    getShotResult(),
                     targetPositionSelection,
                     0,
                     0,
                     obPositionSelection,
                     cbPositionSelection,
-                    ArrayList())
+                    ArrayList()
+                )
             }
             setNegativeButton(android.R.string.cancel, null)
             setView(binding.root)
@@ -84,52 +86,74 @@ class AddAttemptDialog : DialogFragment(), AddAttemptView {
         binding.targetInputLayout.hint = "Target"
         binding.obInputLayout.hint = "Object Ball"
         binding.cbInputLayout.hint = "Cue Ball"
-        binding.layoutEnglishRequired.picker.items = listOf(
-            HorizontalPicker.TextItem("Full Inside"),
-            HorizontalPicker.TextItem("Inside"),
-            HorizontalPicker.TextItem("None"),
-            HorizontalPicker.TextItem("Outside"),
-            HorizontalPicker.TextItem("Full Outside"))
-        binding.layoutSpeedRequired.picker.items = listOf(
-            HorizontalPicker.TextItem("1"),
-            HorizontalPicker.TextItem("2"),
-            HorizontalPicker.TextItem("3"),
-            HorizontalPicker.TextItem("4"),
-            HorizontalPicker.TextItem("5")
-        )
-        binding.layoutShotResult.picker.items = listOf(
-            HorizontalPicker.TextItem("Over cut"),
-            HorizontalPicker.TextItem("Make"),
-            HorizontalPicker.TextItem("Under cut"),
-        )
-        binding.layoutSpinRequired.picker.items = listOf(
-            HorizontalPicker.TextItem("Bottom"),
-            HorizontalPicker.TextItem("Center"),
-            HorizontalPicker.TextItem("Top")
-        )
-        binding.layoutSpeedResult.picker.items = listOf(
-            HorizontalPicker.TextItem("Too slow"),
-            HorizontalPicker.TextItem("Correct"),
-            HorizontalPicker.TextItem("Too fast")
-        )
-        binding.layoutEnglishResult.picker.items = listOf(
-            HorizontalPicker.TextItem("Too little"),
-            HorizontalPicker.TextItem("Correct"),
-            HorizontalPicker.TextItem("Too much")
-        )
-        binding.layoutSpinResult.picker.items = listOf(
-            HorizontalPicker.TextItem("Too low"),
-            HorizontalPicker.TextItem("Correct"),
-            HorizontalPicker.TextItem("Too high")
-        )
-        binding.layoutDistanceResult.picker.items = listOf(
-            HorizontalPicker.TextItem("In target"),
-            HorizontalPicker.TextItem(".5"),
-            HorizontalPicker.TextItem("1"),
-            HorizontalPicker.TextItem("1.5"),
-            HorizontalPicker.TextItem("1.5+"),
-        )
 
+        setPickerItems()
+        setPickerIndices()
+
+        return dialogBuilder.create()
+    }
+
+    private fun getDistanceResult(): DistanceResult {
+        return when (binding.layoutDistanceResult.picker.selectedIndex) {
+            0 -> DistanceResult.ZERO
+            1 -> DistanceResult.ONE_HALF
+            2 -> DistanceResult.ONE
+            3 -> DistanceResult.ONE_AND_HALF
+            4 -> DistanceResult.OVER_ONE_AND_HALF
+            else -> DistanceResult.NO_DATA
+        }
+    }
+
+    private fun getSpeedRequired(): Speed {
+        return when (binding.layoutSpeedRequired.picker.selectedIndex) {
+            0 -> Speed.ONE
+            1 -> Speed.TWO
+            2 -> Speed.THREE
+            3 -> Speed.FOUR
+            4 -> Speed.FIVE
+            else -> Speed.NO_DATA
+        }
+    }
+
+    private fun getEnglishRequired(): English {
+        return when (binding.layoutEnglishRequired.picker.selectedIndex) {
+            0 -> English.FULL_INSIDE
+            1 -> English.INSIDE
+            2 -> English.NONE
+            3 -> English.OUTSIDE
+            4 -> English.FULL_OUTSIDE
+            else -> English.NO_DATA
+        }
+    }
+
+    private fun getSpinRequired(): VSpin {
+        return when (binding.layoutSpinRequired.picker.selectedIndex) {
+            0 -> VSpin.BOTTOM
+            1 -> VSpin.CENTER
+            2 -> VSpin.TOP
+            else -> VSpin.NO_DATA
+        }
+    }
+
+    private fun getSpinResult(index: Int): SpinResult {
+        return when (index) {
+            0 -> SpinResult.TOO_LITTLE
+            1 -> SpinResult.CORRECT
+            2 -> SpinResult.TOO_MUCH
+            else -> SpinResult.NO_DATA
+        }
+    }
+
+    private fun getShotResult(): ShotResult {
+        return when (binding.layoutShotResult.picker.selectedIndex) {
+            0 -> ShotResult.MISS_OVER_CUT
+            1 -> ShotResult.MAKE_CENTER
+            2 -> ShotResult.MAKE_UNDER_CUT
+            else -> ShotResult.NO_DATA
+        }
+    }
+
+    private fun setPickerIndices() {
         binding.layoutEnglishRequired.picker.selectedIndex = getSelectedIndex(englishRequiredSelection)
         binding.layoutSpeedRequired.picker.selectedIndex = getSelectedIndex(speedRequiredSelection)
         binding.layoutSpinRequired.picker.selectedIndex = getSelectedIndex(spinRequiredSelection)
@@ -138,7 +162,29 @@ class AddAttemptDialog : DialogFragment(), AddAttemptView {
         binding.layoutDistanceResult.picker.selectedIndex = getSelectedIndex(DistanceResult.ZERO)
         binding.layoutEnglishResult.picker.selectedIndex = getSelectedIndex(SpinResult.CORRECT)
         binding.layoutSpinResult.picker.selectedIndex = getSelectedIndex(SpinResult.CORRECT)
-        return dialogBuilder.create()
+    }
+
+    private fun setPickerItems() {
+        setPickerItems(
+            binding.layoutEnglishRequired.picker, listOf(
+                "Full inside", "Inside", "None", "Outside", "Full" +
+                        " outside"
+            )
+        )
+        setPickerItems(binding.layoutSpeedRequired.picker, listOf("1", "2", "3", "4", "5"))
+        setPickerItems(binding.layoutShotResult.picker, listOf("Over cut", "Make", "Under cut"))
+        setPickerItems(binding.layoutSpinRequired.picker, listOf("Bottom", "Center", "Top"))
+        setPickerItems(binding.layoutSpeedResult.picker, listOf("Too soft", "Correct", "Too hard"))
+        setPickerItems(binding.layoutEnglishResult.picker, listOf("Too little", "Correct", "Too much"))
+        setPickerItems(binding.layoutSpinResult.picker, listOf("Too low", "Correct", "Too high"))
+        setPickerItems(binding.layoutDistanceResult.picker, listOf("In target", ".5", "1", "1.5", "1.5+"))
+
+    }
+
+    private fun setPickerItems(picker: HorizontalPicker, items: Collection<String>) {
+        picker.items = items.map {
+            HorizontalPicker.TextItem(it)
+        }
     }
 
     private fun getSelectedIndex(distanceResult: DistanceResult): Int {
@@ -269,7 +315,6 @@ class AddAttemptDialog : DialogFragment(), AddAttemptView {
     }
 
     companion object {
-        private const val ENGLISH_SELECTION = "english_selection"
         const val PARAM_DRILL = "param_drill"
         const val PARAM_SELECTED_CB_POS = "param_selected_cb_pos"
         const val PARAM_DRILL_ID = "param_drill_id"

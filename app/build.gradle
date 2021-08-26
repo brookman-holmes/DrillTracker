@@ -9,8 +9,8 @@ android {
         applicationId "com.brookmanholmes.drilltracker"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 25
-        versionName ".90"
+        versionCode 27
+        versionName ".90.2"
         testInstrumentationRunner "android.support.dialog_pattern_input.runner.AndroidJUnitRunner"
     }
     compileOptions {
